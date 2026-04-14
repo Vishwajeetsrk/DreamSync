@@ -1,0 +1,462 @@
+'use client';
+
+import React, { useState, useRef } from 'react';
+import { 
+  Plus, Trash2, Download, Printer, User, Briefcase, 
+  GraduationCap, Palette, Layout, Save, Sparkles, Send, FileText, Award,
+  Fingerprint, Zap, Coffee, ArrowRight, CheckCircle2, AlertCircle, BarChart3, Info, Upload, ShieldCheck
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useReactToPrint } from 'react-to-print';
+import Link from 'next/link';
+import { saveAs } from 'file-saver';
+import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, ExternalHyperlink, BorderStyle } from 'docx';
+import ResumePreview, { ResumeData } from '@/components/ResumePreview';
+import { calculateATSScore, ATSAnalysis } from '@/lib/atsScore';
+
+const DEFAULT_RESUME: ResumeData = {
+  personalInfo: {
+    fullName: "VASHNAVI CHAUHAN",
+    role: "Frontend Developer",
+    email: "vashnavichauhan1@gmail.com",
+    phone: "+91 9174403667",
+    location: "Bengaluru, India",
+    linkedin: "vashnavichauhan18",
+    github: "vashnavichauhan18",
+    portfolio: "vashnavi.dev"
+  },
+  summary: "Self-taught Frontend Engineer with hands-on production experience in modern JavaScript frameworks. Proven track record in developing scalable frontend features and optimizing web performance for high-growth startups.",
+  skills: [
+    { category: "Languages & Frameworks", items: "Javascript, Typescript, Python, HTML, CSS" },
+    { category: "Frontend Technologies", items: "Vue, React, React Native, Nuxt, Tailwind CSS, MUI" },
+    { category: "State Management", items: "Redux Toolkit, Pinia, Vuex, Zustand" },
+    { category: "Backend & Tools", items: "Node.js, Express.js, MongoDB, Flask, Docker, D3.js" }
+  ],
+  experience: [
+    {
+      company: "Rapid Rocket",
+      role: "Frontend Developer (Freelance)",
+      location: "Remote",
+      date: "Sep 2025 – Present",
+      bullets: [
+        "Built scalable frontend features using React.js and Next.js, driving significant UX improvements across the platform.",
+        "Improved web performance through advanced frontend optimization and efficient rendering strategies, resulting in faster load times.",
+        "Collaborated with cross-functional teams to integrate new features and maintain high code quality standards."
+      ]
+    },
+    {
+      company: "Aiseberg - AiseDiscovery",
+      role: "Senior Frontend Engineer",
+      location: "Bengaluru, India",
+      date: "Jan 2025 – Jul 2025",
+      bullets: [
+        "Developed a real-time chat interface in React TSX, significantly enhancing user engagement metrics.",
+        "Optimized list virtualization with TanStack Virtual and Redux Toolkit, contributing to a 40–50% activation rate among demo users.",
+        "Integrated D3 tree chart with custom SCSS styling, reducing UI development time by 30% for data visualization components."
+      ]
+    },
+    {
+      company: "PropVR 3D Squareyards",
+      role: "Frontend Developer (SDE-1)",
+      location: "Bengaluru, India",
+      date: "Nov 2022 – Dec 2024",
+      bullets: [
+        "Collaborated with a 12-member team on the PropVR metaverse project, boosting project delivery efficiency by 20%.",
+        "Led full-stack development of propvr.ai, achieving significant improvements in SEO rankings and user retention.",
+        "Implemented robust security measures, enhancing overall application security posture by 50% through strict policy enforcement."
+      ]
+    }
+  ],
+  education: [
+    {
+      school: "Delhi University",
+      degree: "B.A Hons Political Science",
+      location: "New Delhi",
+      date: "2019 – 2022"
+    }
+  ],
+  projects: [
+    {
+      name: "Metaverse Real Estate",
+      link: "propvr.ai",
+      description: "Implemented high-performance 3D visualization for real estate properties using proprietary rendering engines."
+    }
+  ],
+  achievements: [
+    "RNR Certificate in Software Development",
+    "Blog: Securing Web: A Deep Dive into Content Security Policy (CSP)",
+    "Blog: Understanding Cookie Security: Best Practices for Developers"
+  ],
+  languages: ["English", "Hindi"],
+  certifications: [],
+  extra: "Passionate about web security and technical blogging."
+};
+
+export default function ResumeBuilder() {
+  const [data, setData] = useState<ResumeData>(DEFAULT_RESUME);
+  const [template, setTemplate] = useState<'minimal' | 'modern' | 'professional'>('professional');
+  const [atsAnalysis, setAtsAnalysis] = useState<ATSAnalysis | null>(null);
+  const [isParsing, setIsParsing] = useState(false);
+  const componentRef = useRef<HTMLDivElement>(null);
+
+  // Debounced ATS Calculation
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      const analysis = calculateATSScore(data);
+      setAtsAnalysis(analysis);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [data]);
+
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    documentTitle: `${data.personalInfo.fullName.replace(/\s/g, '_')}_Resume`,
+  });
+
+  const handleImportPdf = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsParsing(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/resume-parse', {
+        method: 'POST',
+        body: formData,
+      });
+      const parsedData = await res.json();
+      if (!res.ok) throw new Error(parsedData.error);
+      
+      const formattedData: ResumeData = {
+        ...parsedData,
+        projects: parsedData.projects || [],
+        achievements: parsedData.achievements || [],
+        languages: parsedData.languages || [],
+        certifications: parsedData.certifications || [],
+        extra: parsedData.extra || ""
+      };
+      
+      setData(formattedData);
+    } catch (err: any) {
+      console.error(err);
+      alert("Failed to parse resume: " + err.message);
+    } finally {
+      setIsParsing(false);
+    }
+  };
+
+  const generateWordDoc = async () => {
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: [
+          new Paragraph({ text: data.personalInfo.fullName.toUpperCase(), heading: HeadingLevel.HEADING_1, alignment: AlignmentType.CENTER }),
+          new Paragraph({ text: data.personalInfo.role, alignment: AlignmentType.CENTER }),
+          new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(`${data.personalInfo.phone} | ${data.personalInfo.email} | ${data.personalInfo.location}`)] }),
+          new Paragraph({ text: "", spacing: { before: 200 } }),
+          new Paragraph({ text: "PROFESSIONAL SUMMARY", heading: HeadingLevel.HEADING_2, border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } } }),
+          new Paragraph({ text: data.summary }),
+          new Paragraph({ text: "", spacing: { before: 200 } }),
+          new Paragraph({ text: "WORK EXPERIENCE", heading: HeadingLevel.HEADING_2, border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } } }),
+          ...data.experience.flatMap(exp => [
+            new Paragraph({ children: [new TextRun({ text: exp.role, bold: true }), new TextRun({ text: ` | ${exp.company}`, bold: true }), new TextRun({ text: `\t${exp.date}`, bold: false })] }),
+            ...exp.bullets.map(bullet => new Paragraph({ text: bullet, bullet: { level: 0 } }))
+          ]),
+          new Paragraph({ text: "", spacing: { before: 200 } }),
+          new Paragraph({ text: "TECHNICAL SKILLS", heading: HeadingLevel.HEADING_2, border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } } }),
+          ...data.skills.map(skill => new Paragraph({ children: [new TextRun({ text: `${skill.category}: `, bold: true }), new TextRun(skill.items)] })),
+          new Paragraph({ text: "", spacing: { before: 200 } }),
+          new Paragraph({ text: "TECHNICAL PROJECTS", heading: HeadingLevel.HEADING_2, border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } } }),
+          ...(data.projects || []).flatMap(proj => [new Paragraph({ children: [new TextRun({ text: proj.name, bold: true }), new TextRun({ text: proj.link ? ` (${proj.link})` : "", color: "2563EB" })] }), new Paragraph({ text: proj.description })]),
+          new Paragraph({ text: "", spacing: { before: 200 } }),
+          new Paragraph({ text: "EDUCATION", heading: HeadingLevel.HEADING_2, border: { bottom: { color: "auto", space: 1, style: BorderStyle.SINGLE, size: 6 } } }),
+          ...data.education.map(edu => new Paragraph({ children: [new TextRun({ text: edu.school, bold: true }), new TextRun(` | ${edu.degree}\t${edu.date}`)] })),
+        ],
+      }],
+    });
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, `${data.personalInfo.fullName.replace(/\s/g, '_')}_Resume.docx`);
+  };
+
+  const updatePersonalInfo = (field: string, value: string) => {
+    setData(prev => ({ ...prev, personalInfo: { ...prev.personalInfo, [field]: value } }));
+  };
+
+  const updateSummary = (value: string) => {
+    setData(prev => ({ ...prev, summary: value }));
+  };
+
+  const updateSkill = (index: number, field: 'category' | 'items', value: string) => {
+    const newSkills = [...data.skills];
+    newSkills[index] = { ...newSkills[index], [field]: value };
+    setData(prev => ({ ...prev, skills: newSkills }));
+  };
+
+  const addSkill = () => {
+    setData(prev => ({ ...prev, skills: [...prev.skills, { category: "", items: "" }] }));
+  };
+
+  const removeSkill = (index: number) => {
+    setData(prev => ({ ...prev, skills: prev.skills.filter((_, i) => i !== index) }));
+  };
+
+  const updateExperience = (index: number, field: string, value: any) => {
+    const newExperience = [...data.experience];
+    (newExperience[index] as any)[field] = value;
+    setData(prev => ({ ...prev, experience: newExperience }));
+  };
+
+  const addExperience = () => {
+    setData(prev => ({ ...prev, experience: [...prev.experience, { company: "", role: "", location: "", date: "", bullets: [""] }] }));
+  };
+
+  const removeExperience = (index: number) => {
+    setData(prev => ({ ...prev, experience: prev.experience.filter((_, i) => i !== index) }));
+  };
+
+  const updateEdu = (index: number, field: string, value: string) => {
+    const newEdu = [...data.education];
+    (newEdu[index] as any)[field] = value;
+    setData(prev => ({ ...prev, education: newEdu }));
+  };
+
+  const updateArrayField = (field: 'achievements' | 'languages', index: number, value: string) => {
+    const newArr = [...(data[field] || [])];
+    newArr[index] = value;
+    setData(prev => ({ ...prev, [field]: newArr }));
+  };
+
+  const addArrayItem = (field: 'achievements' | 'languages') => {
+    setData(prev => ({ ...prev, [field]: [...(prev[field] || []), ""] }));
+  };
+
+  const updateProjects = (index: number, field: string, value: string) => {
+    const newProjects = [...(data.projects || [])];
+    (newProjects[index] as any)[field] = value;
+    setData(prev => ({ ...prev, projects: newProjects }));
+  };
+
+  const updateCert = (index: number, field: string, value: string) => {
+    const newCerts = [...(data.certifications || [])];
+    (newCerts[index] as any)[field] = value;
+    setData(prev => ({ ...prev, certifications: newCerts }));
+  };
+
+  return (
+    <div className="flex flex-col lg:flex-row h-screen bg-[#F3F4F6] text-black overflow-hidden selection:bg-[#FACC15]/40">
+      
+      {/* Sidebar - Neo-Brutalist Form Editor */}
+      <aside className="w-full lg:w-[500px] bg-white border-r-8 border-black overflow-y-auto p-10 space-y-12 scrollbar-hide shadow-[8px_0px_0px_0px_rgba(0,0,0,0.05)]">
+        
+        <div className="flex flex-col gap-6 mb-12">
+          <div className="flex items-center gap-3">
+             <div className="p-2 bg-[#2563EB] text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                <FileText className="w-8 h-8" />
+             </div>
+             <span className="text-xs font-black uppercase tracking-[0.4em] text-black/40">Blueprint Architect v2.0</span>
+          </div>
+          <h1 className="text-5xl font-black tracking-tighter uppercase leading-none">
+             Resume <br /> <span className="text-[#2563EB] drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] italic">Builder</span>
+          </h1>
+        </div>
+
+        {/* Action Protocol Panel */}
+        <motion.div 
+          whileHover={{ y: -2 }}
+          className="neo-box p-8 bg-black text-white space-y-6 shadow-[6px_6px_0px_0px_rgba(37,99,235,1)]"
+        >
+           <h3 className="text-xs font-black uppercase tracking-widest text-[#FACC15] flex items-center gap-3">
+              <Zap className="w-4 h-4 fill-current animate-pulse" /> EXECUTION_PROTOCOLS
+           </h3>
+           <div className="grid grid-cols-2 gap-6">
+              <button 
+                onClick={handlePrint} 
+                className="w-full bg-white text-black border-4 border-black py-4 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-[#FACC15] transition-all"
+              >
+                 <Printer className="w-5 h-5" /> PDF
+              </button>
+              <button 
+                onClick={generateWordDoc} 
+                className="w-full bg-white text-black border-4 border-black py-4 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-[#FACC15] transition-all"
+              >
+                 <FileText className="w-5 h-5" /> DOCX
+              </button>
+           </div>
+           
+           <div className="pt-2">
+              <label className="w-full border-4 border-white/20 hover:border-[#2563EB] py-4 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-4 cursor-pointer transition-all">
+                 <Upload className="w-5 h-5 text-[#2563EB]" /> {isParsing ? 'SYNCHRONIZING...' : 'IMPORT SOURCE PDF'}
+                 <input type="file" hidden accept=".pdf" onChange={handleImportPdf} />
+              </label>
+           </div>
+        </motion.div>
+
+        {/* Form Sections */}
+        <div className="space-y-12">
+          
+          {/* Section: Personal Info */}
+          <section className="space-y-8">
+            <h2 className="text-lg font-black uppercase tracking-tight flex items-center gap-4 border-b-4 border-black pb-4">
+              <User className="w-6 h-6 text-[#2563EB]" /> PERSONAL DETAILS
+            </h2>
+            <div className="grid grid-cols-2 gap-6">
+               <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-black/40">Full Identity Name</label>
+                  <input value={data.personalInfo.fullName} onChange={(e) => updatePersonalInfo('fullName', e.target.value)} className="neo-input" placeholder="Vashnavi Chauhan" />
+               </div>
+               <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-black/40">Occupational Node</label>
+                  <input value={data.personalInfo.role} onChange={(e) => updatePersonalInfo('role', e.target.value)} className="neo-input" placeholder="Frontend Developer" />
+               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+               <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-black/40">Email Protocol</label>
+                  <input type="email" value={data.personalInfo.email} onChange={(e) => updatePersonalInfo('email', e.target.value)} className="neo-input" placeholder="vashnavichauhan1@gmail.com" />
+               </div>
+               <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-black/40">Direct Signal Line</label>
+                  <input value={data.personalInfo.phone} onChange={(e) => updatePersonalInfo('phone', e.target.value)} className="neo-input" placeholder="+91 9174403667" />
+               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+               <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-black/40">LinkedIn Node</label>
+                  <input value={data.personalInfo.linkedin} onChange={(e) => updatePersonalInfo('linkedin', e.target.value)} className="neo-input" placeholder="vashnavichauhan18" />
+               </div>
+               <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-black/40">GitHub Manifest</label>
+                  <input value={data.personalInfo.github} onChange={(e) => updatePersonalInfo('github', e.target.value)} className="neo-input" placeholder="vashnavichauhan18" />
+               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-widest text-black/40">Portfolio Signal</label>
+                <input value={data.personalInfo.portfolio || ''} onChange={(e) => updatePersonalInfo('portfolio', e.target.value)} className="neo-input" placeholder="vashnavi.dev" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-widest text-black/40">Physical Node Location</label>
+                <input value={data.personalInfo.location} onChange={(e) => updatePersonalInfo('location', e.target.value)} className="neo-input" placeholder="Bengaluru, India" />
+              </div>
+            </div>
+          </section>
+
+          {/* Section: Summary */}
+          <section className="space-y-8">
+            <h2 className="text-lg font-black uppercase tracking-tight flex items-center gap-4 border-b-4 border-black pb-4">
+              <FileText className="w-6 h-6 text-[#2563EB]" /> PROFESSIONAL SUMMARY
+            </h2>
+            <textarea 
+              value={data.summary}
+              onChange={(e) => updateSummary(e.target.value)}
+              className="neo-input min-h-[140px] leading-relaxed py-6 text-sm"
+              placeholder="Self-taught Frontend Engineer with hands-on production experience..."
+            />
+          </section>
+
+          {/* Section: Skills */}
+          <section className="space-y-8">
+            <div className="flex justify-between items-center border-b-4 border-black pb-4">
+               <h2 className="text-lg font-black uppercase tracking-tight flex items-center gap-4 text-black">
+                 <Zap className="w-6 h-6 text-[#2563EB]" /> SKILLS
+               </h2>
+               <button onClick={addSkill} className="p-2 bg-black text-white hover:bg-[#2563EB] transition-colors shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"><Plus className="w-5 h-5" /></button>
+            </div>
+            <div className="space-y-4">
+               {data.skills.map((skill, idx) => (
+                 <div key={idx} className="bg-white border-2 border-black p-4 space-y-3 relative group">
+                    <input value={skill.category} onChange={(e) => updateSkill(idx, 'category', e.target.value)} placeholder="Category" className="neo-input text-[10px] font-black" />
+                    <textarea value={skill.items} onChange={(e) => updateSkill(idx, 'items', e.target.value)} placeholder="Items (comma separated)" className="neo-input text-[10px] min-h-[60px]" />
+                    <button onClick={() => removeSkill(idx)} className="absolute -top-2 -right-2 bg-white border-2 border-black p-1 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
+                 </div>
+               ))}
+            </div>
+          </section>
+
+          {/* Section: Experience */}
+          <section className="space-y-8">
+            <div className="flex justify-between items-center border-b-4 border-black pb-4">
+              <h2 className="text-lg font-black uppercase tracking-tight flex items-center gap-4 text-black">
+                <Briefcase className="w-6 h-6 text-[#2563EB]" /> EXPERIENCE
+              </h2>
+              <button onClick={addExperience} className="p-2 bg-black text-white hover:bg-[#2563EB] transition-colors shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"><Plus className="w-5 h-5" /></button>
+            </div>
+            {data.experience.map((exp, idx) => (
+              <div key={idx} className="bg-white border-2 border-black p-6 relative group space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                   <input value={exp.role} onChange={(e) => updateExperience(idx, 'role', e.target.value)} placeholder="Role" className="neo-input text-[10px]" />
+                   <input value={exp.company} onChange={(e) => updateExperience(idx, 'company', e.target.value)} placeholder="Company" className="neo-input text-[10px]" />
+                </div>
+                <div className="space-y-3">
+                   {exp.bullets.map((bullet, bIdx) => (
+                     <div key={bIdx} className="flex gap-2">
+                        <textarea value={bullet} onChange={(e) => {
+                          const newBullets = [...exp.bullets];
+                          newBullets[bIdx] = e.target.value;
+                          updateExperience(idx, 'bullets', newBullets);
+                        }} className="neo-input text-[10px] min-h-[50px] py-3" placeholder="Bullet point..." />
+                     </div>
+                   ))}
+                   <button onClick={() => updateExperience(idx, 'bullets', [...exp.bullets, ""])} className="text-[10px] font-black text-[#2563EB] uppercase text-xs hover:underline">+ Add Point</button>
+                </div>
+                <button onClick={() => removeExperience(idx)} className="absolute -top-3 -right-3 bg-white border-2 border-black p-1 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
+              </div>
+            ))}
+          </section>
+
+          {/* Section: Technical Projects */}
+          <section className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-sm font-black uppercase tracking-widest flex items-center gap-2 text-black">
+                📂 TECHNICAL PROJECTS
+              </h2>
+              <button onClick={() => setData(prev => ({ ...prev, projects: [...(prev.projects || []), { name: "", link: "", description: "" }] }))} className="text-[#2563EB]"><Plus className="w-5 h-5" /></button>
+            </div>
+            {(data.projects || []).map((proj, idx) => (
+              <div key={idx} className="bg-white border-2 border-black p-6 relative group space-y-4">
+                 <input value={proj.name} onChange={(e) => updateProjects(idx, 'name', e.target.value)} placeholder="Project Name" className="neo-input text-[10px]" />
+                 <textarea value={proj.description} onChange={(e) => updateProjects(idx, 'description', e.target.value)} placeholder="Description" className="neo-input text-[10px] min-h-[80px]" />
+                 <button onClick={() => setData(prev => ({ ...prev, projects: prev.projects?.filter((_, i) => i !== idx) }))} className="absolute -top-3 -right-3 bg-white border-2 border-black p-1 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
+              </div>
+            ))}
+          </section>
+
+        </div>
+        
+        {/* Template Intelligence */}
+        <div className="border-t-8 border-black pt-12 space-y-8">
+           <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black">RENDER TEMPLATE_</h3>
+           <div className="grid grid-cols-3 gap-6">
+              {['minimal', 'professional', 'modern'].map((t) => (
+                <button key={t} onClick={() => setTemplate(t as any)} className={`neo-btn-secondary py-4 text-[10px] uppercase font-black ${template === t ? 'bg-black text-white' : ''}`}>
+                   {t}
+                </button>
+              ))}
+           </div>
+        </div>
+
+        {/* Global Security Disclaimer */}
+        <motion.div 
+          whileHover={{ scale: 1.02 }}
+          className="bg-[#FACC15] neo-box p-8 flex gap-6 items-start border-4 border-black"
+        >
+           <ShieldCheck className="w-10 h-10 text-black shrink-0" strokeWidth={3} />
+           <p className="text-xs font-black uppercase leading-relaxed tracking-tight">
+             ATS COMPLIANCE MODE: ACTIVE. Templates are pre-hardened for sovereign recruitment systems. Verified 2026 Protocols.
+           </p>
+        </motion.div>
+      </aside>
+
+      {/* Main Preview Region */}
+      <main className="flex-1 overflow-y-auto bg-gray-200 p-12 lg:p-20 flex justify-center scrollbar-hide relative">
+
+
+         <div className="w-full max-w-[850px] shadow-[20px_20px_0px_0px_rgba(0,0,0,0.1)]">
+            <ResumePreview data={data} template={template} ref={componentRef} />
+         </div>
+      </main>
+    </div>
+  );
+}

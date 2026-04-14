@@ -1,0 +1,128 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Sparkles, Coffee, Map, TrendingUp, Building2, User, Globe, ShieldCheck, Zap } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
+
+export default function Home() {
+  const { user, userData } = useAuth();
+
+  const features = [
+    { title: 'IKIGAI Finder', desc: 'Discover your true purpose and ideal career path using AI-powered Ikigai analysis.', icon: Brain, href: "/ikigai" },
+    { title: 'AI Career Agent', desc: 'Detailed roadmaps, salary insights, role suggestions & real job links tailored for India.', icon: Briefcase, href: "/career-agent" },
+    { title: 'Resume Builder', desc: 'Create ATS-friendly resumes that stand out to top recruiters instantly.', icon: FileText, href: "/resume-builder" },
+    { title: 'ATS Checker', desc: 'Upload your PDF and get instant ATS scoring and targeted resume feedback.', icon: CheckCircle, href: "/ats-check" },
+    { title: 'LinkedIn Optimizer', desc: 'AI-generated headlines, summaries, and post ideas to boost your profile.', icon: Zap, href: "/linkedin" },
+    { title: 'Portfolio Generator', desc: 'Auto-generate a beautiful, deployed portfolio site with your details.', icon: Sparkles, href: "/portfolio" },
+    { title: 'AI Roadmap', desc: 'Generate a personalized step-by-step career path based on your exact dream role.', icon: Map, href: "/roadmap" },
+    { title: 'Skill Roadmaps & Docs', desc: 'Step-by-step skill guides, free resources, and essential government docs for India.', icon: BookOpen, href: "/documents" },
+    { title: 'Mental Health', desc: 'Talk to Serenity—your empathetic AI companion for stress, anxiety & burnout.', icon: HeartHandshake, href: "/mental-health" },
+  ];
+
+  return (
+    <div className="flex flex-col bg-[#F3F4F6] selection:bg-[#FACC15]/40 min-h-screen">
+      
+      {/* 🚀 BLACK MARQUEE TICKER */}
+      <div className="marquee-neo mt-[88px]">
+        <motion.div 
+          animate={{ x: [0, -1200] }}
+          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+          className="flex whitespace-nowrap gap-20 font-black text-xs uppercase tracking-[0.3em] items-center"
+        >
+          <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-[#2563EB]" /> AI CAREER AGENT LIVE WITH 2026 INSIGHTS</div>
+          <div className="flex items-center gap-3"><Brain className="w-5 h-5 text-[#FACC15]" /> PREMIUM "IKIGAI" CAREER FINDER NOW ACTIVE</div>
+          <div className="flex items-center gap-3"><FileText className="w-5 h-5 text-emerald-400" /> AI RESUME BUILDER: 100% FREE FOR STUDENTS</div>
+          
+          <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-[#2563EB]" /> AI CAREER AGENT LIVE WITH 2026 INSIGHTS</div>
+        </motion.div>
+      </div>
+
+      {/* 🔮 HERO SECTION */}
+      <section className="relative text-center space-y-12 py-20 max-w-7xl mx-auto px-6">
+        
+        {/* User Greeting (if logged in) */}
+        {user && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center gap-4 mb-8"
+          >
+            <p className="font-black text-xs uppercase tracking-[0.3em]">Welcome Back, {userData?.name?.split(' ')[0] || 'User'}!</p>
+            <div className="px-4 py-1 bg-[#FACC15] border-2 border-black text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+               ⚡ AI-Powered Career Growth
+            </div>
+          </motion.div>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-8"
+        >
+          <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-none text-black uppercase">
+             Your Dream Career, <br /> 
+             <span className="text-black drop-shadow-[4px_4px_0px_rgba(255,255,255,1)]">Synced Perfectly.</span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-gray-500 font-bold max-w-2xl mx-auto leading-relaxed uppercase">
+             Guidance, resumes, ATS checks, and custom roadmaps—all powered by AI. Designed explicitly for Indian students.
+          </p>
+        </motion.div>
+        
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+          <Link href="/signup" className="bg-[#2563EB] text-white border-4 border-black px-12 py-5 font-black text-sm uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+             Get Started For Free →
+          </Link>
+          <Link href="/about" className="bg-white text-black border-4 border-black px-12 py-5 font-black text-sm uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+             See How It Works
+          </Link>
+        </div>
+      </section>
+
+      {/* 🧪 EVERYTHING YOU NEED SECTION */}
+      <section className="py-20 px-6 max-w-6xl mx-auto w-full space-y-20">
+         <div className="text-center">
+            <h2 className="text-4xl font-black uppercase tracking-tighter underline decoration-8 decoration-[#FACC15] underline-offset-8">Everything You Need</h2>
+         </div>
+
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((tool, i) => (
+              <Link href={tool.href} key={i}>
+                <motion.div 
+                  className="bg-white border-4 border-black p-8 h-full flex flex-col items-start gap-6 group hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all relative overflow-hidden"
+                  whileHover={{ y: -4 }}
+                >
+                   <div className="p-3 border-2 border-black bg-white group-hover:bg-[#FACC15] transition-colors">
+                      <tool.icon className="w-6 h-6" strokeWidth={3} />
+                   </div>
+                   <div className="space-y-3">
+                      <h3 className="text-xl font-black tracking-tight uppercase leading-tight">{tool.title}</h3>
+                      <p className="text-gray-500 font-bold text-xs leading-relaxed uppercase">{tool.desc}</p>
+                   </div>
+                </motion.div>
+              </Link>
+            ))}
+         </div>
+      </section>
+
+      {/* 💎 ENJOYING DREAMSYNC UNIT */}
+      <section className="px-6 pb-40">
+        <div className="max-w-xl mx-auto border-4 border-black p-12 bg-white text-center space-y-8 shadow-[10px_10px_0px_0px_rgba(0,0,0,0.05)]">
+           <Coffee className="w-12 h-12 mx-auto text-black" strokeWidth={3} />
+           <h2 className="text-3xl font-black uppercase tracking-tighter">Enjoying DreamSync?</h2>
+           <p className="text-sm text-gray-500 font-bold leading-relaxed uppercase">
+              DreamSync is 100% free for students. If it helped your career journey, consider buying us a chai — every rupee keeps the servers running!
+           </p>
+           <Link href="/donate" className="inline-block bg-[#2563EB] text-white border-4 border-black px-12 py-4 font-black text-sm uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+              ❤️ Support Us via UPI!
+           </Link>
+           <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">No subscriptions. No hidden fees. Just good vibes.</p>
+        </div>
+      </section>
+    </div>
+  );
+}
