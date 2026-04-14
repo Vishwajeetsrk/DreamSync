@@ -109,7 +109,7 @@ export default function Login() {
             <div className="space-y-4">
               <div className="flex justify-between items-center ml-1">
                 <label className="text-xs font-black tracking-widest">PASSWORD</label>
-                <Link href="/forgot-password" title="Forgot Password" className="text-[10px] text-[#2563EB] hover:underline">RECOVER ACCESS?</Link>
+                <Link href="/forgot-password" title="Forgot Password" className="text-[10px] text-[#2563EB] hover:underline">Forgot Password?</Link>
               </div>
               <div className="relative group">
                 <input 
@@ -148,7 +148,7 @@ export default function Login() {
                 disabled={loading}
                 className="flex items-center justify-center gap-3 p-4 border-4 border-black font-black text-xs uppercase hover:bg-red-50 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
               >
-                <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="Google" /> Google Access
+                <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="Google" /> Google
               </button>
               <button 
                 type="button"
