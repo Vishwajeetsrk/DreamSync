@@ -101,8 +101,15 @@ git push mirror main
 
 ---
 
-## 💸 Support the Initiative
-DreamSync is built with ❤️ for Indian students. If this platform helps you land your dream job, consider supporting the mission via our **Donate** page.
+## 💖 Community Support (Donors)
+DreamSync is 100% free and open-source for students. Our AI infrastructure and server costs are sustained by the community. 
+
+**How to contribute:**
+- **UPI**: `vishwajeetsrk-1@okhdfcbank`
+- **Platform**: Visit our [Donate Page](https://dreamssync.vercel.app/donate) for detailed tiers and QR codes.
+
+*Every contribution helps us maintain the AI API credits and keep the platform accessible to everyone.*
 
 ---
+
 © 2026 DREAMSYNC AI. IDENTITY_SYNCHRONIZED.
