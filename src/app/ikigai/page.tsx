@@ -306,16 +306,22 @@ export default function IkigaiPage() {
             <div className="space-y-8">
               <header className="text-center md:text-left">
                 <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
-                   <span className="px-3 py-1 bg-primary text-white font-black text-xs border-2 border-black neo-box">PREMIUM FEATURE</span>
+                   <motion.span 
+                     animate={{ scale: [1, 1.05, 1], rotate: [-1, 1, -1] }}
+                     transition={{ repeat: Infinity, duration: 2 }}
+                     className="px-6 py-2 bg-[#FACC15] text-black font-black text-xs border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest"
+                   >
+                     💎 PREMIUM FEATURE
+                   </motion.span>
                 </div>
-                <h1 className="text-5xl font-black mb-4">Discover Your Purpose.</h1>
-                <p className="text-xl text-muted-foreground font-medium">Use the Japanese IKIGAI framework to find your dream life.</p>
+                <h1 className="text-5xl md:text-6xl font-black mb-4 tracking-tighter uppercase italic">Discover Your <span className="text-[#7C3AED]">Purpose_</span></h1>
+                <p className="text-xl text-muted-foreground font-medium uppercase tracking-tight">Utilize the Sovereign IKIGAI Protocol to engineer your ideal life trajectory.</p>
               </header>
 
               {/* Progress Bar */}
               <div className="h-2 bg-gray-200 border-2 border-black overflow-hidden mb-12">
                 <motion.div
-                  className="h-full bg-[#2563EB]"
+                  className="h-full bg-[#7C3AED]"
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
                 />
@@ -388,9 +394,9 @@ export default function IkigaiPage() {
                       (currentStepData.id !== 'incomeGoals' && (form[currentStepData.id as keyof typeof form] as string[]).length === 0) ||
                       (currentStepData.id === 'incomeGoals' && !form.incomeGoals.trim())
                     }
-                    className="flex items-center gap-3 px-12 py-3 bg-[#A3A3A3] text-white font-black text-sm border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all disabled:opacity-50"
+                   className="flex items-center gap-3 px-12 py-4 bg-[#7C3AED] text-white font-black text-sm border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all disabled:opacity-50 uppercase italic"
                   >
-                    {isLastStep ? 'Analyze My Ikigai ✨' : 'Continue →'}
+                    {isLastStep ? 'Analyze My Ikigai ✨' : 'Continue Execution →'}
                   </button>
                 </div>
               </div>
