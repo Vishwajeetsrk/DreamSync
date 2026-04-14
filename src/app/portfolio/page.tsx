@@ -233,11 +233,11 @@ export default function PortfolioGenerator() {
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header */}
       <header className="text-center border-b-4 border-black pb-8">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent border-2 border-black text-sm font-bold mb-4">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#2563EB] text-white border-2 border-black text-sm font-bold mb-4">
           <Sparkles className="w-4 h-4" /> AI-Powered
         </div>
         <h1 className="text-4xl md:text-6xl font-black mb-3 leading-tight">
-          Portfolio <span className="bg-primary text-white px-3">Generator</span>
+          Portfolio <span className="bg-[#2563EB] text-white px-3">Generator</span>
         </h1>
         <p className="text-xl text-gray-600 font-medium">From your resume to a stunning website in under 60 seconds.</p>
       </header>
@@ -250,7 +250,7 @@ export default function PortfolioGenerator() {
           const isCurrent = step === s.id;
           return (
             <div key={s.id} className="flex flex-col items-center gap-2">
-              <div className={`w-10 h-10 rounded-full border-4 border-black flex items-center justify-center font-black text-sm transition-all ${isDone ? 'bg-primary text-white' : isCurrent ? 'bg-accent text-black scale-110' : 'bg-white text-gray-400'}`}>
+              <div className={`w-10 h-10 rounded-full border-4 border-black flex items-center justify-center font-black text-sm transition-all ${isDone ? 'bg-[#2563EB] text-white' : isCurrent ? 'bg-[#2563EB] text-white scale-110' : 'bg-white text-gray-400'}`}>
                 {isDone ? <Check className="w-5 h-5" /> : <s.icon className="w-4 h-4" />}
               </div>
               <span className={`text-xs font-bold hidden md:block ${isCurrent ? 'text-black' : 'text-gray-400'}`}>{s.label}</span>
@@ -516,7 +516,7 @@ export default function PortfolioGenerator() {
               <button
                 onClick={generatePortfolio}
                 disabled={isGenerating}
-                className="w-full py-5 bg-primary text-white font-black text-xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full py-5 bg-[#2563EB] text-white font-black text-xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isGenerating ? (
                   <>
@@ -553,7 +553,7 @@ export default function PortfolioGenerator() {
               if (step === 3) setStep(4);
               else setStep(s => Math.min(4, s + 1));
             }}
-            className="flex items-center gap-2 px-6 py-3 border-4 border-black font-black bg-primary text-white hover:bg-primary/90 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            className="flex items-center gap-2 px-6 py-3 border-4 border-black font-black bg-[#2563EB] text-white hover:bg-blue-700 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
           >
             {step === 3 ? 'Review & Generate' : 'Next Step'} <ChevronRight className="w-5 h-5" />
           </button>

@@ -45,10 +45,14 @@ export default function Navbar() {
         
         {/* Branding */}
         <Link href="/" className="shrink-0 inline-block group">
-          <div className="flex items-center text-3xl font-black italic tracking-tighter">
-            <span className="text-[#2563EB]">Dream</span>
-            <span className="text-black ml-1">Sync</span>
-          </div>
+           <Image 
+             src="/DreamSynclogo.png" 
+             alt="DreamSync Logo" 
+             width={180} 
+             height={45} 
+             className="object-contain" 
+             priority 
+           />
         </Link>
 
         {/* Center Navigation */}

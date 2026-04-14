@@ -467,13 +467,13 @@ export default function Documents() {
       <div className="flex gap-0 border-4 border-black w-fit neo-box">
         <button
           onClick={() => setTab('skills')}
-          className={`px-8 py-3 font-black text-sm uppercase tracking-wider transition-colors flex items-center gap-2 ${tab === 'skills' ? 'bg-primary text-white' : 'bg-white hover:bg-gray-100'}`}
+          className={`px-8 py-3 font-black text-sm uppercase tracking-wider transition-colors flex items-center gap-2 ${tab === 'skills' ? 'bg-[#2563EB] text-white' : 'bg-white hover:bg-gray-100'}`}
         >
           <GraduationCap className="w-4 h-4" /> Skill Guides (Videos/Projects)
         </button>
         <button
           onClick={() => setTab('docs')}
-          className={`px-8 py-3 font-black text-sm uppercase tracking-wider transition-colors border-l-4 border-black flex items-center gap-2 ${tab === 'docs' ? 'bg-primary text-white' : 'bg-white hover:bg-gray-100'}`}
+          className={`px-8 py-3 font-black text-sm uppercase tracking-wider transition-colors border-l-4 border-black flex items-center gap-2 ${tab === 'docs' ? 'bg-[#2563EB] text-white' : 'bg-white hover:bg-gray-100'}`}
         >
           <Landmark className="w-4 h-4" /> Government Docs
         </button>

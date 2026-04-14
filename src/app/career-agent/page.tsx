@@ -283,10 +283,10 @@ export default function CareerAgent() {
                <div className="p-2 bg-black text-white shadow-[3px_3px_0px_0px_rgba(37,99,235,1)]">
                   <Brain className="w-8 h-8" />
                </div>
-               <span className="text-xs font-black uppercase tracking-[0.4em] text-black/40">Market Intelligence Protocol</span>
+               <span className="text-xs font-black uppercase tracking-[0.4em] text-black/40">Market Intelligence</span>
             </div>
             <h1 className="text-6xl md:text-[100px] font-black tracking-tighter leading-none italic uppercase">
-               Strategist <br /> <span className="text-[#2563EB] drop-shadow-[5px_5px_0px_rgba(0,0,0,1)]">v2</span>
+               DreamSync AI <br /> <span className="text-[#2563EB] drop-shadow-[5px_5px_0px_rgba(0,0,0,1)]">Career Guide</span>
             </h1>
           </div>
           <div className="flex flex-wrap gap-3 justify-end max-w-md">

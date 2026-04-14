@@ -81,7 +81,7 @@ export default function Login() {
                   <Fingerprint className="w-10 h-10" />
                </div>
             </div>
-            <h1 className="text-4xl font-black tracking-tighter text-black">Hub Authentication_</h1>
+            <h1 className="text-4xl font-black tracking-tighter text-black">Hub Authentication</h1>
             <p className="text-gray-400 text-xs tracking-[0.2em]">Secure Access Required</p>
           </div>
 

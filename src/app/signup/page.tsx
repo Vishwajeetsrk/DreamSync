@@ -92,7 +92,7 @@ export default function Signup() {
                   <ShieldCheck className="w-10 h-10" />
                </div>
             </div>
-            <h1 className="text-4xl font-black tracking-tighter text-black">Create Identity_</h1>
+            <h1 className="text-4xl font-black tracking-tighter text-black">Create Identity</h1>
             <p className="text-gray-400 text-xs tracking-[0.2em]">Synchronize with the Grid</p>
           </div>
 

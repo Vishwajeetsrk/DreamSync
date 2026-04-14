@@ -16,7 +16,7 @@ export default function About() {
           className="flex whitespace-nowrap gap-20 font-black text-xs uppercase tracking-[0.3em] items-center"
         >
           <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-[#2563EB]" /> CORE MISSION: ACCESSIBILITY THROUGH AI</div>
-          <div className="flex items-center gap-3"><Briefcase className="w-5 h-5 text-[#FACC15]" /> ADVANCED CAREER ENGINEERING</div>
+          <div className="flex items-center gap-3"><Link href="/career-agent" className="flex items-center gap-3 hover:text-[#2563EB] transition-colors"><Briefcase className="w-5 h-5 text-[#FACC15]" /> ADVANCED CAREER ENGINEERING</Link></div>
           <div className="flex items-center gap-3"><FileText className="w-5 h-5 text-emerald-400" /> 100% FREE FOR STUDENT NODES</div>
           <div className="flex items-center gap-3"><HeartHandshake className="w-5 h-5 text-rose-400" /> COMMUNITY-DRIVEN GROWTH</div>
           

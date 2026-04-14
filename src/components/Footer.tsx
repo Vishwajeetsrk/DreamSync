@@ -14,10 +14,13 @@ export default function Footer() {
         {/* Brand Identity */}
         <div className="space-y-8">
           <Link href="/" className="inline-block">
-            <div className="flex items-center text-3xl font-black italic tracking-tighter">
-              <span className="text-[#2563EB]">Dream</span>
-              <span className="text-black ml-1">Sync</span>
-            </div>
+            <Image 
+              src="/DreamSynclogo.png" 
+              alt="DreamSync Logo" 
+              width={160} 
+              height={40} 
+              className="object-contain" 
+            />
           </Link>
           <p className="text-xs font-bold leading-relaxed text-gray-400 max-w-xs uppercase">
             AI-powered career guidance for Indian students. Find your path, build your resume, and grow your career.
