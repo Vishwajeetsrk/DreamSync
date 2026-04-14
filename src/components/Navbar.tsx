@@ -44,8 +44,8 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto flex items-center justify-between">
         
         {/* Branding */}
-        <Link href="/" className="shrink-0 group">
-          <div className="relative h-10 w-40">
+        <Link href="/" className="shrink-0 inline-block group">
+          <div className="relative h-10 w-44">
              <Image 
                src="/DreamSynclogo.png" 
                alt="DreamSync" 
