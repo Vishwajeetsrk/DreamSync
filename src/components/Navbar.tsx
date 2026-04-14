@@ -36,7 +36,7 @@ export default function Navbar() {
     { name: 'PORTFOLIO GEN', href: '/portfolio' },
     { name: 'LINKEDIN OPTIMIZER', href: '/linkedin' },
     { name: 'MENTAL HEALTH AI', href: '/mental-health' },
-    { name: 'DOCS & SKILLS', href: '/documents' },
+    { name: 'ROADMAPS & DOCS', href: '/documents' },
   ];
 
   return (

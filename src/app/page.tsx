@@ -18,7 +18,7 @@ export default function Home() {
     { title: 'LinkedIn Optimizer', desc: 'AI-generated headlines, summaries, and post ideas to boost your profile.', icon: Zap, href: "/linkedin" },
     { title: 'Portfolio Generator', desc: 'Auto-generate a beautiful, deployed portfolio site with your details.', icon: Sparkles, href: "/portfolio" },
     { title: 'AI Roadmap', desc: 'Generate a personalized step-by-step career path based on your exact dream role.', icon: Map, href: "/roadmap" },
-    { title: 'Skill Roadmaps & Docs', desc: 'Step-by-step skill guides, free resources, and essential government docs for India.', icon: BookOpen, href: "/documents" },
+    { title: 'Roadmaps & Docs', desc: 'Step-by-step skill guides, free resources, and essential government docs for India.', icon: BookOpen, href: "/documents" },
     { title: 'Mental Health', desc: 'Talk to Serenity—your empathetic AI companion for stress, anxiety & burnout.', icon: HeartHandshake, href: "/mental-health" },
   ];
 
