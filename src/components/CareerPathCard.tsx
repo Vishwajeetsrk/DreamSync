@@ -303,7 +303,7 @@ export default function CareerPathCard({ path }: { path: CareerPath }) {
           {/* ── Jobs ── */}
           {activeSection === 'jobs' && (
             <motion.div key="jobs" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4">
-              <p className="text-xs font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+              <p className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5" /> Live job search platforms
               </p>
               <JobCards jobs={path.jobs} />
