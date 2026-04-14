@@ -314,7 +314,7 @@ export default function IkigaiPage() {
                      💎 PREMIUM FEATURE
                    </motion.span>
                 </div>
-                <h1 className="text-5xl md:text-6xl font-black mb-4 tracking-tighter uppercase italic">Discover Your <span className="text-[#7C3AED]">Purpose_</span></h1>
+                <h1 className="text-5xl md:text-6xl font-black mb-4 tracking-tighter uppercase italic">Discover Your <span className="text-[#7C3AED]">Purpose</span></h1>
                 <p className="text-xl text-muted-foreground font-medium uppercase tracking-tight">Utilize the Advanced IKIGAI Framework to engineer your ideal life trajectory.</p>
               </header>
 

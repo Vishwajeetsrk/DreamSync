@@ -68,7 +68,7 @@ function Flowchart({ nodes }: { nodes: RoadmapNode[] }) {
   return (
     <div className="bg-white border-4 border-black neo-box p-8 shadow-[8px_8px_0px_0px_rgba(37,99,235,1)]">
       <h3 className="font-black text-xl mb-6 flex items-center gap-3 uppercase italic">
-        <MapPin className="w-6 h-6 text-[#2563EB]" /> Visual Progression_
+        <MapPin className="w-6 h-6 text-[#2563EB]" /> Visual Progression
       </h3>
       <div className="overflow-x-auto pb-4">
         <div className="flex items-start gap-0 min-w-max">
@@ -153,7 +153,7 @@ function ChatBubble({ msg }: { msg: Message }) {
             {msg.data.roles?.length > 0 && (
               <div className="space-y-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.4em] text-black/40 flex items-center gap-3">
-                  <TrendingUp className="w-4 h-4" /> NODE SUGGESTIONS_
+                  <TrendingUp className="w-4 h-4" /> NODE SUGGESTIONS
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {msg.data.roles.map((r, i) => <RoleCard key={i} role={r} />)}
@@ -162,7 +162,7 @@ function ChatBubble({ msg }: { msg: Message }) {
             )}
             {msg.data.quickTips?.length > 0 && (
               <div className="bg-[#FACC15] border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <p className="text-xs font-black uppercase tracking-[0.4em] text-black mb-4">⚡ CRITICAL INTELLIGENCE_</p>
+                <p className="text-xs font-black uppercase tracking-[0.4em] text-black mb-4">⚡ CRITICAL INTELLIGENCE</p>
                 <ul className="space-y-3">
                   {msg.data.quickTips.map((tip, i) => (
                     <li key={i} className="text-sm text-black font-black flex gap-4 italic uppercase">
@@ -175,7 +175,7 @@ function ChatBubble({ msg }: { msg: Message }) {
             {msg.data.jobLinks?.length > 0 && (
               <div className="space-y-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.4em] text-black/40 flex items-center gap-3">
-                  <Briefcase className="w-4 h-4" /> LIVE PORTALS_
+                  <Briefcase className="w-4 h-4" /> LIVE PORTALS
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {msg.data.jobLinks.map((j, i) => (
@@ -279,12 +279,12 @@ export default function CareerAgent() {
           transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
           className="flex whitespace-nowrap gap-20 font-black text-xs uppercase tracking-[0.3em] items-center"
         >
-          <div className="flex items-center gap-3"><Brain className="w-5 h-5 text-[#FACC15] fill-current" /> NODE: DREAMSYNC STRATEGIST v2.0</div>
+          <div className="flex items-center gap-3"><Brain className="w-5 h-5 text-[#FACC15] fill-current" /> NODE: DREAMSYNC STRATEGIST v2</div>
           <div className="flex items-center gap-3"><Globe className="w-5 h-5 text-[#2563EB]" /> ACTIVE CAREER SYNC: 2026 ARCHIVES LOADED</div>
           <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-emerald-600" /> SALARY TRENDS: +15% INCREASE IN TECH ROLES</div>
           
           {/* Duplicates for loop */}
-          <div className="flex items-center gap-3"><Brain className="w-5 h-5 text-[#FACC15] fill-current" /> NODE: DREAMSYNC STRATEGIST v2.0</div>
+          <div className="flex items-center gap-3"><Brain className="w-5 h-5 text-[#FACC15] fill-current" /> NODE: DREAMSYNC STRATEGIST v2</div>
           <div className="flex items-center gap-3"><Globe className="w-5 h-5 text-[#2563EB]" /> ACTIVE CAREER SYNC: 2026 ARCHIVES LOADED</div>
         </motion.div>
       </div>
@@ -301,7 +301,7 @@ export default function CareerAgent() {
                <span className="text-xs font-black uppercase tracking-[0.4em] text-black/40">Market Intelligence Protocol</span>
             </div>
             <h1 className="text-6xl md:text-[100px] font-black tracking-tighter leading-none italic uppercase">
-               Strategist <br /> <span className="text-[#2563EB] drop-shadow-[5px_5px_0px_rgba(0,0,0,1)]">v2.0_</span>
+               Strategist <br /> <span className="text-[#2563EB] drop-shadow-[5px_5px_0px_rgba(0,0,0,1)]">v2</span>
             </h1>
           </div>
           <div className="flex flex-wrap gap-3 justify-end max-w-md">

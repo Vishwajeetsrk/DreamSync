@@ -81,7 +81,7 @@ export default function Roadmap() {
         >
           <div className="flex items-center gap-3"><Map className="w-5 h-5 text-[#FACC15] fill-current" /> NODE: PLOTTING SYNTHETIC CAREER TRAJECTORIES</div>
           <div className="flex items-center gap-3"><Globe className="w-5 h-5 text-[#2563EB]" /> GLOBAL SYNC: 2026 MARKET INTELLIGENCE ARCHIVES LOADED</div>
-          <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-emerald-600" /> ROADMAP v4.0: 100% SUCCESS RATE IN FAANG ALIGNMENT</div>
+          <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-emerald-600" /> ROADMAP: 100% SUCCESS RATE IN FAANG ALIGNMENT</div>
           
           {/* Duplicates for loop */}
           <div className="flex items-center gap-3"><Map className="w-5 h-5 text-[#FACC15] fill-current" /> NODE: PLOTTING SYNTHETIC CAREER TRAJECTORIES</div>
@@ -98,10 +98,10 @@ export default function Roadmap() {
                  <div className="p-2 bg-black text-white shadow-[3px_3px_0px_0px_rgba(37,99,235,1)]">
                     <Map className="w-8 h-8" />
                  </div>
-                 <span className="text-xs font-black uppercase tracking-[0.4em] text-black/40">Career Graph Protocol v4.0</span>
+                 <span className="text-xs font-black uppercase tracking-[0.4em] text-black/40">Career Roadmap</span>
               </div>
               <h1 className="text-6xl md:text-[100px] font-black tracking-tighter leading-none text-black">
-                 Path <br /> <span className="text-[#2563EB] drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] italic text-nowrap">Architect_</span>
+                  Path
               </h1>
            </div>
            
@@ -140,7 +140,7 @@ export default function Roadmap() {
             <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="neo-box bg-red-100 border-red-600 p-16 max-w-3xl mx-auto shadow-[10px_10px_0px_0px_rgba(220,38,38,1)]">
               <div className="flex items-center gap-8 mb-10 border-b-4 border-red-600 pb-8">
                 <ShieldCheck className="w-16 h-16 text-red-600" strokeWidth={3} />
-                <h2 className="text-4xl font-black text-red-600 uppercase italic">Safety violation_</h2>
+                <h2 className="text-4xl font-black text-red-600 uppercase italic">Safety violation</h2>
               </div>
               <p className="text-xl font-bold text-red-900 mb-10 uppercase tracking-tight leading-tight">{safetyError.message}</p>
               
@@ -187,7 +187,7 @@ export default function Roadmap() {
               {globalPrerequisites && (
                 <div className="neo-box bg-white p-16 border-black space-y-10 shadow-[12px_12px_0px_0px_rgba(37,99,235,1)]">
                   <h2 className="text-3xl font-black flex items-center gap-6 border-b-6 border-black pb-6 uppercase italic">
-                    <GraduationCap className="w-10 h-10 text-[#2563EB]" /> Core Prerequisites_
+                    <GraduationCap className="w-10 h-10 text-[#2563EB]" /> Core Prerequisites
                   </h2>
                   <div className="grid md:grid-cols-2 gap-16">
                     <div className="space-y-4">
@@ -234,7 +234,7 @@ export default function Roadmap() {
 
                         {step.phasePrerequisites?.length > 0 && (
                           <div className="bg-[#F3F4F6] border-4 border-black p-8 italic shadow-inner">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-[#2563EB]">GATEWAY REQUIREMENTS_</h4>
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-[#2563EB]">GATEWAY REQUIREMENTS</h4>
                             <ul className="grid md:grid-cols-2 gap-4">
                               {step.phasePrerequisites.map((p: string) => (
                                 <li key={p} className="flex gap-4 text-xs font-black uppercase italic">
@@ -251,7 +251,7 @@ export default function Roadmap() {
                         {step.studyMaterials && step.studyMaterials.length > 0 && (
                           <div className="space-y-6">
                              <h4 className="text-xs font-black uppercase tracking-[0.4em] text-black/30 flex items-center gap-4">
-                               <Book className="w-5 h-5 text-black" /> LIBRARIES_
+                               <Book className="w-5 h-5 text-black" /> LIBRARIES
                              </h4>
                              <div className="space-y-4">
                                {step.studyMaterials.map((link: any, idx: number) => (
@@ -270,7 +270,7 @@ export default function Roadmap() {
                         {step.videoLectures && step.videoLectures.length > 0 && (
                           <div className="space-y-6">
                              <h4 className="text-xs font-black uppercase tracking-[0.4em] text-red-600 flex items-center gap-4">
-                               <Video className="w-5 h-5" /> BROADCASTS_
+                               <Video className="w-5 h-5" /> BROADCASTS
                              </h4>
                              <div className="space-y-4">
                                {step.videoLectures.map((link: any, idx: number) => (

@@ -77,7 +77,7 @@ export default function Dashboard() {
                whileHover={{ letterSpacing: "0.4em" }}
                className="text-lg font-black uppercase tracking-[0.3em] text-black transition-all cursor-default"
              >
-               Active User Node Toolsets
+               Active Tools
              </motion.h2>
              <div className="h-2 flex-grow mx-8 bg-black/5" />
           </div>
