@@ -14,17 +14,20 @@ import Link from 'next/link';
 // ── Types ─────────────────────────────────────────────────────────
 interface IkigaiResult {
   ikigaiSummary: string;
+  ikigaiMatchScore: number;
   primaryPath: {
     title: string;
     description: string;
+    whyFits: string[];
     salaryRange: string;
     marketDemand: string;
   };
+  multipleCareerOptions: string[];
+  skillGaps: string[];
+  freeResources: Array<{ title: string; url: string; platform: string }>;
+  nextActionSteps: string[];
   zones: {
-    passion: string;
-    profession: string;
-    mission: string;
-    vocation: string;
+    passion: string; profession: string; mission: string; vocation: string;
   };
   recommendedRoles: Array<{ title: string; match: string; reason: string }>;
   roadmap: Array<{ step: string; focus: string; duration: string }>;
@@ -161,10 +164,10 @@ export default function IkigaiPage() {
             <div className="bg-white border-4 border-black p-8 neo-box">
               <IkigaiDiagram activeZone={hoveredZone as any} />
               <div className="mt-8 grid grid-cols-2 gap-4 text-center">
-                <div onMouseEnter={() => setHoveredZone('passion')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-rose-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(244,63,94,1)]">❤️ Passion Zone</div>
-                <div onMouseEnter={() => setHoveredZone('profession')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-emerald-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(16,185,129,1)]">💪 Profession Zone</div>
-                <div onMouseEnter={() => setHoveredZone('mission')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-indigo-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(79,70,229,1)]">🌍 Mission Zone</div>
-                <div onMouseEnter={() => setHoveredZone('vocation')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-amber-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(245,158,11,1)]">💰 Vocation Zone</div>
+                <div onMouseEnter={() => setHoveredZone('passion')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-rose-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(244,63,94,1)] text-rose-700">❤️ Passion Zone</div>
+                <div onMouseEnter={() => setHoveredZone('profession')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-emerald-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(16,185,129,1)] text-emerald-700">💪 Profession Zone</div>
+                <div onMouseEnter={() => setHoveredZone('mission')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-indigo-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(79,70,229,1)] text-indigo-700">🌍 Mission Zone</div>
+                <div onMouseEnter={() => setHoveredZone('vocation')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-amber-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(245,158,11,1)] text-amber-700">💰 Vocation Zone</div>
               </div>
             </div>
           </div>
@@ -172,25 +175,70 @@ export default function IkigaiPage() {
           {/* Details */}
           <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="space-y-8">
             {/* Primary Path */}
-            <div className="bg-black text-white border-4 border-black p-8 neo-box shadow-[8px_8px_0px_0px_rgba(124,58,237,1)]">
-              <div className="text-[#FACC15] font-black uppercase text-xs tracking-widest mb-2 flex items-center gap-2">
-                <Rocket className="w-4 h-4" /> Recommended Ikigai Path
+            {/* 🎯 RECOMMENDED IKIGAI PATH */}
+            <div className="bg-[#0F172A] text-white border-[3px] border-black p-8 neo-box shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <div className="flex justify-between items-start mb-6">
+                <div className="text-[#FACC15] font-black uppercase text-xs tracking-[0.2em] flex items-center gap-2">
+                  <Rocket className="w-4 h-4" /> RECOMMENDED IKIGAI PATH
+                </div>
+                <div className="bg-[#7C3AED] text-white px-3 py-1 border-2 border-black text-[10px] font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                   Ikigai Match: {result.ikigaiMatchScore}%
+                </div>
               </div>
-              <h2 className="text-4xl font-black mb-4">{result.primaryPath.title}</h2>
-              <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                {result.primaryPath.description}
-              </p>
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/20">
+
+              <h2 className="text-[22px] font-black mb-4 text-[#22C55E] uppercase italic">{result.primaryPath.title}</h2>
+              
+              <div className="space-y-4 mb-8">
+                <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Why this fits you:</p>
+                <ul className="space-y-2">
+                   {result.primaryPath.whyFits?.map((point, i) => (
+                     <li key={i} className="text-sm font-bold flex gap-2 text-gray-200">
+                        <span className="text-[#22C55E]">✦</span> {point}
+                     </li>
+                   ))}
+                </ul>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/10">
                 <div>
-                  <div className="text-xs text-gray-500 uppercase font-bold mb-1">Market Demand</div>
-                  <div className="text-lg font-black text-emerald-400">{result.primaryPath.marketDemand}</div>
+                  <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Market Demand</div>
+                  <div className="text-xl font-black text-[#22C55E] flex items-center gap-2 uppercase">
+                    {result.primaryPath.marketDemand} 📈
+                  </div>
                 </div>
                 <div>
-                  <div className="text-xs text-gray-500 uppercase font-bold mb-1">Exp. Salary (LPA)</div>
-                  <div className="text-lg font-black text-amber-400">{result.primaryPath.salaryRange}</div>
+                  <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Exp. Salary (India 2026)</div>
+                  <div className="text-xl font-black text-[#FACC15]">{result.primaryPath.salaryRange}</div>
                 </div>
               </div>
             </div>
+
+            {/* Multiple Career Options & Gaps */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="bg-white border-4 border-black p-6 neo-box">
+                  <h3 className="text-lg font-black mb-4 uppercase flex items-center gap-2 italic">
+                     <Star className="w-5 h-5 text-amber-500" /> Career Variants
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                     {result.multipleCareerOptions?.map((opt, i) => (
+                       <span key={i} className="px-3 py-1.5 bg-gray-50 border-2 border-black text-[10px] font-black uppercase">{opt}</span>
+                     ))}
+                  </div>
+               </div>
+               <div className="bg-[#FEF2F2] border-4 border-black p-6 neo-box">
+                  <h3 className="text-lg font-black mb-4 uppercase flex items-center gap-2 italic text-red-600">
+                     <AlertCircle className="w-5 h-5" /> Skill Gaps
+                  </h3>
+                  <ul className="space-y-2">
+                     {result.skillGaps?.map((gap, i) => (
+                       <li key={i} className="text-[10px] font-black uppercase flex gap-2 text-red-800">
+                          <span className="text-red-500">•</span> {gap}
+                       </li>
+                     ))}
+                  </ul>
+               </div>
+            </div>
+
 
             {/* Analysis Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -223,34 +271,35 @@ export default function IkigaiPage() {
             </div>
 
             {/* Next Steps / Roadmap */}
-            <div className="bg-white border-4 border-black p-8 neo-box">
-              <h3 className="text-2xl font-black mb-6 flex items-center gap-2">
-                <TrendingUp className="w-6 h-6" /> Your Growth Roadmap
-              </h3>
-              <div className="space-y-6">
-                {result.roadmap.map((step, i) => (
-                  <div key={i} className="flex gap-4">
-                    <div className="space-y-1 text-center">
-                      <div className="w-10 h-10 bg-black text-white font-black flex items-center justify-center text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)]">
-                        {i + 1}
-                      </div>
-                      <div className="h-full w-0.5 bg-black/10 mx-auto" />
-                    </div>
-                    <div className="pb-6">
-                      <h4 className="font-black text-lg leading-none mb-2">{step.step}</h4>
-                      <p className="text-sm text-gray-600 font-bold mb-2">{step.focus}</p>
-                      <span className="text-[10px] bg-sky-100 text-sky-700 px-2 py-1 uppercase font-black border border-sky-300">
-                         Duration: {step.duration}
-                      </span>
-                    </div>
+            {/* 💡 NEXT ACTION STEPS & RESOURCES */}
+            <div className="bg-white border-4 border-black p-8 neo-box space-y-8">
+               <div className="border-b-4 border-black pb-4">
+                  <h3 className="text-2xl font-black uppercase italic flex items-center gap-3">
+                     <TrendingUp className="w-7 h-7 text-[#7C3AED]" /> Next Action Steps
+                  </h3>
+               </div>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                     {result.nextActionSteps?.map((step, i) => (
+                       <div key={i} className="flex gap-4 items-start">
+                          <div className="w-8 h-8 bg-black text-white flex items-center justify-center font-black text-xs shrink-0">{i + 1}</div>
+                          <p className="text-sm font-bold leading-tight">{step}</p>
+                       </div>
+                     ))}
                   </div>
-                ))}
-              </div>
-              <div className="mt-4 p-4 bg-amber-50 border-2 border-black font-bold text-sm">
-                🎯 <span className="uppercase text-[10px] text-amber-800">Critical Next Action:</span><br/>
-                {result.nextAction}
-              </div>
+                  <div className="space-y-4">
+                     <p className="text-[10px] font-black uppercase tracking-widest text-[#2563EB]">Free Resources</p>
+                     <div className="space-y-2">
+                        {result.freeResources?.map((res, i) => (
+                          <Link key={i} href={res.url} target="_blank" className="flex items-center justify-between p-3 bg-gray-100 border-2 border-black text-[10px] font-black uppercase hover:bg-white transition-all">
+                             {res.title} <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        ))}
+                     </div>
+                  </div>
+               </div>
             </div>
+
 
             {/* Integration CTAs */}
             <div className="flex flex-col gap-4">
@@ -334,8 +383,8 @@ export default function IkigaiPage() {
                     <currentStepData.icon className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-black leading-none">{currentStepData.title}</h2>
-                    <p className="text-gray-500 font-medium mt-2">{currentStepData.desc}</p>
+                    <h2 className="text-3xl font-black leading-none text-[#2563EB]">{currentStepData.title}</h2>
+                    <p className="text-gray-500 font-medium mt-2 uppercase text-[10px] tracking-widest">{currentStepData.desc}</p>
                   </div>
                 </div>
 
@@ -344,7 +393,7 @@ export default function IkigaiPage() {
                   <textarea
                     value={form.incomeGoals}
                     onChange={e => setForm(f => ({ ...f, incomeGoals: e.target.value }))}
-                    className="w-full p-4 text-lg font-bold border-4 border-black focus:outline-none focus:bg-accent/5 resize-none min-h-[200px]"
+                    className="w-full p-6 text-lg font-black border-4 border-black bg-white focus:outline-none focus:bg-gray-50 resize-none min-h-[200px] text-gray-900 placeholder:text-gray-400"
                     placeholder={currentStepData.placeholder}
                   />
                 ) : (
@@ -356,9 +405,9 @@ export default function IkigaiPage() {
                         onChange={e => setTempInput(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && handleAddItem()}
                         placeholder={currentStepData.placeholder}
-                        className="flex-1 p-4 text-lg font-bold border-4 border-black focus:outline-none focus:bg-accent/5"
+                        className="flex-1 p-5 text-lg font-black border-4 border-black bg-white focus:outline-none focus:bg-gray-50 text-gray-900 placeholder:text-gray-400"
                       />
-                      <button onClick={handleAddItem} className="px-8 py-4 bg-[#2563EB] text-white font-black uppercase hover:bg-blue-700 transition-colors border-4 border-black neo-box">
+                      <button onClick={handleAddItem} className="px-8 py-4 bg-[#7C3AED] text-white font-black uppercase border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
                         Add
                       </button>
                     </div>
@@ -394,7 +443,7 @@ export default function IkigaiPage() {
                       (currentStepData.id !== 'incomeGoals' && (form[currentStepData.id as keyof typeof form] as string[]).length === 0) ||
                       (currentStepData.id === 'incomeGoals' && !form.incomeGoals.trim())
                     }
-                   className="flex items-center gap-3 px-12 py-4 bg-[#7C3AED] text-white font-black text-sm border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all disabled:opacity-50 uppercase italic"
+                    className="flex items-center gap-3 px-12 py-5 bg-[#7C3AED] text-white font-black text-sm border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all disabled:opacity-50 disabled:bg-[#C4B5FD] disabled:text-[#1F2937] uppercase italic"
                   >
                     {isLastStep ? 'Analyze My Ikigai ✨' : 'Continue Execution →'}
                   </button>

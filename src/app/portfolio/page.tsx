@@ -698,5 +698,8 @@ export default function PortfolioGenerator() {
             </div>
          </div>
       </div>
-    )}
+      )}
+    </div>
   </div>
+  );
+}

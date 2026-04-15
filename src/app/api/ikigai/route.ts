@@ -32,29 +32,35 @@ Analyze the user's inputs and find their "Ikigai" — the sweet spot where all f
 RESPONSE FORMAT (Strict JSON):
 {
   "ikigaiSummary": "A powerful 2-sentence summary of their Ikigai core.",
+  "ikigaiMatchScore": 85,
   "primaryPath": {
     "title": "The name of their ideal career path",
     "description": "Why this path fits their unique Ikigai profile perfectly.",
+    "whyFits": ["Point 1", "Point 2", "Point 3"],
     "salaryRange": "₹X LPA – ₹Y LPA (India market 2026)",
     "marketDemand": "High | Medium | Low"
   },
+  "multipleCareerOptions": ["Role 1", "Role 2", "Role 3"],
+  "skillGaps": ["Gap 1", "Gap 2"],
+  "freeResources": [
+    { "title": "Course Name", "url": "URL", "platform": "Platform Name" }
+  ],
   "zones": {
-    "passion": "What drives them emotionally in this path.",
-    "profession": "How their existing skills transform into value.",
-    "mission": "The impact they will have on the world.",
-    "vocation": "The economic stability this path provide."
+    "passion": "Emotional drive in this path.",
+    "profession": "Skill transformation.",
+    "mission": "Social impact.",
+    "vocation": "Economic stability."
   },
   "recommendedRoles": [
-    { "title": "Role 1", "match": "95%", "reason": "Short reason" },
-    { "title": "Role 2", "match": "85%", "reason": "Short reason" }
+    { "title": "Role 1", "match": "95%", "reason": "Short reason" }
   ],
   "roadmap": [
-    { "step": "Phase 1", "focus": "Skills to acquire", "duration": "1-2 months" },
-    { "step": "Phase 2", "focus": "Portfolio & networking", "duration": "2-3 months" }
+    { "step": "Phase 1", "focus": "Skills", "duration": "1-2 months" }
   ],
-  "strengths": ["Strength 1", "Strength 2"],
-  "weaknesses": ["Area to improve 1", "Area to improve 2"],
-  "nextAction": "The single most important first step to take."
+  "strengths": ["Strength 1"],
+  "weaknesses": ["Area to improve 1"],
+  "nextActionSteps": ["Action 1", "Action 2", "Action 3"],
+  "nextAction": "The single most important first step."
 }`;
 
 // ── Handler ───────────────────────────────────────────────────────
