@@ -95,7 +95,7 @@ const DEFAULT_RESUME: ResumeData = {
 
 export default function ResumeBuilder() {
   const [data, setData] = useState<ResumeData>(DEFAULT_RESUME);
-  const [template, setTemplate] = useState<'google_swe' | 'microsoft_sde' | 'faang_standard'>('faang_standard');
+  const [template, setTemplate] = useState<'elite' | 'strategic' | 'modern'>('modern');
   const [atsAnalysis, setAtsAnalysis] = useState<ATSAnalysis | null>(null);
   const [scanStatus, setScanStatus] = useState<'idle' | 'scanning' | 'complete'>('idle');
   const [isParsing, setIsParsing] = useState(false);
@@ -262,6 +262,61 @@ export default function ResumeBuilder() {
         
 
 
+        {/* 🚀 ELITE TEMPLATE SELECTOR (TOP) */}
+        <section className="space-y-6">
+          <h2 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b-4 border-black pb-4 flex items-center justify-between">
+            SELECT TEMPLATE <Sparkles className="w-4 h-4 text-[#FACC15] fill-current" />
+          </h2>
+          <div className="grid grid-cols-1 gap-4">
+            {[
+              { 
+                id: 'elite', 
+                name: 'Elite Product Pro', 
+                desc: 'Best for top tech companies.', 
+                focus: 'Focus: Showing your scores and results.',
+                color: 'hover:bg-purple-50',
+                accent: 'bg-purple-600'
+              },
+              { 
+                id: 'strategic', 
+                name: 'Strategic Project Pro', 
+                desc: 'Great for building your first big projects.', 
+                focus: 'Focus: High clarity.',
+                color: 'hover:bg-blue-50',
+                accent: 'bg-[#2563EB]'
+              },
+              { 
+                id: 'modern', 
+                name: 'Modern Job Pro', 
+                desc: 'Standard style for all careers.', 
+                focus: 'Focus: Passing auto-screening systems.',
+                color: 'hover:bg-emerald-50',
+                accent: 'bg-emerald-600'
+              }
+            ].map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTemplate(t.id as any)}
+                className={`w-full text-left p-5 border-4 transition-all relative group ${
+                  template === t.id 
+                  ? 'border-black bg-white shadow-none translate-x-1 translate-y-1' 
+                  : 'border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1'
+                } ${t.color}`}
+              >
+                {template === t.id && <div className={`absolute top-0 left-0 w-2 h-full ${t.accent}`} />}
+                <div className="flex justify-between items-start mb-1">
+                   <h3 className="text-xs font-black uppercase tracking-tighter">{t.name}</h3>
+                   {template === t.id && <CheckCircle2 className="w-4 h-4 text-[#FACC15] fill-black" />}
+                </div>
+                <p className="text-[10px] font-bold text-gray-500 uppercase leading-tight mb-2">{t.desc}</p>
+                <div className="pt-2 border-t border-dashed border-gray-100">
+                   <p className="text-[9px] font-black text-[#2563EB] uppercase tracking-widest italic">{t.focus}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
         {/* Action Protocol Panel */}
         <motion.div 
           whileHover={{ y: -2 }}
@@ -425,27 +480,6 @@ export default function ResumeBuilder() {
 
         </div>
         
-        {/* Template Intelligence */}
-        <div className="border-t-8 border-black pt-12 space-y-8">
-           <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black">SELECT TEMPLATE</h3>
-           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {[
-                { id: 'google_swe', name: 'Elite Product Pro', desc: 'Best for top tech companies. Focus: Showing your scores and results.' },
-                { id: 'microsoft_sde', name: 'Strategic Project Pro', desc: 'Great for building your first big projects. Focus: High clarity.' },
-                { id: 'faang_standard', name: 'Modern Job Pro', desc: 'Standard style for all careers. Focus: Passing auto-screening systems.' }
-              ].map((t) => (
-                <div key={t.id} className="space-y-3">
-                  <button 
-                    onClick={() => setTemplate(t.id as any)} 
-                    className={`w-full py-4 text-[10px] uppercase font-black border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all ${template === t.id ? 'bg-[#2563EB] text-white shadow-none translate-x-1 translate-y-1' : 'bg-[#FACC15] hover:bg-white hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'}`}
-                  >
-                     {t.name}
-                  </button>
-                  <p className="text-[9px] font-black text-gray-400 leading-tight uppercase italic">{t.desc}</p>
-                </div>
-              ))}
-          </div>
-        </div>
       </aside>
 
       {/* Main Preview Region */}

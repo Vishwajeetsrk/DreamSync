@@ -51,19 +51,19 @@ export interface ResumeData {
 
 interface ResumePreviewProps {
   data: ResumeData;
-  template?: 'google_swe' | 'microsoft_sde' | 'faang_standard';
+  template?: 'elite' | 'strategic' | 'modern';
 }
 
 const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, template = 'faang_standard' }, ref) => {
   const { personalInfo, summary, skills, experience, education, projects, achievements, languages, certifications, extra } = data;
 
   // Template Specific Styles
-  const isGoogle = template === 'google_swe';
-  const isMicrosoft = template === 'microsoft_sde';
+  const isElite = template === 'elite';
+  const isStrategic = template === 'strategic';
   
-  const sectionTitleClass = isGoogle 
+  const sectionTitleClass = isElite 
     ? "text-[14px] font-bold text-gray-900 uppercase tracking-tight border-b-2 border-gray-900 pb-0.5 mb-2 mt-4" 
-    : isMicrosoft 
+    : isStrategic 
       ? "text-[13px] font-bold text-[#2b5797] uppercase tracking-widest border-b border-gray-300 pb-1 mb-2 mt-4"
       : "text-[14px] font-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-3 mt-6";
 
@@ -73,7 +73,7 @@ const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ da
   const textClass = "text-[12px] text-gray-900 leading-[1.6]";
   
   // A4 Layout Consistency
-  const containerClass = `bg-white text-black px-12 py-12 mx-auto w-full max-w-[800px] min-h-[1123px] shadow-none ${isGoogle ? 'font-sans' : isMicrosoft ? 'font-serif' : 'font-sans'}`;
+  const containerClass = `bg-white text-black px-12 py-12 mx-auto w-full max-w-[800px] min-h-[1123px] shadow-none ${isElite ? 'font-sans' : isStrategic ? 'font-serif' : 'font-sans'}`;
 
   return (
     <div 
@@ -88,9 +88,9 @@ const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ da
       }}
     >
       {/* Header */}
-      <header className={`text-center ${isGoogle ? 'mb-4' : 'mb-6'}`}>
-        <h1 className={`text-4xl uppercase tracking-tighter mb-1 font-black ${isGoogle ? 'text-black' : isMicrosoft ? 'text-[#2b5797]' : 'text-black'}`}>{personalInfo.fullName || 'YOUR NAME'}</h1>
-        <p className={`text-lg mb-3 ${isGoogle ? 'font-bold text-gray-800' : 'font-bold text-gray-600 italic tracking-wide'}`}>{personalInfo.role?.toUpperCase() || 'PROFESSIONAL ROLE'}</p>
+      <header className={`text-center ${isElite ? 'mb-4' : 'mb-6'}`}>
+        <h1 className={`text-4xl uppercase tracking-tighter mb-1 font-black ${isElite ? 'text-black' : isStrategic ? 'text-[#2b5797]' : 'text-black'}`}>{personalInfo.fullName || 'YOUR NAME'}</h1>
+        <p className={`text-lg mb-3 ${isElite ? 'font-bold text-gray-800' : 'font-bold text-gray-600 italic tracking-wide'}`}>{personalInfo.role?.toUpperCase() || 'PROFESSIONAL ROLE'}</p>
         
         <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 text-[11px] font-bold text-gray-800">
           {personalInfo.phone && <span>{personalInfo.phone}</span>}
