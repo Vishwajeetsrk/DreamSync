@@ -3,13 +3,7 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Users } from 'lucide-react';
 
-const team = [
-  { name: "Anand Biniya", role: "Founder / CEO", dept: "Leadership", link: "https://www.linkedin.com/in/anandbin/", image: "/Anand.jpeg" },
-  { name: "Ayush Bajpai", role: "COO", dept: "Operations", link: "https://www.linkedin.com/in/ayush-bajpai25/", image: "/Ayush.jpeg" },
-  { name: "Vishwajeet", role: "Manager of CE Training", dept: "Training", link: "https://www.linkedin.com/in/vishwajeetsrk/", image: "/vishwajeet.jpeg" },
-  { name: "Chaitanya Khaleja", role: "Associate Programme", dept: "Programme", link: "https://www.linkedin.com/in/chaitanya-khaleja-975502255/", image: "/Chaitanya.jpeg" },
-  { name: "Nisha Das", role: "Resource Operation", dept: "Resources", link: "https://www.linkedin.com/in/nisha-das-ab9bb5246/", image: "/Nisha.jpg" },
-];
+const team: any[] = [];
 
 export default function Team() {
   return (
