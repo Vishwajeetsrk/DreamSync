@@ -131,7 +131,6 @@ export default function AIAssistant() {
                       if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
                         return (
                           <div key={li} className="pl-4 py-2 flex gap-3 bg-black/5 border-l-4 border-[#2563EB] my-1">
-                            <span className="text-[#2563EB]">🎯</span> 
                             <span className="text-[12px]">{cleanLine.replace(/^-/, '').replace(/^\*/, '').trim()}</span>
                           </div>
                         );

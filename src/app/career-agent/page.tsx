@@ -169,7 +169,6 @@ function ChatBubble({ msg }: { msg: Message }) {
                            if (line.trim().startsWith('-')) {
                              return (
                                <div key={li} className="flex gap-4 p-4 bg-gray-50 border-l-8 border-[#2563EB] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.05)]">
-                                 <span className="text-[#2563EB] font-black">🎯</span> 
                                  <span>{cleanLine.replace(/^-/, '').trim()}</span>
                                </div>
                              );
