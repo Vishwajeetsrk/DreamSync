@@ -66,6 +66,7 @@ export default function PortfolioGenerator() {
   const [generatedHtml, setGeneratedHtml] = useState('');
   const [showPreview, setShowPreview] = useState(false);
   const [genError, setGenError] = useState('');
+  const [genProgress, setGenProgress] = useState(0);
   const [isParsing, setIsParsing] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [activePreview, setActivePreview] = useState(false);
@@ -131,6 +132,10 @@ export default function PortfolioGenerator() {
       const expStr = workExp.filter(w => w.title).map(w =>
         `${w.isInternship ? '[Internship]' : '[Work]'} ${w.title} @ ${w.company} (${w.startDate}–${w.endDate || 'Present'}): ${w.points}`).join('\n');
 
+      const progressInterval = setInterval(() => {
+        setGenProgress(p => p < 90 ? p + 2 : p);
+      }, 500);
+
       const res = await fetch('/api/portfolio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -146,6 +151,8 @@ export default function PortfolioGenerator() {
           },
         }),
       });
+      clearInterval(progressInterval);
+      setGenProgress(100);
       const resData = await res.json();
       if (!res.ok) throw new Error(resData.error || 'Generation failed');
       setGeneratedHtml(resData.html);
@@ -614,50 +621,69 @@ export default function PortfolioGenerator() {
           {/* STEP 4: Pre-Generate Review */}
           {step === 4 && !generatedHtml && (
             <div className="bg-white border-4 border-black neo-box p-8 space-y-6">
-              <div className="text-center space-y-3">
-                <div className="w-20 h-20 bg-accent border-4 border-black flex items-center justify-center mx-auto">
-                  <Sparkles className="w-10 h-10" />
-                </div>
-                <h2 className="text-3xl font-black">Ready to Generate!</h2>
-                <p className="text-gray-600 font-medium">Review your choices below, then click Generate. This may take 20–40 seconds.</p>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[
-                  { label: 'Name', value: fullName || '—' },
-                  { label: 'Role', value: targetRole || '—' },
-                  { label: 'Theme', value: THEMES.find(t => t.id === selectedTheme)?.name || '—' },
-                  { label: 'Projects', value: `${projects.filter(p => p.topic).length} added` },
-                ].map(item => (
-                  <div key={item.label} className="border-2 border-gray-200 p-3 rounded-lg text-center">
-                    <p className="text-xs text-gray-500 font-semibold uppercase">{item.label}</p>
-                    <p className="font-black text-sm mt-1 truncate">{item.value}</p>
+              {isGenerating ? (
+                <div className="text-center space-y-6 py-8">
+                  <div className="relative w-32 h-32 mx-auto">
+                      <div className="absolute inset-0 rounded-full border-4 border-gray-100" />
+                      <div 
+                        className="absolute inset-0 rounded-full border-4 border-[#2563EB] border-t-transparent animate-spin transition-all duration-300" 
+                        style={{ clipPath: `inset(0 0 ${100 - genProgress}% 0)` }}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                         <Sparkles className="w-10 h-10 text-[#2563EB] animate-pulse" />
+                      </div>
                   </div>
-                ))}
-              </div>
-
-              {genError && (
-                <div className="p-4 bg-red-50 border-2 border-red-300 text-red-800 font-medium text-sm rounded-lg">
-                  ❌ {genError}
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-black uppercase italic tracking-tighter">Generating Masterpiece...</h2>
+                    <div className="flex flex-col items-center gap-1">
+                       <p className="text-gray-500 font-bold uppercase text-xs tracking-widest">
+                          {genProgress < 30 && "⚡ Architecting design system..."}
+                          {genProgress >= 30 && genProgress < 60 && "🎨 Injecting theme styles..."}
+                          {genProgress >= 60 && genProgress < 90 && "📝 Populating with your data..."}
+                          {genProgress >= 90 && "✨ Finalizing code polish..."}
+                       </p>
+                       <p className="text-[#2563EB] font-black">{genProgress}% Complete</p>
+                    </div>
+                  </div>
                 </div>
-              )}
+              ) : (
+                <>
+                  <div className="text-center space-y-3">
+                    <div className="w-20 h-20 bg-accent border-4 border-black flex items-center justify-center mx-auto">
+                      <Sparkles className="w-10 h-10" />
+                    </div>
+                    <h2 className="text-3xl font-black tracking-tighter uppercase italic">Ready to Generate!</h2>
+                    <p className="text-gray-600 font-medium">Review your choices below, then click Generate.</p>
+                  </div>
 
-              <button
-                onClick={generatePortfolio}
-                disabled={isGenerating}
-                className="w-full py-5 bg-[#2563EB] text-white font-black text-xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {isGenerating ? (
-                  <>
-                    <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                    Generating your portfolio... (20–40s)
-                  </>
-                ) : (
-                  <><Code2 className="w-6 h-6" /> Generate Premium Portfolio</>
-                )}
-              </button>
-              {isGenerating && (
-                <p className="text-center text-sm text-gray-500 animate-pulse">Using GPT-4o to craft your portfolio. Please wait...</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      { label: 'Name', value: fullName || '—' },
+                      { label: 'Role', value: targetRole || '—' },
+                      { label: 'Theme', value: THEMES.find(t => t.id === selectedTheme)?.name || '—' },
+                      { label: 'Projects', value: `${projects.filter(p => p.topic).length} added` },
+                    ].map(item => (
+                      <div key={item.label} className="border-2 border-gray-200 p-3 rounded-lg text-center">
+                        <p className="text-xs text-gray-500 font-semibold uppercase">{item.label}</p>
+                        <p className="font-black text-sm mt-1 truncate">{item.value}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {genError && (
+                    <div className="p-4 bg-red-50 border-2 border-red-300 text-red-800 font-medium text-sm rounded-lg">
+                      ❌ {genError}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={generatePortfolio}
+                    className="w-full py-5 bg-[#2563EB] text-white font-black text-xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-3"
+                  >
+                    <Code2 className="w-6 h-6" /> Generate Premium Portfolio
+                  </button>
+                  <p className="text-center text-sm text-gray-500 font-bold uppercase">Estimated Time: 25–45 seconds</p>
+                </>
               )}
             </div>
           )}
