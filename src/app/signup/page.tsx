@@ -56,16 +56,16 @@ export default function Signup() {
     setLoading(true);
     setError('');
     try {
-      let provider;
-      if (providerName === 'google') {
-        provider = new GoogleAuthProvider();
-      } else if (providerName === 'github') {
-        provider = new GithubAuthProvider();
+      let authProvider;
+      if (provider === 'google') {
+        authProvider = new GoogleAuthProvider();
+      } else if (provider === 'github') {
+        authProvider = new GithubAuthProvider();
       } else {
         return;
       }
       
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, authProvider);
       const user = result.user;
 
       // Sync with Firestore
@@ -77,15 +77,15 @@ export default function Signup() {
           name: user.displayName || 'DreamSync User',
           email: user.email,
           avatar_url: user.photoURL || '',
-          provider: providerName,
+          provider: provider,
           created_at: new Date().toISOString()
         });
       }
 
       router.push('/dashboard');
     } catch (err: any) {
-      console.error(`${providerName} signup error:`, err);
-      setError(err.message || `Failed to sign up with ${providerName}`);
+      console.error(`${provider} signup error:`, err);
+      setError(err.message || `Failed to sign up with ${provider}`);
     } finally {
       setLoading(false);
     }
