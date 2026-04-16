@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Sparkles, Coffee, Map, TrendingUp, Building2, User, Globe, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Sparkles, Coffee, Map, TrendingUp, Building2, User, Globe, ShieldCheck, Zap, MapPin, ClipboardCheck, MonitorPlay, Network } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
@@ -124,10 +124,10 @@ export default function Home() {
       <section className="py-20 px-4 md:px-6 max-w-7xl mx-auto w-full">
          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             {[
-              { val: '1+', label: 'Working Locations', icon: Building2, color: 'text-[#2563EB]', bg: 'bg-blue-50' },
-              { val: '50+', label: 'Verified Documents', icon: ShieldCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-              { val: '6+', label: 'Well-being Sessions', icon: HeartHandshake, color: 'text-rose-600', bg: 'bg-rose-50' },
-              { val: '30+', label: 'Community Members', icon: User, color: 'text-amber-600', bg: 'bg-amber-50' },
+              { val: '1+', label: 'Working Locations', icon: MapPin, color: 'text-[#2563EB]', bg: 'bg-blue-50' },
+              { val: '50+', label: 'Verified Documents', icon: ClipboardCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+              { val: '6+', label: 'Well-being Sessions', icon: MonitorPlay, color: 'text-rose-600', bg: 'bg-rose-50' },
+              { val: '30+', label: 'Community Members', icon: Network, color: 'text-amber-600', bg: 'bg-amber-50' },
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -143,15 +143,15 @@ export default function Home() {
                   <div className={`p-5 ${stat.bg} border-4 border-black group-hover:rotate-[15deg] transition-transform relative z-10 overflow-hidden`}>
                      <motion.div
                        animate={
-                         i === 0 ? { rotate: 360 } :
+                         i === 0 ? { y: [0, -8, 0] } :
                          i === 1 ? { scale: [1, 1.2, 1] } :
-                         i === 2 ? { y: [0, -5, 0] } :
-                         { x: [-2, 2, -2] }
+                         i === 2 ? { scaleY: [1, 0.8, 1] } :
+                         { scale: [1, 1.1, 1], rotate: [0, 10, 0] }
                        }
                        transition={{
                          repeat: Infinity,
-                         duration: i === 0 ? 8 : 2,
-                         ease: "linear"
+                         duration: 2.5,
+                         ease: "easeInOut"
                        }}
                      >
                         <stat.icon className={`w-8 h-8 ${stat.color} stroke-[3px]`} />

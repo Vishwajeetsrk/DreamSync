@@ -5,7 +5,8 @@ import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
 import { 
   TrendingUp, Briefcase, FileText, HeartHandshake, 
   Target, Globe, Zap, Heart, ArrowRight, ChevronDown, CheckCircle,
-  Building2, ShieldCheck, User
+  Building2, ShieldCheck, User,
+  MapPin, ClipboardCheck, MonitorPlay, Network
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -239,14 +240,19 @@ export default function About() {
         <section className="bg-black border-8 border-black p-12 md:p-20 shadow-[12px_12px_0px_0px_rgba(37,99,235,1)]">
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-center">
              {[
-               { value: "1+", label: "Working Locations", icon: Building2, color: 'text-[#FACC15]' },
-               { value: "50+", label: "Verified Documents", icon: ShieldCheck, color: 'text-emerald-400' },
-               { value: "6+", label: "Well-being Sessions", icon: HeartHandshake, color: 'text-rose-400' },
-               { value: "30+", label: "Members Connected", icon: User, color: 'text-[#2563EB]' }
+               { value: "1+", label: "Working Locations", icon: MapPin, color: 'text-[#FACC15]', anim: { y: [0, -8, 0] } },
+               { value: "50+", label: "Verified Documents", icon: ClipboardCheck, color: 'text-emerald-400', anim: { scale: [1, 1.2, 1] } },
+               { value: "6+", label: "Well-being Sessions", icon: MonitorPlay, color: 'text-rose-400', anim: { scaleY: [1, 0.8, 1] } },
+               { value: "30+", label: "Members Connected", icon: Network, color: 'text-[#2563EB]', anim: { scale: [1, 1.1, 1], rotate: [0, 10, 0] } }
              ].map((stat, i) => (
                <div key={i} className="space-y-6 flex flex-col items-center">
-                  <div className="p-4 bg-white/10 border-2 border-white/20 rounded-full">
-                     <stat.icon className={`w-8 h-8 ${stat.color}`} strokeWidth={3} />
+                  <div className="p-4 bg-white/10 border-2 border-white/20 rounded-full overflow-hidden">
+                     <motion.div
+                       animate={stat.anim}
+                       transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+                     >
+                        <stat.icon className={`w-8 h-8 ${stat.color}`} strokeWidth={3} />
+                     </motion.div>
                   </div>
                   <div className="space-y-2">
                     <div className="text-5xl md:text-7xl font-black text-[#FACC15] tracking-tighter italic">
