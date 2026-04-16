@@ -260,6 +260,13 @@ export default function ResumeBuilder() {
       {/* Sidebar - Neo-Brutalist Form Editor */}
       <aside className="w-full lg:w-[500px] bg-white border-b-8 lg:border-r-8 lg:border-b-0 border-black p-6 md:p-10 space-y-12 shadow-[8px_0px_0px_0px_rgba(0,0,0,0.05)] lg:h-screen lg:overflow-y-auto">
         
+        <header className="space-y-2 border-b-4 border-black pb-8">
+           <div className="flex items-center gap-3 text-[#2563EB]">
+              <FileText className="w-8 h-8" />
+              <h1 className="text-3xl font-black uppercase tracking-tighter italic">Resume Builder</h1>
+           </div>
+           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40">Professional Tier AI Generator</p>
+        </header>
 
 
         {/* 🚀 ELITE TEMPLATE SELECTOR (TOP) */}

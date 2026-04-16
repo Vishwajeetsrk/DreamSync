@@ -94,10 +94,10 @@ const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ da
         
         <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 text-[11px] font-bold text-gray-800">
           {personalInfo.phone && <span>{personalInfo.phone}</span>}
-          {personalInfo.email && <span className="underline">{personalInfo.email}</span>}
+          {personalInfo.email && <span className="">{personalInfo.email}</span>}
           {personalInfo.location && <span>{personalInfo.location?.toUpperCase()}</span>}
-          {personalInfo.linkedin && <span className="underline">LINKEDIN.COM/IN/{personalInfo.linkedin.replace(/.*\/in\//, '').replace(/\/$/, '').toUpperCase()}</span>}
-          {personalInfo.github && <span className="underline">GITHUB.COM/{personalInfo.github.replace(/.*github.com\//, '').replace(/\/$/, '').toUpperCase()}</span>}
+          {personalInfo.linkedin && <span className="">LINKEDIN.COM/IN/{personalInfo.linkedin.replace(/.*\/in\//, '').replace(/\/$/, '').toUpperCase()}</span>}
+          {personalInfo.github && <span className="">GITHUB.COM/{personalInfo.github.replace(/.*github.com\//, '').replace(/\/$/, '').toUpperCase()}</span>}
         </div>
       </header>
 
