@@ -9,7 +9,7 @@ const redis = new Redis({
 });
 
 const portfolioSchema = z.object({
-  theme: z.enum(['minimal-dev', 'neo-brutalism', 'glass-dark']).default('minimal-dev'),
+  theme: z.enum(['minimal-dev', 'neo-brutalism', 'glass-dark', 'data-pro']).default('minimal-dev'),
   data: z.object({
     fullName: z.string().optional(),
     email: z.string().optional(),
@@ -52,6 +52,22 @@ THEME: Modern Glass UI (Dark). Use these EXACT styles:
 - Animations: smooth fade-ins, floating elements
 - Icons: use colored emoji or unicode symbols
 - Give everything a premium, Apple-level dark mode feel
+`;
+  if (theme === 'data-pro') return `
+THEME: Data-Driven Innovator / Creative Technologist (Vishwa Pro). Use these EXACT styles:
+- Background: Linear gradient (135deg, #667eea 0%, #764ba2 100%) for hero.
+- Typography: 'Poppins' for headings, 'Inter' for body.
+- Palette: Primary #1e40af, Secondary #10b981, Accent #f59e0b.
+- Layout Features:
+  1. Particle.js background on Hero.
+  2. Multi-category skills grid with categorized icons.
+  3. Timeline with 'dots' and vertical connection lines.
+  4. Project cards with overlay hover links (External/GitHub icons).
+  5. Statistics cards (e.g. "1000+ Records", "2+ Years").
+  6. Dark/Light mode compatible (default to professional light/dark balance).
+- Buttons: Rounded (0.5rem), high-contrast gradients, FontAwesome icons.
+- Modern elements: Floating badges, interactive skill bars, and smooth AOS-style animations (fade-up).
+- FontAwesome 6.4.0 integration for all icons.
 `;
   // minimal-dev
   return `

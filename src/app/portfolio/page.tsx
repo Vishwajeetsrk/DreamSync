@@ -41,6 +41,14 @@ const THEMES = [
     gradient: 'from-violet-950 to-slate-900',
     border: 'border-violet-500/30',
   },
+  {
+    id: 'data-pro',
+    name: 'Data Pro',
+    desc: 'Innovation • Analytics • Creative',
+    preview: { bg: '#667eea', accent: '#FACC15', text: '#FFFFFF', card: '#FFFFFF20' },
+    gradient: 'from-[#667eea] to-[#764ba2]',
+    border: 'border-white/20',
+  },
 ];
 
 const STEPS = [
@@ -456,6 +464,7 @@ export default function PortfolioGenerator() {
                   {selectedTheme === 'minimal-dev' && <p className="font-medium text-gray-700">📄 <strong>Minimal Dev</strong> — Clean editorial grid. Perfect for professional applications.</p>}
                   {selectedTheme === 'neo-brutalism' && <p className="font-medium text-gray-700">⚡ <strong>Neo-Brutalism</strong> — Bold borders and hard shadows. Inspired by Figma's system.</p>}
                   {selectedTheme === 'glass-dark' && <p className="font-medium text-gray-700">🌌 <strong>Glass Dark</strong> — Immersive dark UI with glassmorphism effects.</p>}
+                  {selectedTheme === 'data-pro' && <p className="font-medium text-gray-700">📊 <strong>Data Pro</strong> — Professional analytics vibe. High-impact stats and modern gradients.</p>}
                 </div>
                 <button onClick={() => setActivePreview(!activePreview)} className="p-4 bg-black text-white font-black uppercase text-xs border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
                    {activePreview ? 'Close Split View' : 'Live Split Preview'}
