@@ -17,6 +17,7 @@ export default function Navbar() {
   const { t } = useLanguage();
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const pathname = usePathname();
 
   const handleLogout = async () => {
@@ -100,29 +101,52 @@ export default function Navbar() {
               <Link href="/dashboard" className="hidden lg:flex border-4 border-black px-6 py-2 bg-white font-black text-xs uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
                 DASHBOARD
               </Link>
-              <div className="relative group">
-                <button className="w-10 h-10 rounded-full border-4 border-black overflow-hidden flex items-center justify-center bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  {userData?.avatar_url ? (
-                    <img src={userData.avatar_url} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <UserIcon className="w-5 h-5" />
-                  )}
-                </button>
-                <div className="absolute right-0 mt-4 w-60 neo-box bg-white p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[100]">
-                  <div className="flex flex-col gap-4">
-                    <div className="border-b-2 border-black/10 pb-4">
-                      <p className="font-black text-[10px] text-gray-400 uppercase tracking-widest mb-1">User Profile</p>
-                      <p className="font-black text-sm uppercase truncate">{userData?.name || 'User'}</p>
-                    </div>
-                    <Link href="/profile" className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-[#2563EB] border-2 border-[#2563EB] hover:bg-[#2563EB] hover:text-white transition-all">
-                      <Settings className="w-4 h-4" /> PROFILE SETTINGS
-                    </Link>
-                    <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-red-600 border-2 border-red-600 hover:bg-red-600 hover:text-white transition-all">
-                      <LogOut className="w-4 h-4" /> LOGOUT
-                    </button>
-                  </div>
-                </div>
-              </div>
+               <div className="relative">
+                 <button 
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="w-10 h-10 rounded-full border-4 border-black overflow-hidden flex items-center justify-center bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:scale-110 transition-transform active:translate-x-0.5 active:translate-y-0.5"
+                 >
+                   {userData?.avatar_url ? (
+                     <img src={userData.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                   ) : (
+                     <UserIcon className="w-5 h-5" />
+                   )}
+                 </button>
+
+                 <AnimatePresence>
+                   {isProfileOpen && (
+                     <>
+                        <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setIsProfileOpen(false)} />
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute right-0 mt-4 w-60 neo-box bg-white p-6 z-[100] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
+                        >
+                          <div className="flex flex-col gap-4">
+                            <div className="border-b-2 border-black/10 pb-4">
+                              <p className="font-black text-[10px] text-gray-400 uppercase tracking-widest mb-1">User Profile</p>
+                              <p className="font-black text-sm uppercase truncate">{userData?.name || 'User'}</p>
+                            </div>
+                            <Link 
+                              href="/profile" 
+                              onClick={() => setIsProfileOpen(false)}
+                              className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-[#2563EB] border-2 border-[#2563EB] hover:bg-[#2563EB] hover:text-white transition-all"
+                            >
+                              <Settings className="w-4 h-4" /> PROFILE SETTINGS
+                            </Link>
+                            <button 
+                              onClick={() => { setIsProfileOpen(false); handleLogout(); }}
+                              className="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-red-600 border-2 border-red-600 hover:bg-red-600 hover:text-white transition-all"
+                            >
+                              <LogOut className="w-4 h-4" /> LOGOUT
+                            </button>
+                          </div>
+                        </motion.div>
+                     </>
+                   )}
+                 </AnimatePresence>
+               </div>
             </div>
           )}
 
@@ -155,9 +179,9 @@ export default function Navbar() {
                    key={link.href}
                    href={link.href}
                    onClick={() => setIsMenuOpen(false)}
-                   className="p-3 border-2 md:border-4 border-black font-black uppercase text-xs text-black hover:bg-[#2563EB] hover:text-white flex items-center justify-between transition-all"
+                   className="p-2 border-2 border-black font-black uppercase text-[10px] text-black hover:bg-[#2563EB] hover:text-white flex items-center justify-between transition-all"
                  >
-                   {link.name} <ArrowRight className="w-4 h-4" />
+                   {link.name} <ArrowRight className="w-3 h-3" />
                  </Link>
               ))}
               <div className="pt-4 space-y-4">
@@ -171,11 +195,11 @@ export default function Navbar() {
 
                 <div className="pt-8 space-y-4 border-t-4 border-black mt-4">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Account & Settings</p>
-                    <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 p-3 border-2 md:border-4 border-black font-black uppercase text-xs text-[#2563EB]">
-                       <Settings className="w-4 h-4" /> Profile Settings
+                    <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 p-2 border-2 border-black font-black uppercase text-[10px] text-[#2563EB]">
+                       <Settings className="w-3 h-3" /> Profile Settings
                     </Link>
-                    <button onClick={() => { setIsMenuOpen(false); handleLogout(); }} className="w-full flex items-center gap-3 p-3 border-2 md:border-4 border-black font-black uppercase text-xs text-red-600">
-                       <LogOut className="w-4 h-4" /> Logout
+                    <button onClick={() => { setIsMenuOpen(false); handleLogout(); }} className="w-full flex items-center gap-3 p-2 border-2 border-black font-black uppercase text-[10px] text-red-600">
+                       <LogOut className="w-3 h-3" /> Logout
                     </button>
                 </div>
               </div>
