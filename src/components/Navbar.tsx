@@ -129,13 +129,19 @@ export default function Navbar() {
                               <p className="font-black text-[10px] text-gray-400 uppercase tracking-widest mb-1">Account</p>
                               <p className="font-black text-[10px] uppercase truncate">{userData?.name || 'User'}</p>
                             </div>
-                            <Link 
-                              href="/profile" 
-                              onClick={() => setIsProfileOpen(false)}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#2563EB] border-2 border-[#2563EB] hover:bg-[#2563EB] hover:text-white transition-all"
-                            >
-                              <Settings className="w-3 h-3" /> SETTINGS
-                            </Link>
+                             <Link 
+                               href="/profile" 
+                               onClick={() => setIsProfileOpen(false)}
+                               className="w-full flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#2563EB] border-2 border-[#2563EB] hover:bg-[#2563EB] hover:text-white transition-all"
+                             >
+                               <motion.div
+                                 animate={{ rotate: 360 }}
+                                 transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+                                 className="flex items-center justify-center"
+                               >
+                                 <Settings className="w-3 h-3" />
+                               </motion.div> SETTINGS
+                             </Link>
                             <button 
                               onClick={() => { setIsProfileOpen(false); handleLogout(); }}
                               className="w-full flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-red-600 border-2 border-red-600 hover:bg-red-600 hover:text-white transition-all group"
