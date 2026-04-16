@@ -83,6 +83,7 @@ export default function Navbar() {
           </div>
           <Link href="/about" className="text-xs font-black uppercase tracking-widest text-black hover:text-[#2563EB] transition-colors">ABOUT</Link>
           <Link href="/team" className="text-xs font-black uppercase tracking-widest text-black hover:text-[#2563EB] transition-colors">TEAM</Link>
+          <Link href="/donate" className="text-xs font-black uppercase tracking-widest text-[#2563EB] hover:bg-[#2563EB] hover:text-white px-3 py-1 border-2 border-transparent hover:border-black transition-all">SUPPORT US</Link>
           <Link href="/contact" className="text-xs font-black uppercase tracking-widest text-black hover:text-[#2563EB] transition-colors">CONTACT</Link>
         </div>
 
@@ -185,13 +186,13 @@ export default function Navbar() {
                  </Link>
               ))}
               <div className="pt-4 space-y-4">
-                <Link
-                  href="/donate"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block w-full py-5 bg-[#FACC15] border-4 border-black text-black text-center font-black uppercase text-sm"
-                >
-                  DONATE HUB
-                </Link>
+                 <Link
+                   href="/donate"
+                   onClick={() => setIsMenuOpen(false)}
+                   className="block w-full py-5 bg-[#FACC15] border-4 border-black text-black text-center font-black uppercase text-sm"
+                 >
+                   SUPPORT US
+                 </Link>
 
                 <div className="pt-8 space-y-4 border-t-4 border-black mt-4">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Account & Settings</p>
