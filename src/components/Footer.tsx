@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Coffee, Globe, Shield, Zap, Sparkles, Instagram, Twitter } from 'lucide-react';
+import { Coffee, Globe, Shield, Zap, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Footer() {
@@ -68,7 +68,7 @@ export default function Footer() {
               title="Follow us on Instagram"
               className="bg-white border-2 border-black shadow-[4px_4px_0px_black] px-4 py-2 flex items-center gap-2 text-[10px] font-black uppercase hover:bg-yellow-300 hover:scale-105 transition-all w-fit"
             >
-              <Instagram className="w-4 h-4" /> Instagram
+              <InstagramIcon className="w-4 h-4" /> Instagram
             </a>
 
             <a 
@@ -78,7 +78,7 @@ export default function Footer() {
               title="Follow us on X"
               className="bg-white border-2 border-black shadow-[4px_4px_0px_black] px-4 py-2 flex items-center gap-2 text-[10px] font-black uppercase hover:bg-yellow-300 hover:scale-105 transition-all w-fit"
             >
-              <Twitter className="w-4 h-4" /> X (Twitter)
+              <XIcon className="w-4 h-4" /> X (Twitter)
             </a>
 
             <a 
@@ -106,6 +106,47 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function InstagramIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
+function XIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 4l11.733 16h4.267l-11.733-16z" />
+      <path d="M4 20l6.768-6.768m2.46-2.46L20 4" />
+    </svg>
   );
 }
 
