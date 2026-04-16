@@ -163,10 +163,25 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Mobile Shell */}
           <div className="lg:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 border-4 border-black bg-white">
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(37,99,235,1)] relative w-12 h-12 flex items-center justify-center overflow-hidden active:translate-x-0.5 active:translate-y-0.5"
+            >
+              <div className="flex flex-col gap-1.5 items-center justify-center">
+                <motion.span 
+                  animate={isMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                  className="w-6 h-1 bg-black block"
+                />
+                <motion.span 
+                  animate={isMenuOpen ? { opacity: 0, x: -20 } : { opacity: 1, x: 0 }}
+                  className="w-6 h-1 bg-black block"
+                />
+                <motion.span 
+                  animate={isMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                  className="w-6 h-1 bg-black block"
+                />
+              </div>
             </button>
           </div>
         </div>
