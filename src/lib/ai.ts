@@ -48,7 +48,7 @@ async function callGroq(
   if (!key) throw new Error('GROQ_API_KEY not configured');
 
   const body: Record<string, unknown> = {
-    model: 'mixtral-8x7b-32768',
+    model: 'llama-3.3-70b-versatile',
     messages,
     temperature: opts.temperature ?? 0.7,
     max_tokens: opts.maxTokens ?? 2048,
