@@ -2,21 +2,21 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Link2, Sparkles, LayoutDashboard, User, Zap, Globe, ShieldCheck, HelpCircle } from 'lucide-react';
+import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Link2, Sparkles, LayoutDashboard, User, Zap, Globe, ShieldCheck, HelpCircle, Map } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 const tools = [
-  { name: 'Ikigai Finder', href: '/ikigai', icon: Brain, color: 'bg-rose-50 text-rose-600', border: 'border-rose-100', desc: 'Find what you love and what the world needs.', premium: true },
-  { name: 'Resume Builder', href: '/resume-builder', icon: FileText, color: 'bg-emerald-50 text-emerald-600', border: 'border-emerald-100', desc: 'Craft a professional, ATS-friendly resume.' },
-  { name: 'ATS Checker', href: '/ats-check', icon: CheckCircle, color: 'bg-blue-50 text-blue-600', border: 'border-blue-100', desc: 'Scan and improve your existing resume score.' },
-  { name: 'LinkedIn Pro', href: '/linkedin', icon: Link2, color: 'bg-indigo-50 text-indigo-600', border: 'border-indigo-100', desc: 'Optimize your profile and grow your network.' },
-  { name: 'Portfolio Gen', href: '/portfolio', icon: Sparkles, color: 'bg-amber-50 text-amber-600', border: 'border-amber-100', desc: 'Auto-generate your personal website.' },
-  { name: 'Career Roadmap', href: '/roadmap', icon: Briefcase, color: 'bg-stone-50 text-stone-600', border: 'border-stone-100', desc: 'Plan your step-by-step career timeline.' },
-  { name: 'Mental Health', href: '/mental-health', icon: HeartHandshake, color: 'bg-rose-50 text-rose-600', border: 'border-rose-100', desc: 'Talk to Serenity, your emotional safe space.' },
-  { name: 'Guides & Docs', href: '/documents', icon: BookOpen, color: 'bg-blue-50 text-blue-600', border: 'border-blue-100', desc: 'Find free learning videos and resources.' },
-  { name: 'AI Career Agent', href: '/career-agent', icon: Brain, color: 'bg-violet-50 text-violet-600', border: 'border-violet-100', desc: 'Get real-time jobs and AI guidance.' },
+  { name: 'Best Career Finder', href: '/ikigai', icon: Brain, color: 'bg-rose-50 text-rose-600', border: 'border-rose-100', desc: 'Find the heart of your career. Discover what you love and what pays well with AI coaching.', premium: true },
+  { name: 'AI Job Guide', href: '/career-agent', icon: Briefcase, color: 'bg-violet-50 text-violet-600', border: 'border-violet-100', desc: 'Get step-by-step career path, local salary info, and real job links from India.' },
+  { name: 'Easy Resume Builder', href: '/resume-builder', icon: FileText, color: 'bg-emerald-50 text-emerald-600', border: 'border-emerald-100', desc: 'Create professional resumes that help you get noticed by big companies and hiring managers.' },
+  { name: 'Resume Score Check', href: '/ats-check', icon: CheckCircle, color: 'bg-blue-50 text-blue-600', border: 'border-blue-100', desc: 'Upload your resume and get an instant score. See exactly how to fix it for jobs.' },
+  { name: 'LinkedIn Helper', href: '/linkedin', icon: Link2, color: 'bg-indigo-50 text-indigo-600', border: 'border-indigo-100', desc: 'Get ready-to-use headlines and profile summaries to make your LinkedIn look professional.' },
+  { name: 'Auto Portfolio', href: '/portfolio', icon: Sparkles, color: 'bg-amber-50 text-amber-600', border: 'border-amber-100', desc: 'Create your own beautiful website showing your work in just a few clicks.' },
+  { name: 'AI Roadmap', href: '/roadmap', icon: Map, color: 'bg-stone-50 text-stone-600', border: 'border-stone-100', desc: 'Get a personalized 90-day plan to reach your dream job, step by step.' },
+  { name: 'Govt Docs & Free Resources', href: '/documents', icon: BookOpen, color: 'bg-blue-50 text-blue-600', border: 'border-blue-100', desc: 'Access free learning guides, videos, and important government forms for your career.' },
+  { name: 'Mental Health AI', href: '/mental-health', icon: HeartHandshake, color: 'bg-rose-50 text-rose-600', border: 'border-rose-100', desc: 'Talk to Serenity—your friendly AI for stress, confidence, and feeling good.' },
 ];
 
 export default function Dashboard() {

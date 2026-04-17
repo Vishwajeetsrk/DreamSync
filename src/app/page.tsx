@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Sparkles, Coffee, Map, TrendingUp, Building2, User, Users, Globe, ShieldCheck, Zap, MapPin, ClipboardCheck, MonitorPlay, Network, Star, ArrowDown } from 'lucide-react';
+import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Sparkles, Coffee, Map, TrendingUp, Building2, User, Users, Globe, ShieldCheck, Zap, MapPin, ClipboardCheck, MonitorPlay, Network, Star, ArrowDown, Link2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
@@ -47,14 +47,15 @@ export default function Home() {
   const { user, userData } = useAuth();
 
   const features = [
-    { title: 'Career Finder', desc: 'Discover jobs you will love and excel at easily.', icon: Brain, href: "/ikigai" },
-    { title: 'Resume Builder', desc: 'Create a professional resume in minutes.', icon: FileText, href: "/resume-builder" },
-    { title: 'Job Roadmap', desc: 'Get a clear plan to reach your career goals.', icon: Map, href: "/roadmap" },
-    { title: 'Interview Help', desc: 'Practice and prepare for your big interview.', icon: Zap, href: "/career-agent" },
-    { title: 'Resume Check', desc: 'See how well your resume matches job requirements.', icon: CheckCircle, href: "/ats-check" },
-    { title: 'Personal Website', desc: 'Showcase your work with an automatic portfolio.', icon: Sparkles, href: "/portfolio" },
-    { title: 'Free Resources', desc: 'Access guides, videos, and government documents.', icon: BookOpen, href: "/documents" },
-    { title: 'Mental Wellbeing', desc: 'Talk to someone who cares about your progress.', icon: HeartHandshake, href: "/mental-health" },
+    { title: 'Best Career Finder', desc: 'Find the heart of your career. Discover what you love and what pays well with AI coaching.', icon: Brain, href: "/ikigai" },
+    { title: 'AI Job Guide', desc: 'Get step-by-step career path, local salary info, and real job links from India.', icon: Briefcase, href: "/career-agent" },
+    { title: 'Easy Resume Builder', desc: 'Create professional resumes that help you get noticed by big companies and hiring managers.', icon: FileText, href: "/resume-builder" },
+    { title: 'Resume Score Check', desc: 'Upload your resume and get an instant score. See exactly how to fix it for jobs.', icon: CheckCircle, href: "/ats-check" },
+    { title: 'LinkedIn Helper', desc: 'Get ready-to-use headlines and profile summaries to make your LinkedIn look professional.', icon: Link2, href: "/linkedin" },
+    { title: 'Auto Portfolio', desc: 'Create your own beautiful website showing your work in just a few clicks.', icon: Sparkles, href: "/portfolio" },
+    { title: 'AI Roadmap', desc: 'Get a personalized 90-day plan to reach your dream job, step by step.', icon: Map, href: "/roadmap" },
+    { title: 'Govt Docs & Free Resources', desc: 'Access free learning guides, videos, and important government forms for your career.', icon: BookOpen, href: "/documents" },
+    { title: 'Mental Health AI', desc: 'Talk to Serenity—your friendly AI for stress, confidence, and feeling good.', icon: HeartHandshake, href: "/mental-health" },
   ];
 
   return (
@@ -180,7 +181,7 @@ export default function Home() {
             <p className="text-stone-500 font-medium">Everything you need to succeed in one place</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((tool, i) => (
               <Link href={tool.href} key={i}>
                 <motion.div

@@ -6,7 +6,7 @@ import {
   BookOpen, ExternalLink, FileText, Info, AlertTriangle,
   Code2, Database, GitBranch, Globe, Smartphone, Terminal,
   Shield, ChevronRight, Layers, CheckCircle2, ChevronDown, ChevronUp,
-  Landmark, GraduationCap, Sparkles, Brain, ArrowRight, Star
+  Landmark, GraduationCap, Sparkles, Brain, ArrowRight, Star, MonitorPlay
 } from 'lucide-react';
 
 // --- Government Docs ---
@@ -124,6 +124,7 @@ const skillGuides = [
     duration: "2–3 months",
     skills: ["Prompt Engineering", "Fine-tuning LLMs", "RAG Systems", "Vector DBs"],
     jobs: "https://www.naukri.com/generative-ai-jobs",
+    video: "https://www.youtube.com/results?search_query=generative+ai+full+course",
     salary: "₹8L – ₹25L (FY)",
   },
   {
@@ -135,6 +136,7 @@ const skillGuides = [
     duration: "3–4 months",
     skills: ["LangGraph", "Multi-Agent Systems", "Stateful Agents", "AI Orchestration"],
     jobs: "https://www.naukri.com/ai-agent-jobs",
+    video: "https://www.youtube.com/results?search_query=ai+agents+langchain+course",
     salary: "₹12L – ₹35L+",
   },
   {
@@ -146,6 +148,7 @@ const skillGuides = [
     duration: "3–4 months",
     skills: ["Figma Mastery", "User Research", "Design Systems", "Prototyping"],
     jobs: "https://www.naukri.com/ux-designer-jobs",
+    video: "https://www.youtube.com/results?search_query=ui+ux+design+full+course",
     salary: "₹4L – ₹20L",
   },
   {
@@ -157,6 +160,7 @@ const skillGuides = [
     duration: "4–6 months",
     skills: ["TypeScript", "Next.js 15", "Server Components", "Tailwind CSS"],
     jobs: "https://www.naukri.com/frontend-developer-jobs",
+    video: "https://www.youtube.com/results?search_query=nextjs+full+tutorial",
     salary: "₹3L – ₹15L",
   },
   {
@@ -168,6 +172,7 @@ const skillGuides = [
     duration: "6–8 months",
     skills: ["AWS / Azure", "Docker & K8s", "CI/CD Pipelines", "Terraform"],
     jobs: "https://www.naukri.com/devops-jobs",
+    video: "https://www.youtube.com/results?search_query=devops+roadmap+full+course",
     salary: "₹6L – ₹22L",
   },
   {
@@ -179,6 +184,7 @@ const skillGuides = [
     duration: "5–7 months",
     skills: ["Python", "Pandas", "SQL", "PowerBI / Tableau"],
     jobs: "https://www.naukri.com/data-science-jobs",
+    video: "https://www.youtube.com/results?search_query=data+science+full+course+python",
     salary: "₹5L – ₹18L",
   },
 ];
@@ -302,9 +308,12 @@ function SkillCard({ guide, i }: { guide: typeof skillGuides[0]; i: number }) {
          ))}
       </div>
 
-      <div className="pt-6 border-t border-stone-50 flex items-center justify-between gap-4">
-         <a href={guide.jobs} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 bg-stone-900 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest text-center shadow-lg hover:shadow-blue-500/20 hover:bg-blue-600 transition-all flex items-center justify-center gap-2">
-            Find Opportunities <ArrowRight className="w-4 h-4" />
+      <div className="pt-6 border-t border-stone-50 grid grid-cols-2 gap-3">
+         <a href={guide.jobs} target="_blank" rel="noopener noreferrer" className="py-3 bg-stone-900 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest text-center shadow-lg hover:shadow-blue-500/20 hover:bg-blue-600 transition-all flex items-center justify-center gap-2">
+            Find Jobs <ArrowRight className="w-4 h-4" />
+         </a>
+         <a href={guide.video} target="_blank" rel="noopener noreferrer" className="py-3 bg-white border border-stone-100 text-stone-900 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-center shadow-sm hover:shadow-md hover:bg-stone-50 transition-all flex items-center justify-center gap-2">
+            Watch Guide <MonitorPlay className="w-4 h-4 text-rose-500" />
          </a>
       </div>
     </motion.div>
@@ -324,11 +333,11 @@ export default function Documents() {
             <div className="p-3 bg-blue-600 text-white rounded-2xl">
                <BookOpen className="w-8 h-8" />
             </div>
-            <p className="text-[10px] font-bold text-stone-400">Resources & protocol</p>
+            <p className="text-[10px] font-bold text-stone-400">Govt Docs & Free Resources</p>
           </div>
           <div className="space-y-4">
             <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
-              Roadmaps & <span className="text-blue-600 underline underline-offset-8 decoration-stone-200">Docs</span>
+              Protocols & <span className="text-blue-600">Guides</span>
             </h1>
             <p className="text-lg md:text-xl text-stone-500 font-medium leading-relaxed">
               Step-by-step skill guides and essential government documentation frameworks, optimized for Indian career seekers.

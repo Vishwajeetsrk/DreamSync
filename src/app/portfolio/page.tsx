@@ -277,10 +277,10 @@ export default function PortfolioGenerator() {
         {/* Header */}
         <div className="text-center space-y-4">
            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold uppercase tracking-widest mb-2">
-              <Sparkles className="w-4 h-4" /> Professional Portfolio
+              <Sparkles className="w-4 h-4" /> Auto Portfolio
            </div>
            <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight">
-              A website that <br /> <span className="text-blue-600">represents you.</span>
+              A website that <span className="text-blue-600">represents you.</span>
            </h1>
            <p className="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
               Tell your story professionally. Build a stunning one-page portfolio in minutes.

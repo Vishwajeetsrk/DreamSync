@@ -105,7 +105,7 @@ export default function AdvancedATS() {
               <Zap className="w-4 h-4" /> AI-Powered Resume Scoring
            </div>
            <h1 className="text-5xl md:text-6xl font-extrabold text-stone-900 tracking-tight">
-              Does your resume <br /> <span className="text-blue-600">stand out?</span>
+              Resume <span className="text-blue-600">Score Check</span>
            </h1>
            <p className="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
               Check if your resume is ready for the jobs you want. We&apos;ll tell you how companies see your profile.

@@ -97,10 +97,10 @@ export default function Roadmap() {
         <div className="flex flex-col lg:grid lg:grid-cols-12 gap-10 items-center no-print">
            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold uppercase tracking-widest">
-                 <Compass className="w-4 h-4" /> Career Journey Planner
+                 <Compass className="w-4 h-4" /> AI Roadmap
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
-                  Map your path to <span className="text-blue-600">success.</span>
+                  Map your path to <span className="text-blue-600">Success.</span>
               </h1>
               <p className="text-lg text-stone-500 font-medium max-w-2xl">
                  Get a step-by-step guide to your dream job, including free courses, tools, and projects to build your portfolio.

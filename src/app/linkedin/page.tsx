@@ -174,10 +174,10 @@ export default function LinkedInOptimizer() {
         {/* Header */}
         <div className="text-center space-y-6">
            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold uppercase tracking-widest mb-2">
-              <Star className="w-4 h-4" /> Profile Enhancement
+              <Star className="w-4 h-4" /> LinkedIn Helper
            </div>
            <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
-              Get noticed by <span className="text-blue-600">recruiters.</span>
+              Get noticed by <span className="text-blue-600">Recruiters.</span>
            </h1>
            <p className="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
               Tell your professional story with confidence. We help you optimize your LinkedIn profile for maximum impact and visibility.

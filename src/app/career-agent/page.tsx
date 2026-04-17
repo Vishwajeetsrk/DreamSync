@@ -315,7 +315,7 @@ export default function CareerAgent() {
              </div>
               <div className="space-y-1">
                 <p className="text-[10px] font-bold text-stone-400">Personal career guide</p>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight">AI Career Guide</h1>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight">AI Job Guide</h1>
               </div>
           </div>
           <p className="text-lg font-medium text-stone-500 max-w-2xl">

@@ -425,11 +425,11 @@ export default function MentalHealthAgent() {
               <HeartHandshake className="w-7 h-7 text-white" />
             </motion.div>
             <div className="text-center sm:text-left">
-              <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">Serenity</h1>
+              <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">Mental Health AI</h1>
               <div className="flex items-center justify-center sm:justify-start gap-2">
                 <span className={`w-2 h-2 rounded-full ${speaking ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}`} />
                 <span className="text-xs text-stone-400 font-bold uppercase tracking-widest">
-                  {speaking ? 'Talking...' : listening ? 'Listening...' : 'Online'}
+                  {speaking ? 'Serenity Talking...' : listening ? 'Listening...' : 'Serenity Online'}
                 </span>
               </div>
             </div>

@@ -145,10 +145,10 @@ export default function IkigaiPage() {
         {/* Results Header */}
         <header className="text-center space-y-4">
            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 text-xs font-bold uppercase tracking-widest mb-2">
-              <Compass className="w-4 h-4" /> Discovery Complete
+              <Compass className="w-4 h-4" /> Best Career Finder
            </div>
            <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
-              Your Personal <span className="text-blue-600">Career Vibe.</span>
+              Find the <span className="text-blue-600">Heart</span> of your career.
            </h1>
            <p className="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
              A clear path built from your passions, skills, and the world&apos;s needs.
@@ -305,10 +305,10 @@ export default function IkigaiPage() {
             <motion.div key="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
               <header className="text-center space-y-4">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold uppercase tracking-widest mb-2">
-                   <Award className="w-4 h-4" /> Career Discovery
+                   <Award className="w-4 h-4" /> Best Career Finder
                 </div>
                 <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
-                   Find what <span className="text-blue-600">truly fits</span> you.
+                   Discover your <span className="text-blue-600">Perfect Career</span>
                 </h1>
                 <p className="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
                   Ikigai is a Japanese concept meaning &quot;a reason for being.&quot; We&apos;ll help you find yours.

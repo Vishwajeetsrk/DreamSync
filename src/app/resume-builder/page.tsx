@@ -265,7 +265,7 @@ export default function ResumeBuilder() {
               <div className="p-3 bg-blue-50 rounded-2xl">
                 <FileText className="w-6 h-6" />
               </div>
-              <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">Create your resume easily</h1>
+              <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">Easy Resume Builder</h1>
            </div>
            <p className="text-sm font-medium text-stone-400">Follow the steps below to build a professional resume.</p>
         </header>
