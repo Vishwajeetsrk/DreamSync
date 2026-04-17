@@ -6,7 +6,7 @@ import {
   TrendingUp, Briefcase, FileText, HeartHandshake, 
   Target, Globe, Zap, Heart, ArrowRight, ChevronDown, CheckCircle,
   Building2, ShieldCheck, User,
-  MapPin, ClipboardCheck, MonitorPlay, Network
+  MapPin, ClipboardCheck, MonitorPlay, Network, Sparkles
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -32,43 +32,22 @@ const StatCounter = ({ value }: { value: string }) => {
 
 // --- COMPONENTS ---
 
-const FlipCard = ({ title, desc, icon: Icon }: { title: string, desc: string, icon: any }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
-
+const FeatureCard = ({ title, desc, icon: Icon, color }: { title: string, desc: string, icon: any, color: string }) => {
   return (
-    <div 
-      className="relative h-[300px] w-full perspective-1000 cursor-pointer group"
-      onMouseEnter={() => setIsFlipped(true)}
-      onMouseLeave={() => setIsFlipped(false)}
-      onClick={() => setIsFlipped(!isFlipped)}
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="p-8 bg-white rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-md transition-all group"
     >
-      <motion.div
-        className="relative h-full w-full transition-all duration-500 preserve-3d"
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-      >
-        {/* Front */}
-        <div className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-8 bg-white border-4 border-black neo-box group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all">
-          <div className="p-4 bg-[#FACC15] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6 transition-transform group-hover:scale-110">
-            <Icon className="w-10 h-10" strokeWidth={3} />
-          </div>
-          <h3 className="text-xl font-black uppercase tracking-tight text-center">{title}</h3>
-          <p className="mt-4 text-[10px] font-black uppercase tracking-widest text-[#2563EB]">Hover to reveal →</p>
-        </div>
-
-        {/* Back */}
-        <div 
-          className="absolute inset-0 backface-hidden rotate-y-180 flex flex-col items-center justify-center p-8 bg-black text-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(37,99,235,1)]"
-        >
-          <div className="p-3 bg-white text-black border-2 border-white mb-6">
-            <Icon className="w-8 h-8" />
-          </div>
-          <p className="text-sm font-bold text-center leading-relaxed uppercase">
-            {desc}
-          </p>
-        </div>
-      </motion.div>
-    </div>
+      <div className={`w-14 h-14 rounded-2xl ${color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+        <Icon className="w-7 h-7" />
+      </div>
+      <h3 className="text-xl font-bold text-stone-800 mb-4">{title}</h3>
+      <p className="text-sm font-medium text-stone-500 leading-relaxed">
+        {desc}
+      </p>
+    </motion.div>
   );
 };
 
@@ -76,17 +55,17 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-4 border-black bg-white neo-box overflow-hidden">
+    <div className="rounded-3xl border border-stone-100 bg-white overflow-hidden shadow-sm transition-all hover:border-stone-200">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between p-6 text-left"
       >
-        <span className="text-lg font-black uppercase tracking-tight">{question}</span>
+        <span className="text-lg font-bold text-stone-800">{question}</span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
-          className="p-2 border-2 border-black bg-[#FACC15]"
+          className={`p-2 rounded-full ${isOpen ? 'bg-blue-50 text-blue-600' : 'bg-stone-50 text-stone-400'}`}
         >
-          <ChevronDown className="w-5 h-5" strokeWidth={3} />
+          <ChevronDown className="w-5 h-5" />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -95,9 +74,9 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="border-t-4 border-black bg-white"
+            className="border-t border-stone-50"
           >
-            <div className="p-6 text-sm font-bold leading-relaxed uppercase text-gray-600">
+            <div className="p-6 text-sm font-medium leading-relaxed text-stone-500">
               {answer}
             </div>
           </motion.div>
@@ -112,172 +91,158 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
 export default function About() {
   const featureCards = [
     { 
-      title: "Document Helper", 
-      desc: "Get easy help in preparing and managing your important ID cards, government forms, and professional papers correctly.",
-      icon: FileText
+      title: "Document Support", 
+      desc: "Get simple, step-by-step help preparing important ID cards, government forms, and professional papers correctly.",
+      icon: FileText,
+      color: "bg-blue-50 text-blue-600"
     },
     { 
-      title: "Skill Guides", 
-      desc: "Access a library of easy guides, video links, and free learning tools built to help you grow your skills.",
-      icon: Zap
+      title: "Learning Library", 
+      desc: "Access easy-to-follow guides and free learning tools built especially for students starting their career journey.",
+      icon: Zap,
+      color: "bg-amber-50 text-amber-600"
     },
     { 
-      title: "Community Unity", 
-      desc: "Join a friendly network of people growing up independently to chat, share advice, and build professional friendships.",
-      icon: Heart
+      title: "A Safe Community", 
+      desc: "Join a friendly group of peers to chat, share advice, and grow together in a non-judgmental environment.",
+      icon: Heart,
+      color: "bg-rose-50 text-rose-600"
     },
     { 
-      title: "Career Boosting", 
-      desc: "Take part in live sessions to build your confidence and career, where everyone helps each other succeed.",
-      icon: HeartHandshake
+      title: "Career Mentorship", 
+      desc: "Participate in live sessions that build your confidence and help you navigate the world of work.",
+      icon: HeartHandshake,
+      color: "bg-emerald-50 text-emerald-600"
     }
   ];
-
 
   const faqs = [
     {
       q: "What is DreamSync?",
-      a: "DreamSync is a professional community for students and young builders to connect, share jobs, and grow their careers together."
+      a: "DreamSync is a supportive community created for students and young people to connect, learn career skills, and grow together."
     },
     {
-      q: "What is our main goal?",
-      a: "Our goal is simple: to help you build a great career by providing the right tools, roadmaps, and a supportive community."
+      q: "Who is this for?",
+      a: "We specially support care-experienced and underprivileged youth (16-30) who are looking for career guidance and a helpful community."
     },
     {
-      q: "Why should I join?",
-      a: "Join us if you want free AI career tools, better resumes, and a network of people who support each other's growth."
+      q: "Is it free to use?",
+      a: "Yes! Our platform and community are entirely free for students. We want to ensure everyone has access to professional tools."
     },
     {
-      q: "Are there any requirements?",
-      a: "No special requirements! Just bring a positive attitude, an open mind, and a willingness to help others."
-    },
-    {
-      q: "How do our sessions help?",
-      a: "We talk about real things: how to get a job, how to manage stress, and how to build the confidence you need to succeed."
-    },
-    {
-      q: "Which language is used?",
-      a: "We use English and Hindi to make sure everyone understands and can participate easily."
+      q: "How can I get started?",
+      a: "Simply create a free account to join the community, build your first resume, or check out our learning resources."
     }
   ];
 
   return (
-    <div className="flex flex-col bg-[#F3F4F6] selection:bg-[#FACC15]/40 min-h-screen">
+    <div className="flex flex-col bg-stone-50/50 min-h-screen">
       
-      {/* Black Marquee Ticker */}
-      <div className="marquee-neo mt-[88px]">
+      {/* Soft Marquee Ticker */}
+      <div className="bg-white border-y border-stone-100 py-3 mt-[88px] overflow-hidden">
         <motion.div 
           animate={{ x: [0, -1200] }}
-          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-          className="flex whitespace-nowrap gap-20 font-black text-xs uppercase tracking-[0.3em] items-center"
+          transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+          className="flex whitespace-nowrap gap-20 font-bold text-xs uppercase tracking-widest text-stone-400 items-center"
         >
-          <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-[#2563EB]" /> CORE MISSION: EMPOWERING CARE-EXPERIENCED INDIVIDUALS</div>
-          <div className="flex items-center gap-3"><Globe className="w-5 h-5 text-emerald-400" /> REGIONS: BANGALORE & KASHMIR</div>
-          <div className="flex items-center gap-3"><HeartHandshake className="w-5 h-5 text-rose-400" /> POSITIVE COMMUNITY CULTURE</div>
-          <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-[#2563EB]" /> CORE MISSION: EMPOWERING CARE-EXPERIENCED INDIVIDUALS</div>
+          <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-blue-600" /> Empowering Care-Experienced Youth</div>
+          <div className="flex items-center gap-3"><Globe className="w-5 h-5 text-emerald-500" /> Impacting Bangalore & Kashmir</div>
+          <div className="flex items-center gap-3"><HeartHandshake className="w-5 h-5 text-rose-500" /> A Positive Community Culture</div>
+          <div className="flex items-center gap-3"><TrendingUp className="w-5 h-5 text-blue-600" /> Empowering Care-Experienced Youth</div>
         </motion.div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-20 space-y-32">
         
         {/* SECTION 1 — HERO ABOUT TITLE */}
-        <section className="text-center space-y-12">
+        <section className="text-center space-y-8">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="inline-block px-8 py-2 border-4 border-black bg-white text-black font-black text-[10px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-[0.4em]"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 font-bold text-xs uppercase tracking-widest"
           >
-             About DreamSync
+             <Sparkles className="w-4 h-4" /> About Our Story
           </motion.div>
 
-          <h1 className="text-4xl md:text-7xl font-black tracking-tighter leading-tight text-center max-w-5xl mx-auto uppercase">
-            The Platform for Care-Experienced People to 
-            <span className="inline-block mx-4 text-[#2563EB] italic decoration-8 decoration-[#FACC15] underline underline-offset-8">
-              Connect
-            </span> 
-            with other Care-Experienced individuals.
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-center max-w-5xl mx-auto text-stone-900">
+            A safe space to <br />
+            <span className="text-blue-600">connect, grow & empower</span> <br />
+            your future.
           </h1>
 
-          {/* SECTION 2 — INTRO TEXT */}
-          <div className="max-w-3xl mx-auto space-y-8 pt-10 border-t-4 border-black">
-            <p className="text-xl md:text-3xl text-black font-black leading-relaxed uppercase">
-              Welcome to 
-              <span className="text-[#2563EB] ml-2">Dream</span>Sync, 
-              a hub created for care-experienced individuals.
+          <div className="max-w-3xl mx-auto space-y-6 pt-10 border-t border-stone-100">
+            <p className="text-xl md:text-2xl text-stone-800 font-bold leading-relaxed">
+              DreamSync is more than just a platform — it&apos;s a hub built for individuals who have grown up independently.
             </p>
-            <p className="text-lg md:text-xl text-gray-500 font-bold leading-relaxed uppercase">
-               Join us in this one-stop destination where you can connect, meet, greet, and empower others while being empowered yourself.
+            <p className="text-lg md:text-xl text-stone-400 font-medium leading-relaxed">
+               Join our family-like destination where you can meet mentors, greet friends, and find the tools you need to succeed in your career journey.
             </p>
           </div>
         </section>
 
-        {/* SECTION 3 — WHAT DREAMSYNC DOES */}
+        {/* SECTION 2 — FEATURES */}
         <section className="space-y-16">
           <div className="text-center space-y-4">
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
-              What <span className="text-[#2563EB]">DreamSync</span> Does.
+            <h2 className="text-4xl md:text-5xl font-extrabold text-stone-900">
+              How we support you
             </h2>
-            <p className="text-lg font-black uppercase tracking-widest text-[#2563EB]">
-              Explore Our Comprehensive Resources
+            <p className="text-lg font-bold text-blue-600 uppercase tracking-widest">
+              Resources for Your Journey
             </p>
           </div>
 
-          {/* SECTION 4 — FEATURE CARDS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {featureCards.map((card, i) => (
-              <FlipCard 
+              <FeatureCard 
                 key={i}
                 title={card.title}
                 desc={card.desc}
                 icon={card.icon}
+                color={card.color}
               />
             ))}
           </div>
         </section>
 
 
-        {/* SECTION 5 — RESTORED IMPACT STATS */}
-        <section className="bg-black border-8 border-black p-12 md:p-20 shadow-[12px_12px_0px_0px_rgba(37,99,235,1)]">
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-center">
+        {/* SECTION 3 — IMPACT STATS */}
+        <section className="bg-stone-900 rounded-[3rem] p-12 md:p-20 shadow-2xl relative overflow-hidden">
+           <div className="absolute top-0 right-0 p-20 opacity-5">
+              <Building2 className="w-64 h-64 text-white" />
+           </div>
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-center relative z-10">
              {[
-               { value: "1+", label: "Working Locations", icon: MapPin, color: 'text-[#FACC15]', anim: { y: [0, -8, 0] } },
-               { value: "50+", label: "Verified Documents", icon: ClipboardCheck, color: 'text-emerald-400', anim: { scale: [1, 1.2, 1] } },
-               { value: "6+", label: "Well-being Sessions", icon: MonitorPlay, color: 'text-rose-400', anim: { scaleY: [1, 0.8, 1] } },
-               { value: "30+", label: "Members Connected", icon: Network, color: 'text-[#2563EB]', anim: { scale: [1, 1.1, 1], rotate: [0, 10, 0] } }
+               { value: "5+", label: "Cities Reached", icon: MapPin, color: 'text-blue-400' },
+               { value: "100+", label: "Resumes Built", icon: ClipboardCheck, color: 'text-emerald-400' },
+               { value: "10+", label: "Support Sessions", icon: MonitorPlay, color: 'text-rose-400' },
+               { value: "50+", label: "Active Members", icon: Network, color: 'text-amber-400' }
              ].map((stat, i) => (
-               <div key={i} className="space-y-6 flex flex-col items-center">
-                  <div className="p-4 bg-white/10 border-2 border-white/20 rounded-full overflow-hidden">
-                     <motion.div
-                       animate={stat.anim}
-                       transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-                     >
-                        <stat.icon className={`w-8 h-8 ${stat.color}`} strokeWidth={3} />
-                     </motion.div>
+               <div key={i} className="space-y-4">
+                  <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                     <stat.icon className={`w-6 h-6 ${stat.color}`} />
                   </div>
-                  <div className="space-y-2">
-                    <div className="text-5xl md:text-7xl font-black text-[#FACC15] tracking-tighter italic">
-                      <StatCounter value={stat.value} />
-                    </div>
-                    <div className="h-1 w-12 bg-white/20 mx-auto rounded-full" />
-                    <p className="text-xs font-black uppercase tracking-widest text-white leading-tight opacity-70">
-                      {stat.label}
-                    </p>
+                  <div className="text-5xl md:text-6xl font-black text-white">
+                    <StatCounter value={stat.value} />
                   </div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-500">
+                    {stat.label}
+                  </p>
                </div>
              ))}
            </div>
         </section>
 
-        {/* SECTION 6 — FAQ SECTION */}
-        <section className="space-y-20">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-             <div className="space-y-2 text-center md:text-left">
-                <h2 className="text-4xl font-black uppercase tracking-tighter italic">Common Inquiries</h2>
-                <p className="text-[#2563EB] font-black uppercase tracking-widest text-xs">Essential Foundation Knowledge</p>
+        {/* SECTION 4 — FAQ */}
+        <section className="space-y-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+             <div className="space-y-1 text-center md:text-left">
+                <h2 className="text-3xl font-bold text-stone-900">Common questions</h2>
+                <p className="text-blue-600 font-bold uppercase tracking-widest text-xs">Always here to help</p>
              </div>
-             <div className="h-2 flex-grow hidden md:block bg-black/5" />
-             <div className="p-4 bg-[#FACC15] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                <HeartHandshake className="w-8 h-8" />
+             <div className="h-px flex-grow hidden md:block bg-stone-100" />
+             <div className="w-12 h-12 rounded-full bg-stone-50 flex items-center justify-center text-rose-500">
+                <Heart className="w-6 h-6 fill-rose-50" />
              </div>
           </div>
 
@@ -294,45 +259,27 @@ export default function About() {
 
         {/* CTA SECTION */}
         <section className="pb-40">
-          <div className="neo-box p-12 md:p-20 bg-white text-center space-y-12 relative overflow-hidden group">
-             <div className="absolute top-0 left-0 w-full h-3 bg-[#2563EB]" />
-             <div className="absolute bottom-0 right-0 p-8 transform translate-x-12 translate-y-12 opacity-5 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-700">
-                <Target className="w-64 h-64 text-black" />
-             </div>
+          <div className="bg-white rounded-[3rem] p-12 md:p-20 text-center space-y-10 border border-stone-100 shadow-sm relative overflow-hidden group">
+             <div className="absolute top-0 left-0 w-full h-2 bg-blue-600" />
              
-             <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-tight relative z-10">
-                Ready to empower <br /> your journey?
+             <h2 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
+                Ready to start your <br /> journey with us?
              </h2>
-             <p className="text-lg md:text-xl text-gray-500 font-bold max-w-2xl mx-auto uppercase relative z-10">
-                Join our supportive ecosystem and build a future alongside care-experienced individuals who truly understand your path.
+             <p className="text-lg md:text-xl text-stone-400 font-medium max-w-2xl mx-auto">
+                Join our supportive community and build a future alongside people who truly understand your path.
              </p>
              
-             <div className="flex flex-col sm:flex-row justify-center items-center gap-6 relative z-10">
-                <Link href="/signup" className="neo-btn-primary inline-flex px-12 py-5 text-lg items-center gap-4">
-                  Join Community Today <ArrowRight className="w-6 h-6" />
+             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <Link href="/signup" className="btn-primary flex items-center gap-3 !px-10 !py-4 shadow-xl">
+                  Join Community <ArrowRight className="w-5 h-5" />
                 </Link>
-                <Link href="/contact" className="neo-btn-secondary inline-flex px-12 py-5 text-lg items-center gap-4">
-                  Contact Us
+                <Link href="/contact" className="btn-secondary !px-10 !py-4">
+                   Talk to Us
                 </Link>
              </div>
           </div>
         </section>
       </div>
-
-      <style jsx global>{`
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-        .preserve-3d {
-          transform-style: preserve-3d;
-        }
-        .backface-hidden {
-          backface-visibility: hidden;
-        }
-        .rotate-y-180 {
-          transform: rotateY(180deg);
-        }
-      `}</style>
     </div>
   );
 }

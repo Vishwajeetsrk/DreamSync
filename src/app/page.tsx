@@ -2,12 +2,11 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Sparkles, Coffee, Map, TrendingUp, Building2, User, Globe, ShieldCheck, Zap, MapPin, ClipboardCheck, MonitorPlay, Network } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
+import { ArrowRight, BookOpen, Brain, Briefcase, CheckCircle, FileText, HeartHandshake, Sparkles, Coffee, Map, TrendingUp, Building2, User, Users, Globe, ShieldCheck, Zap, MapPin, ClipboardCheck, MonitorPlay, Network, Star, ArrowDown } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
-import { useMotionValue, useTransform, animate, useInView } from 'framer-motion';
+import { animate, useInView } from 'framer-motion';
 
 const StatCounter = ({ value }: { value: string }) => {
   const ref = useRef(null);
@@ -29,176 +28,202 @@ const StatCounter = ({ value }: { value: string }) => {
   return <span ref={ref}>{display}</span>;
 };
 
+const Step = ({ number, title, desc, icon: Icon }: { number: string, title: string, desc: string, icon: any }) => (
+  <div className="flex flex-col items-center text-center p-6 space-y-4 relative">
+    <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center relative z-10 border-4 border-white shadow-sm">
+      <Icon className="w-8 h-8" />
+      <span className="absolute -top-1 -right-1 w-6 h-6 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center border-2 border-white">
+        {number}
+      </span>
+    </div>
+    <div className="space-y-2">
+      <h3 className="text-xl font-bold text-stone-900">{title}</h3>
+      <p className="text-stone-500 text-sm leading-relaxed max-w-xs">{desc}</p>
+    </div>
+  </div>
+);
+
 export default function Home() {
   const { user, userData } = useAuth();
 
   const features = [
-    { title: 'Best Career Finder', desc: 'Find the heart of your career. Discover what you love and what pays well with AI coaching.', icon: Brain, href: "/ikigai" },
-    { title: 'AI Job Guide', desc: 'Get step-by-step career path, local salary info, and real job links from India.', icon: Briefcase, href: "/career-agent" },
-    { title: 'Easy Resume Builder', desc: 'Create professional resumes that help you get noticed by big companies and hiring managers.', icon: FileText, href: "/resume-builder" },
-    { title: 'Resume Score Check', desc: 'Upload your resume and get an instant score. See exactly how to fix it for jobs.', icon: CheckCircle, href: "/ats-check" },
-    { title: 'LinkedIn Helper', desc: 'Get ready-to-use headlines and profile summaries to make your LinkedIn look professional.', icon: Zap, href: "/linkedin" },
-    { title: 'Auto Portfolio', desc: 'Create your own beautiful website showing your work in just a few clicks.', icon: Sparkles, href: "/portfolio" },
-    { title: 'AI Roadmap', desc: 'Get a personalized 90-day plan to reach your dream job, step by step.', icon: Map, href: "/roadmap" },
-    { title: 'Govt Docs & Free Resources', desc: 'Access free learning guides, videos, and important government forms for your career.', icon: BookOpen, href: "/documents" },
-    { title: 'Mental Health AI', desc: 'Talk to Serenity—your friendly AI for stress, confidence, and feeling good.', icon: HeartHandshake, href: "/mental-health" },
+    { title: 'Career Finder', desc: 'Discover jobs you will love and excel at easily.', icon: Brain, href: "/ikigai" },
+    { title: 'Resume Builder', desc: 'Create a professional resume in minutes.', icon: FileText, href: "/resume-builder" },
+    { title: 'Job Roadmap', desc: 'Get a clear plan to reach your career goals.', icon: Map, href: "/roadmap" },
+    { title: 'Interview Help', desc: 'Practice and prepare for your big interview.', icon: Zap, href: "/career-agent" },
+    { title: 'Resume Check', desc: 'See how well your resume matches job requirements.', icon: CheckCircle, href: "/ats-check" },
+    { title: 'Personal Website', desc: 'Showcase your work with an automatic portfolio.', icon: Sparkles, href: "/portfolio" },
+    { title: 'Free Resources', desc: 'Access guides, videos, and government documents.', icon: BookOpen, href: "/documents" },
+    { title: 'Mental Wellbeing', desc: 'Talk to someone who cares about your progress.', icon: HeartHandshake, href: "/mental-health" },
   ];
 
   return (
-    <div className="flex flex-col bg-[#F3F4F6] selection:bg-[#FACC15]/40 min-h-screen">
-
-      {/* 🚀 CLICKABLE MARQUEE TICKER (Exclusive to Home) */}
-      <div className="marquee-neo mt-[88px] overflow-hidden border-b-4 border-black">
-        <motion.div
-          animate={{ x: [0, -1200] }}
-          transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-          className="flex whitespace-nowrap gap-20 font-black text-xs uppercase tracking-[0.3em] items-center py-4"
-        >
-          <Link href="/career-agent" className="flex items-center gap-3 hover:text-[#2563EB] transition-colors">
-            <TrendingUp className="w-5 h-5 text-[#2563EB]" /> AI CAREER AGENT LIVE WITH 2026 INSIGHTS
-          </Link>
-          <Link href="/ikigai" className="flex items-center gap-3 hover:text-[#7C3AED] transition-colors">
-            <Brain className="w-5 h-5 text-[#FACC15] fill-current" /> PREMIUM "IKIGAI" CAREER FINDER NOW ACTIVE
-          </Link>
-          <Link href="/resume-builder" className="flex items-center gap-3 hover:text-emerald-600 transition-colors">
-            <FileText className="w-5 h-5 text-emerald-400" /> AI RESUME BUILDER: 100% FREE FOR STUDENTS
-          </Link>
-
-          {/* Duplicate loop */}
-          <Link href="/career-agent" className="flex items-center gap-3 hover:text-[#2563EB] transition-colors">
-            <TrendingUp className="w-5 h-5 text-[#2563EB]" /> AI CAREER AGENT LIVE WITH 2026 INSIGHTS
-          </Link>
-          <Link href="/ikigai" className="flex items-center gap-3 hover:text-[#7C3AED] transition-colors">
-            <Brain className="w-5 h-5 text-[#FACC15] fill-current" /> PREMIUM "IKIGAI" CAREER FINDER NOW ACTIVE
-          </Link>
-          <Link href="/resume-builder" className="flex items-center gap-3 hover:text-emerald-600 transition-colors">
-            <FileText className="w-5 h-5 text-emerald-400" /> AI RESUME BUILDER: 100% FREE FOR STUDENTS
-          </Link>
-        </motion.div>
-      </div>
+    <div className="flex flex-col min-h-screen">
 
       {/* 🔮 HERO SECTION */}
-      <section className="relative text-center space-y-12 py-20 max-w-7xl mx-auto px-6">
+      <section className="relative overflow-hidden pt-32 pb-20 md:pt-48 md:pb-32 px-6">
+        {/* Abstract Background Decoration */}
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[600px] h-[600px] bg-blue-50 rounded-full blur-3xl opacity-50 z-0" />
+        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-emerald-50 rounded-full blur-3xl opacity-50 z-0" />
 
-        {/* User Greeting (if logged in) */}
-        {user && (
+        <div className="max-w-5xl mx-auto text-center relative z-10 space-y-10">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center gap-4 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-sm font-bold"
           >
-            <p className="font-black text-xs uppercase tracking-[0.3em]">Welcome Back, {userData?.name?.split(' ')[0] || 'User'}!</p>
-            <div className="px-4 py-1 bg-[#FACC15] border-2 border-black text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-              ⚡ AI-Powered Career Growth
-            </div>
+            <Star className="w-4 h-4 fill-current" />
+            <span>Helping youth build bright careers</span>
           </motion.div>
-        )}
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="space-y-8"
-        >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-tight text-black uppercase">
-            Your Dream Career, <br />
-            <span className="text-black drop-shadow-[2px_2px_0px_rgba(255,255,255,1)] md:drop-shadow-[3px_3px_0px_rgba(255,255,255,1)]">Synced Perfectly.</span>
-          </h1>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="space-y-6"
+          >
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-stone-900 tracking-tight leading-[1.1]">
+              We help you build your career <br />
+              <span className="text-blue-600">step by step</span>
+            </h1>
 
-          <p className="text-lg md:text-xl text-gray-500 font-bold max-w-2xl mx-auto leading-relaxed uppercase">
-            Guidance, resumes, ATS checks, and custom roadmaps—all powered by AI. Designed explicitly for Indian students.
-          </p>
-        </motion.div>
+            <p className="text-lg md:text-xl text-stone-500 font-medium max-w-2xl mx-auto leading-relaxed">
+              DreamSync is your friendly companion for career guidance, resume building, and life support. Simple, safe, and made for you.
+            </p>
+          </motion.div>
 
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-          <Link href="/signup" className="bg-[#2563EB] text-white border-4 border-black px-12 py-5 font-black text-sm uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
-            Get Started For Free →
-          </Link>
-          <Link href="/about" className="bg-white text-black border-4 border-black px-12 py-5 font-black text-sm uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
-            See How It Works
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col sm:flex-row justify-center items-center gap-4"
+          >
+            <Link href="/signup" className="btn-primary w-full sm:w-auto text-lg !px-12">
+              Start Here
+            </Link>
+            <Link href="#how-it-works" className="btn-secondary w-full sm:w-auto text-lg !px-12 flex items-center justify-center gap-2">
+              How it works <ArrowDown className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 🌊 HOW IT WORKS SECTION */}
+      <section id="how-it-works" className="section-padding bg-stone-50/50">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-stone-900">It's as easy as 1-2-3</h2>
+            <p className="text-stone-500 font-medium">Simple steps to kickstart your journey</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            {/* Connector Lines (Desktop) */}
+            <div className="hidden md:block absolute top-14 left-1/3 right-1/4 h-0.5 bg-blue-100 -z-0" />
+            
+            <Step 
+              number="1" 
+              title="Tell us about you" 
+              desc="Answer a few simple questions about your interests and what you'd like to do." 
+              icon={User} 
+            />
+            <Step 
+              number="2" 
+              title="Get guidance" 
+              desc="Our friendly AI finds the best career paths and training for you." 
+              icon={Brain} 
+            />
+            <Step 
+              number="3" 
+              title="Build your career" 
+              desc="Create your resume, find local jobs, and start your dream career." 
+              icon={Briefcase} 
+            />
+          </div>
         </div>
       </section>
 
       {/* 📊 IMPACT STATS SECTION */}
-      <section className="py-20 px-4 md:px-6 max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      <section className="section-padding">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
           {[
-            { val: '1+', label: 'Working Locations', icon: MapPin, color: 'text-[#2563EB]', bg: 'bg-blue-50' },
-            { val: '50+', label: 'Verified Documents', icon: ClipboardCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-            { val: '6+', label: 'Well-being Sessions', icon: MonitorPlay, color: 'text-rose-600', bg: 'bg-rose-50' },
-            { val: '3+', label: 'Community Members', icon: Network, color: 'text-amber-600', bg: 'bg-amber-50' },
+            { val: '10+', label: 'Support Locations', icon: MapPin, color: 'text-blue-600', bg: 'bg-blue-50' },
+            { val: '500+', label: 'Happy Students', icon: Users, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+            { val: '1000+', label: 'Resumes Created', icon: FileText, color: 'text-amber-600', bg: 'bg-amber-50' },
+            { val: '24/7', label: 'AI Support', icon: HeartHandshake, color: 'text-rose-600', bg: 'bg-rose-50' },
           ].map((stat, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, type: 'spring' }}
-              className="bg-white border-4 border-black p-6 md:p-10 neo-box flex flex-col items-center text-center gap-6 hover:translate-y-[-8px] transition-all relative group overflow-hidden"
+              className="glass-card p-8 flex flex-col items-center text-center gap-4 hover-lift"
             >
-              {/* Visual Background Decoration */}
-              <div className={`absolute -top-10 -right-10 w-24 h-24 ${stat.bg} rounded-full blur-2xl opacity-50 group-hover:scale-150 transition-transform`} />
-
-              <div className={`p-5 ${stat.bg} border-4 border-black group-hover:rotate-[15deg] transition-transform relative z-10 overflow-hidden`}>
-                <motion.div
-                  animate={
-                    i === 0 ? { y: [0, -8, 0] } :
-                      i === 1 ? { scale: [1, 1.2, 1] } :
-                        i === 2 ? { scaleY: [1, 0.8, 1] } :
-                          { scale: [1, 1.1, 1], rotate: [0, 10, 0] }
-                  }
-                  transition={{
-                    repeat: Infinity,
-                    duration: 2.5,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <stat.icon className={`w-8 h-8 ${stat.color} stroke-[3px]`} />
-                </motion.div>
+              <div className={`p-4 rounded-2xl ${stat.bg}`}>
+                <stat.icon className={`w-8 h-8 ${stat.color}`} />
               </div>
-
-              <div className="space-y-2 relative z-10">
-                <h2 className="text-4xl md:text-6xl font-black tracking-tighter italic">
+              <div className="space-y-1">
+                <h2 className="text-3xl md:text-4xl font-bold text-stone-900">
                   <StatCounter value={stat.val} />
                 </h2>
-                <p className="text-[10px] md:text-sm font-black uppercase tracking-widest text-gray-500 leading-tight">
-                  {stat.label}
-                </p>
+                <p className="text-xs font-bold text-stone-400 uppercase tracking-widest">{stat.label}</p>
               </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* 🧪 EVERYTHING YOU NEED SECTION */}
-      <section className="py-20 px-6 max-w-6xl mx-auto w-full space-y-20">
-        <div className="text-center">
-          <h2 className="text-4xl font-black uppercase tracking-tighter underline decoration-8 decoration-[#FACC15] underline-offset-8">Everything You Need</h2>
-        </div>
+      {/* 🧪 FEATURE CARDS SECTION */}
+      <section className="section-padding bg-stone-50/50">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-stone-900">Tools to help you grow</h2>
+            <p className="text-stone-500 font-medium">Everything you need to succeed in one place</p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((tool, i) => (
-            <Link href={tool.href} key={i}>
-              <motion.div
-                className="bg-white border-4 border-black p-8 h-full flex flex-col items-start gap-6 group hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all relative overflow-hidden cursor-pointer"
-                whileHover={{ y: -4 }}
-                whileTap={{
-                  scale: 0.98,
-                  backgroundColor: ["#ffffff", "#f87171", "#fbbf24", "#34d399", "#60a5fa", "#818cf8", "#c084fc", "#ffffff"],
-                  transition: { duration: 0.8, times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 1], repeat: 0 }
-                }}
-              >
-                <div className="p-3 border-2 border-black bg-white group-hover:bg-[#FACC15] transition-colors">
-                  <tool.icon className="w-6 h-6" strokeWidth={3} />
-                </div>
-                <div className="space-y-3">
-                  <h3 className="text-xl font-black tracking-tight uppercase leading-tight">{tool.title}</h3>
-                  <p className="text-gray-500 font-bold text-xs leading-relaxed uppercase">{tool.desc}</p>
-                </div>
-              </motion.div>
-            </Link>
-          ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((tool, i) => (
+              <Link href={tool.href} key={i}>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="glass-card p-8 h-full flex flex-col items-start gap-5 hover-lift group"
+                >
+                  <div className="p-3 bg-stone-50 text-stone-400 rounded-xl group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                    <tool.icon className="w-6 h-6" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-stone-900 group-hover:text-blue-600 transition-colors">{tool.title}</h3>
+                    <p className="text-stone-500 text-sm leading-relaxed">{tool.desc}</p>
+                  </div>
+                  <div className="mt-auto pt-4 flex items-center gap-2 text-blue-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+                    Get Started <ArrowRight className="w-4 h-4" />
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section className="section-padding">
+        <div className="max-w-5xl mx-auto bg-blue-600 rounded-[32px] p-8 md:p-16 text-center text-white space-y-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+          
+          <div className="relative z-10 space-y-6">
+            <h2 className="text-3xl md:text-5xl font-bold leading-tight">Ready to start your journey?</h2>
+            <p className="text-blue-100 text-lg md:text-xl font-medium max-w-2xl mx-auto">
+              Join hundreds of students who are building their future with DreamSync. 100% free and easy to use.
+            </p>
+            <div className="pt-4">
+              <Link href="/signup" className="bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:bg-blue-50 transition-all inline-block">
+                Start My Journey Now
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

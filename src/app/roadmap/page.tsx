@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Map, Briefcase, ExternalLink, Book, Video, 
   GraduationCap, Box, CheckCircle, ArrowRight, ShieldCheck,
-  Star, Download, Printer, Wrench, Zap, Globe, TrendingUp, Search, Loader2, FileText
+  Star, Download, Wrench, Zap, Globe, TrendingUp, Search, Loader2, FileText,
+  Compass, Lightbulb, Target, AlertCircle
 } from 'lucide-react';
 import { validateCareerInput } from '@/lib/aiGuard';
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, Link, AlignmentType } from 'docx';
+import { Document, Packer, Paragraph, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
 
 export default function Roadmap() {
@@ -24,19 +25,13 @@ export default function Roadmap() {
   const [safetyError, setSafetyError] = useState<{ message: string, alternatives: string[] } | null>(null);
 
   const generateRoadmap = async () => {
-    if (!query.role) return alert("ROLE REDACTED. FIELD MANDATORY.");
+    if (!query.role) return;
     
     const safety = validateCareerInput(query.role);
     if (!safety.allowed) {
       setSafetyError({ 
         message: safety.message, 
-        alternatives: [
-          "Software Developer", 
-          "Data Scientist", 
-          "UI/UX Designer", 
-          "Product Manager", 
-          "Cybersecurity Analyst (Ethical)"
-        ] 
+        alternatives: ["Software Developer", "Data Scientist", "UI/UX Designer", "Sales Professional", "Accountant"] 
       });
       return;
     }
@@ -52,16 +47,7 @@ export default function Roadmap() {
       });
       const data = await res.json();
       
-      if (!res.ok) {
-        if (res.status === 400 && data.error === 'Safety Violation') {
-          setSafetyError({ 
-            message: data.details, 
-            alternatives: ["Software Developer", "Data Scientist", "UI/UX Designer"] 
-          });
-          return;
-        }
-        throw new Error(data.error || "GENERATION PROTOCOL FAILED");
-      }
+      if (!res.ok) throw new Error(data.error || "Failed to generate roadmap");
       
       setSteps(data.timeline || []);
       setTotalTimeline(data.totalTimeline || '');
@@ -71,7 +57,7 @@ export default function Roadmap() {
       setCriticalIntelligence(data.criticalIntelligence || null);
       setTargetRole(data.targetRole || '');
     } catch (err: any) {
-      alert("CRITICAL ERROR: " + err.message);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -86,35 +72,14 @@ export default function Roadmap() {
       sections: [{
         properties: {},
         children: [
-          new Paragraph({ text: "DREAMSYNC CAREER ROADMAP", heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER }),
+          new Paragraph({ text: "DREAMSYNC CAREER ROADMAP", heading: HeadingLevel.TITLE }),
           new Paragraph({ text: `Target Role: ${targetRole || query.role}`, heading: HeadingLevel.HEADING_1 }),
           new Paragraph({ text: `Estimated Duration: ${totalTimeline}`, heading: HeadingLevel.HEADING_3 }),
-          
-          new Paragraph({ text: "CORE PREREQUISITES", heading: HeadingLevel.HEADING_2, spacing: { before: 400 } }),
-          new Paragraph({ text: `Education: ${globalPrerequisites?.education || 'N/A'}` }),
-          new Paragraph({ text: `Technical Skills: ${globalPrerequisites?.technicalSkills?.join(', ') || 'N/A'}` }),
-          new Paragraph({ text: `Core Knowledge: ${globalPrerequisites?.requiredKnowledge?.join(', ') || 'N/A'}` }),
-
-          ...steps.flatMap((step, i) => [
-            new Paragraph({ text: `${step.title} (${step.time})`, heading: HeadingLevel.HEADING_2, spacing: { before: 400 } }),
+          ...steps.flatMap((step) => [
+            new Paragraph({ text: `${step.title} (${step.time})`, heading: HeadingLevel.HEADING_2 }),
             new Paragraph({ text: step.desc }),
-            new Paragraph({ text: "PROJECT MISSION:", heading: HeadingLevel.HEADING_4 }),
-            new Paragraph({ text: step.build || 'N/A' }),
-            new Paragraph({ text: "RESOURCES:", heading: HeadingLevel.HEADING_4 }),
-            ...(step.studyMaterials || []).map((m: any) => new Paragraph({ text: `• ${m.label}: ${m.url}`, bullet: { level: 0 } })),
-            ...(step.videoLectures || []).map((v: any) => new Paragraph({ text: `• [VIDEO] ${v.label}: ${v.url}`, bullet: { level: 0 } }))
+            new Paragraph({ text: `Project: ${step.build || 'N/A'}` })
           ]),
-
-          new Paragraph({ text: "MARKET INSIGHTS", heading: HeadingLevel.HEADING_2, spacing: { before: 600 } }),
-          new Paragraph({ text: `India Avg Salary: ${marketInsights?.salaryIndia}` }),
-          new Paragraph({ text: `Global Ceiling: ${marketInsights?.salaryGlobal}` }),
-          new Paragraph({ text: `Market Demand: ${marketInsights?.demandLevel}` }),
-          
-          new Paragraph({ text: "CRITICAL INTELLIGENCE", heading: HeadingLevel.HEADING_2, spacing: { before: 400 } }),
-          new Paragraph({ text: "What Actually Matters:", heading: HeadingLevel.HEADING_4 }),
-          new Paragraph({ text: criticalIntelligence?.whatMatters || 'N/A' }),
-          new Paragraph({ text: "Mistakes to Avoid:", heading: HeadingLevel.HEADING_4 }),
-          new Paragraph({ text: criticalIntelligence?.mistakesToAvoid || 'N/A' }),
         ],
       }],
     });
@@ -124,70 +89,73 @@ export default function Roadmap() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F4F6] text-black selection:bg-[#FACC15]/40 font-bold uppercase overflow-x-hidden">
+    <div className="min-h-screen bg-stone-50/50 pb-24">
       
-      <div className="mt-[88px]" />
-
-      <div className="max-w-7xl mx-auto px-6 py-20">
+      <div className="pt-32 max-w-7xl mx-auto px-6 space-y-12">
         
-        {/* Header Architecture (Audit Recap State) */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-12 border-b-8 border-black pb-16 mb-20 no-print">
-           <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                 <div className="p-2 bg-black text-white shadow-[3px_3px_0px_0px_rgba(37,99,235,1)]">
-                    <Map className="w-8 h-8" />
-                 </div>
-                 <span className="text-xs font-black uppercase tracking-[0.4em] text-black/40">Career Roadmap</span>
+        {/* Header Section */}
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-10 items-center no-print">
+           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold uppercase tracking-widest">
+                 <Compass className="w-4 h-4" /> Career Journey Planner
               </div>
-              <h1 className="text-4xl md:text-[100px] font-black tracking-tighter leading-none text-black">
-                  Career Roadmap
+              <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
+                  Map your path to <span className="text-blue-600">success.</span>
               </h1>
+              <p className="text-lg text-stone-500 font-medium max-w-2xl">
+                 Get a step-by-step guide to your dream job, including free courses, tools, and projects to build your portfolio.
+              </p>
            </div>
            
-           <div className="neo-box bg-white p-6 md:p-10 space-y-8 min-w-full md:min-w-[400px] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+           <div className="lg:col-span-5 w-full bg-white rounded-[2.5rem] p-8 md:p-10 border border-stone-100 shadow-sm space-y-8">
               <div className="space-y-4">
-                 <label className="text-[10px] font-black uppercase text-[#2563EB]">Target Career Goal</label>
-                 <input type="text" value={query.role} onChange={e => setQuery({...query, role: e.target.value})} className="neo-input text-lg" placeholder="e.g. DATA SCIENTIST" />
+                 <label className="text-xs font-bold uppercase tracking-widest text-stone-400 ml-1">What goal are you aiming for?</label>
+                 <input type="text" value={query.role} onChange={e => setQuery({...query, role: e.target.value})} className="input-field" placeholder="e.g. Sales, Marketing, IT..." />
               </div>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4">
                  <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase text-black/40">Experience</label>
-                    <select value={query.experience} onChange={e => setQuery({...query, experience: e.target.value})} className="neo-input text-xs">
+                    <label className="text-xs font-bold uppercase tracking-widest text-stone-400 ml-1">Experience</label>
+                    <select value={query.experience} onChange={e => setQuery({...query, experience: e.target.value})} className="input-field appearance-none">
                        <option>Beginner</option>
                        <option>Intermediate</option>
                     </select>
                  </div>
                  <div className="flex items-end">
-                    <button onClick={generateRoadmap} disabled={loading} className="neo-btn-primary w-full py-4 text-xs">
-                       {loading ? <Loader2 className="animate-spin w-4 h-4 mx-auto" /> : 'START'}
+                    <button onClick={generateRoadmap} disabled={loading} className="btn-primary w-full !py-4 shadow-xl flex items-center justify-center gap-2">
+                       {loading ? <Loader2 className="animate-spin w-4 h-4" /> : <Zap className="w-4 h-4" />}
+                       {loading ? 'Building...' : 'Create Guide'}
                     </button>
                  </div>
               </div>
            </div>
         </div>
 
-        {/* Dynamic Content Buffer */}
         <AnimatePresence mode="wait">
           {steps.length === 0 && !loading && !safetyError && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.2 }} className="text-center py-40 border-8 border-dashed border-black/10 flex flex-col items-center gap-8 grayscale">
-               <Search className="w-24 h-24" />
-               <p className="text-4xl font-black uppercase tracking-tighter italic">Define Career Goal to Generate Your Roadmap</p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-32 border-2 border-dashed border-stone-200 rounded-[3rem] space-y-6">
+               <div className="w-20 h-20 bg-stone-50 rounded-full flex items-center justify-center mx-auto">
+                  <Search className="w-10 h-10 text-stone-300" />
+               </div>
+               <p className="text-xl font-bold text-stone-400">Tell us your career goal to generate a personalized guide.</p>
             </motion.div>
           )}
 
           {safetyError && (
-            <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="neo-box bg-red-100 border-red-600 p-16 max-w-3xl mx-auto shadow-[10px_10px_0px_0px_rgba(220,38,38,1)]">
-              <div className="flex items-center gap-8 mb-10 border-b-4 border-red-600 pb-8">
-                <ShieldCheck className="w-16 h-16 text-red-600" strokeWidth={3} />
-                <h2 className="text-4xl font-black text-red-600 uppercase italic">Safety violation</h2>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-rose-50 border border-rose-100 rounded-[2.5rem] p-12 max-w-3xl mx-auto shadow-sm space-y-8">
+              <div className="flex items-center gap-6 pb-6 border-b border-rose-200/50">
+                <div className="p-4 bg-white rounded-2xl shadow-sm"><AlertCircle className="w-10 h-10 text-rose-500" /></div>
+                <div>
+                   <h2 className="text-2xl font-extrabold text-stone-900 leading-tight">Hmm, that role seems a bit unusual.</h2>
+                   <p className="text-rose-600 font-bold uppercase text-[10px] tracking-widest mt-1">Safety Refusal Protocol</p>
+                </div>
               </div>
-              <p className="text-xl font-bold text-red-900 mb-10 uppercase tracking-tight leading-tight">{safetyError.message}</p>
+              <p className="text-lg font-medium text-stone-600 leading-relaxed">{safetyError.message}</p>
               
-              <div className="space-y-6">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600/60">Authorized Alternatives:</p>
-                <div className="flex flex-wrap gap-4">
+              <div className="space-y-4">
+                <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Try one of these professional paths:</p>
+                <div className="flex flex-wrap gap-3">
                   {safetyError.alternatives.map(alt => (
-                    <button key={alt} onClick={() => { setQuery({...query, role: alt}); setSafetyError(null); }} className="px-6 py-3 bg-white border-4 border-black font-black text-xs uppercase hover:bg-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all">
+                    <button key={alt} onClick={() => { setQuery({...query, role: alt}); setSafetyError(null); }} className="px-5 py-2.5 bg-white border border-stone-200 rounded-xl font-bold text-stone-700 hover:border-blue-300 hover:bg-blue-50 transition-all text-sm">
                       {alt}
                     </button>
                   ))}
@@ -197,259 +165,202 @@ export default function Roadmap() {
           )}
 
           {loading && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center py-40 space-y-10">
-               <div className="w-32 h-32 border-8 border-black border-t-[#2563EB] animate-spin shadow-[10px_10px_0px_0px_rgba(0,0,0,0.1)]"></div>
-               <p className="text-2xl font-black uppercase tracking-widest animate-pulse italic">Synthesizing Professional Timeline...</p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center py-40 space-y-8">
+               <div className="relative">
+                  <div className="w-24 h-24 border-[8px] border-stone-100 border-t-blue-600 rounded-full animate-spin"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                     <Map className="w-8 h-8 text-blue-600 animate-pulse" />
+                  </div>
+               </div>
+               <div className="text-center space-y-2">
+                  <p className="text-2xl font-extrabold text-stone-900">Designing your path...</p>
+                  <p className="text-stone-500 font-medium">Looking up courses, projects, and salary trends.</p>
+               </div>
             </motion.div>
           )}
 
           {steps.length > 0 && (
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="space-y-20">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-16">
               
-              {/* Journey Stats (Audit Recap State) */}
-              <div className="flex flex-col md:flex-row justify-between items-center gap-10">
-                <div className="neo-box bg-[#FACC15] p-8 border-black flex items-center gap-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                   <div className="p-3 bg-black text-white">
-                      <Zap className="w-8 h-8 fill-current" />
+              {/* Journey Overview */}
+              <div className="flex flex-col md:flex-row justify-between items-center gap-8 bg-white p-10 rounded-[2.5rem] border border-stone-100 shadow-sm">
+                <div className="flex items-center gap-6">
+                   <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl shadow-sm">
+                      <TrendingUp className="w-8 h-8" />
                    </div>
                    <div className="space-y-1">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-black/40">Estimated Protocol Duration</span>
-                      <h2 className="text-3xl font-black uppercase italic">{totalTimeline}</h2>
+                      <span className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">Total Journey Time</span>
+                      <h2 className="text-4xl font-extrabold text-stone-900">{totalTimeline}</h2>
                    </div>
                 </div>
-                 <div className="flex flex-wrap gap-4 no-print shrink-0">
-                    <button onClick={handleDownloadPDF} className="neo-btn-secondary px-8 py-4 text-xs flex items-center gap-3 shadow-[4px_4px_0px_0px_rgba(37,99,235,1)]">
-                       <Download className="w-5 h-5" /> EXPORT PDF
+                 <div className="flex flex-wrap gap-4 no-print">
+                    <button onClick={handleDownloadPDF} className="btn-secondary !py-4 flex items-center gap-2">
+                       <Download className="w-4 h-4" /> Save as PDF
                     </button>
-                    <button onClick={handleDownloadDocx} className="neo-btn-secondary px-8 py-4 text-xs flex items-center gap-3 bg-white border-black text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-100">
-                       <FileText className="w-5 h-5" /> EXPORT WORD
+                    <button onClick={handleDownloadDocx} className="btn-secondary !py-4 flex items-center gap-2">
+                       <FileText className="w-4 h-4" /> Save as Word
                     </button>
                  </div>
               </div>
 
-              {/* Global Prerequisites (Audit Recap State) */}
+              {/* Core Prerequisites */}
               {globalPrerequisites && (
-                <div className="neo-box bg-white p-16 border-black space-y-10 shadow-[12px_12px_0px_0px_rgba(37,99,235,1)]">
-                  <h2 className="text-3xl font-black flex items-center gap-6 border-b-6 border-black pb-6 uppercase italic">
-                    <GraduationCap className="w-10 h-10 text-[#2563EB]" /> Core Prerequisites
-                  </h2>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-16">
-                    <div className="space-y-4">
-                      <h3 className="text-xs font-black uppercase tracking-[0.3em] text-[#2563EB]">Academic Baseline</h3>
-                      <p className="text-xl font-bold leading-tight">{globalPrerequisites.education}</p>
+                <div className="bg-white rounded-[2.5rem] p-10 md:p-12 border border-stone-100 shadow-sm space-y-10">
+                  <div className="flex items-center gap-4">
+                     <div className="p-3 bg-emerald-50 rounded-2xl"><GraduationCap className="w-8 h-8 text-emerald-600" /></div>
+                     <h2 className="text-2xl font-extrabold text-stone-900 tracking-tight">Before you start</h2>
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-12">
+                    <div className="space-y-3">
+                       <p className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">Education Baseline</p>
+                       <p className="text-lg font-bold text-stone-800 leading-snug">{globalPrerequisites.education}</p>
                     </div>
-                    {globalPrerequisites.requiredKnowledge && (
-                      <div className="space-y-4">
-                        <h3 className="text-xs font-black uppercase tracking-[0.3em] text-[#2563EB]">Core Knowledge</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {globalPrerequisites.requiredKnowledge.map((k: string) => (
-                            <span key={k} className="text-xs font-bold uppercase tracking-tight text-black flex items-center gap-2">
-                              <Box className="w-3 h-3" /> {k}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    <div className="space-y-6">
-                      <h3 className="text-xs font-black uppercase tracking-[0.3em] text-[#2563EB]">Technical Requirements</h3>
-                      <div className="flex flex-wrap gap-4">
-                        {globalPrerequisites.technicalSkills?.map((s: string) => (
-                          <span key={s} className="px-6 py-2 bg-[#F3F4F6] border-4 border-black text-xs font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">{s}</span>
-                        ))}
-                      </div>
+                    <div className="space-y-3">
+                       <p className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">Crucial Skills</p>
+                       <div className="flex flex-wrap gap-2">
+                         {globalPrerequisites.technicalSkills?.map((s: string) => (
+                           <span key={s} className="px-3 py-1 bg-stone-50 border border-stone-100 rounded-lg text-[10px] font-bold text-stone-600 uppercase tracking-tighter">{s}</span>
+                         ))}
+                       </div>
+                    </div>
+                    <div className="space-y-3">
+                       <p className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">Must-Have Knowledge</p>
+                       <div className="space-y-1.5">
+                         {globalPrerequisites.requiredKnowledge?.map((k: string) => (
+                           <div key={k} className="flex items-center gap-2 text-xs font-bold text-stone-600 italic">
+                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> {k}
+                           </div>
+                         ))}
+                       </div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Timeline Architecture */}
-              <div className="relative border-l-4 md:border-l-8 border-black ml-2 md:ml-12 pl-6 md:pl-20 space-y-16 md:space-y-32 py-10 md:py-20">
+              {/* Learning Timeline */}
+              <div className="relative border-l-4 border-stone-100 ml-4 md:ml-12 pl-10 md:pl-20 space-y-20 py-10">
                 {steps.map((step, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative neo-box bg-white p-6 md:p-12 border-black group hover:shadow-[12px_12px_0px_0px_rgba(250,204,21,1)] transition-all">
-                    
-                    {/* Timeline Node Infrastructure */}
-                    <div className="absolute top-1/2 -translate-y-1/2 -left-[1.75rem] md:-left-[5.7rem] w-8 h-8 md:w-12 md:h-12 border-4 md:border-8 border-black bg-white z-10 group-hover:bg-[#FACC15] transition-colors" />
-                    <div className="absolute top-1/2 -translate-y-1/2 -left-8 md:-left-16 w-8 md:w-16 h-2 md:h-4 bg-black -z-10 group-hover:bg-[#FACC15]/20 transition-colors" />
+                  <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="relative bg-white rounded-[2.5rem] p-8 md:p-12 border border-stone-100 shadow-sm">
+                    {/* Step bubble */}
+                    <div className="absolute top-1/2 -translate-y-1/2 -left-[3.15rem] md:-left-[5.7rem] w-8 h-8 md:w-12 md:h-12 border-4 border-white bg-blue-600 rounded-full flex items-center justify-center text-white font-extrabold shadow-lg z-10">
+                       {i + 1}
+                    </div>
 
-                    <div className="flex flex-col lg:flex-row gap-16 items-start">
-                      <div className="flex-1 space-y-10">
-                        <div className="space-y-6">
-                          <div className="flex items-center gap-6">
-                            <div className="px-6 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(37,99,235,1)]">
-                               {step.time}
+                    <div className="grid lg:grid-cols-12 gap-12 items-start">
+                      <div className="lg:col-span-8 space-y-8">
+                         <div className="space-y-4">
+                            <div className="inline-block px-4 py-1.5 bg-blue-50 text-blue-600 rounded-xl text-[10px] font-bold uppercase tracking-widest">
+                               Estimated Time: {step.time}
                             </div>
-                            {step.skillsToLearn && (
-                              <div className="flex gap-2">
-                                 {step.skillsToLearn.slice(0, 2).map((s: string) => <span key={s} className="text-[10px] font-black text-[#2563EB]"># {s}</span>)}
-                              </div>
-                            )}
-                          </div>
-                          <h3 className="text-5xl font-black tracking-tighter uppercase italic leading-none">{step.title}</h3>
-                          <p className="text-xl font-bold text-black/60 leading-snug uppercase">{step.desc}</p>
-                        </div>
+                            <h3 className="text-3xl font-extrabold text-stone-900 tracking-tight">{step.title}</h3>
+                            <p className="text-lg font-medium text-stone-500 leading-relaxed">{step.desc}</p>
+                         </div>
 
-                        {step.phasePrerequisites?.length > 0 && (
-                          <div className="bg-[#F3F4F6] border-4 border-black p-8 italic shadow-inner">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-[#2563EB]">GATEWAY REQUIREMENTS</h4>
-                            <ul className="grid md:grid-cols-2 gap-4">
-                              {step.phasePrerequisites.map((p: string) => (
-                                <li key={p} className="flex gap-4 text-xs font-black uppercase italic">
-                                   <div className="w-2 h-2 mt-1 shrink-0 bg-black" /> {p}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-
-                        {step.build && (
-                          <div className="bg-[#FACC15]/20 border-4 border-black p-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-black">PROJECT MISSION</h4>
-                            <div className="flex items-start gap-4">
-                              <div className="p-2 bg-black text-white"><CheckCircle className="w-5 h-5" /></div>
-                              <p className="text-sm font-black uppercase italic tracking-tight">{step.build}</p>
+                         {step.build && (
+                            <div className="p-8 bg-amber-50 rounded-[2.25rem] border border-amber-100 space-y-4 shadow-sm">
+                               <div className="flex items-center gap-3">
+                                  <div className="p-2 bg-white rounded-lg"><Target className="w-5 h-5 text-amber-500" /></div>
+                                  <span className="text-xs font-extrabold text-amber-700 uppercase tracking-widest">Recommended Project</span>
+                               </div>
+                               <p className="text-stone-700 font-bold leading-relaxed">{step.build}</p>
                             </div>
-                          </div>
-                        )}
+                         )}
                       </div>
 
-                      {/* Resource Nodes */}
-                      <div className="w-full lg:w-[450px] shrink-0 space-y-10">
-                        {step.studyMaterials && step.studyMaterials.length > 0 && (
-                          <div className="space-y-6">
-                             <h4 className="text-xs font-black uppercase tracking-[0.4em] text-black/30 flex items-center gap-4">
-                               <Book className="w-5 h-5 text-black" /> Free Course
-                             </h4>
-                             <div className="space-y-4">
-                               {step.studyMaterials.map((link: any, idx: number) => (
-                                 <a key={idx} href={link.url} target="_blank" rel="noopener noreferrer" className="block p-6 bg-white border-4 border-black hover:bg-[#FACC15] transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none group">
-                                   <div className="flex justify-between items-center mb-2">
-                                     <h5 className="text-sm font-black uppercase italic">{link.label}</h5>
-                                     <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                   </div>
-                                   <p className="text-[10px] font-bold text-black/40 leading-relaxed uppercase">{link.summary}</p>
-                                 </a>
-                               ))}
-                             </div>
-                          </div>
-                        )}
+                      {/* Resources */}
+                      <div className="lg:col-span-4 space-y-8 lg:border-l lg:border-stone-50 lg:pl-10">
+                         {step.studyMaterials?.slice(0, 1).map((link: any, idx: number) => (
+                           <div key={idx} className="space-y-4">
+                              <h4 className="text-[10px] font-bold text-stone-300 uppercase tracking-widest flex items-center gap-2">
+                                 <Book className="w-4 h-4" /> Top Course
+                              </h4>
+                              <a href={link.url} target="_blank" rel="noopener noreferrer" className="group block p-6 bg-stone-50 rounded-2xl border border-stone-100 hover:bg-white hover:shadow-xl transition-all">
+                                 <div className="flex justify-between items-start mb-2 gap-2">
+                                    <h5 className="font-bold text-stone-800 group-hover:text-blue-600 transition-colors leading-tight">{link.label}</h5>
+                                    <ExternalLink className="w-4 h-4 text-stone-300 shrink-0" />
+                                 </div>
+                                 <p className="text-[10px] text-stone-400 font-medium leading-relaxed">{link.summary}</p>
+                              </a>
+                           </div>
+                         ))}
 
-                        {step.videoLectures && step.videoLectures.length > 0 && (
-                          <div className="space-y-6">
-                             <h4 className="text-xs font-black uppercase tracking-[0.4em] text-red-600 flex items-center gap-4">
-                               <Video className="w-5 h-5" /> Video
-                             </h4>
-                             <div className="space-y-4">
-                               {step.videoLectures.map((link: any, idx: number) => (
-                                 <a key={idx} href={link.url} target="_blank" rel="noopener noreferrer" className="block p-6 bg-white border-4 border-black hover:bg-red-50 transition-all shadow-[4px_4px_0px_0px_rgba(220,38,38,0.2)] hover:shadow-none group">
-                                   <div className="flex justify-between items-center mb-2">
-                                     <h5 className="text-sm font-black uppercase italic text-red-600">{link.label}</h5>
-                                     <ExternalLink className="w-4 h-4 text-red-600" />
-                                   </div>
-                                 </a>
-                               ))}
-                             </div>
-                          </div>
-                        )}
-
-                        {step.preparationTools && step.preparationTools.length > 0 && (
-                          <div className="space-y-6">
-                             <h4 className="text-xs font-black uppercase tracking-[0.4em] text-[#2563EB] flex items-center gap-4">
-                               <Wrench className="w-5 h-5" /> Preparation Tools link
-                             </h4>
-                             <div className="space-y-4">
-                               {step.preparationTools.map((link: any, idx: number) => (
-                                 <a key={idx} href={link.url} target="_blank" rel="noopener noreferrer" className="block p-6 bg-white border-4 border-black hover:bg-blue-50 transition-all shadow-[4px_4px_0px_0px_rgba(37,99,235,0.2)] hover:shadow-none group">
-                                   <div className="flex justify-between items-center mb-2">
-                                     <h5 className="text-sm font-black uppercase italic text-[#2563EB]">{link.label}</h5>
-                                     <ExternalLink className="w-4 h-4 text-[#2563EB]" />
-                                   </div>
-                                   {link.summary && <p className="text-[10px] font-bold text-black/40 leading-relaxed uppercase mt-2">{link.summary}</p>}
-                                 </a>
-                               ))}
-                             </div>
-                          </div>
-                        )}
-
-                        {step.aiTools && step.aiTools.length > 0 && (
-                          <div className="space-y-6">
-                             <h4 className="text-xs font-black uppercase tracking-[0.4em] text-purple-600 flex items-center gap-4">
-                               <Zap className="w-5 h-5" /> AI Tools
-                             </h4>
-                             <div className="space-y-4">
-                               {step.aiTools.map((link: any, idx: number) => (
-                                 <a key={idx} href={link.url} target="_blank" rel="noopener noreferrer" className="block p-6 bg-white border-4 border-black hover:bg-purple-50 transition-all shadow-[4px_4px_0px_0px_rgba(168,85,247,0.2)] hover:shadow-none group">
-                                   <div className="flex justify-between items-center mb-2">
-                                     <h5 className="text-sm font-black uppercase italic text-purple-600">{link.label}</h5>
-                                     <ExternalLink className="w-4 h-4 text-purple-600" />
-                                   </div>
-                                   {link.summary && <p className="text-[10px] font-bold text-black/40 leading-relaxed uppercase mt-2">{link.summary}</p>}
-                                 </a>
-                               ))}
-                             </div>
-                          </div>
-                        )}
+                         {step.videoLectures?.slice(0, 1).map((link: any, idx: number) => (
+                           <div key={idx} className="space-y-4">
+                              <h4 className="text-[10px] font-bold text-stone-300 uppercase tracking-widest flex items-center gap-2">
+                                 <Video className="w-4 h-4" /> Watch & Learn
+                              </h4>
+                              <a href={link.url} target="_blank" rel="noopener noreferrer" className="group block p-6 bg-stone-50 rounded-2xl border border-stone-100 hover:bg-white hover:shadow-xl transition-all">
+                                 <div className="flex justify-between items-start gap-2">
+                                    <h5 className="font-bold text-stone-800 group-hover:text-rose-500 transition-colors leading-tight">{link.label}</h5>
+                                    <PlayCircle className="w-5 h-5 text-rose-500 shrink-0" />
+                                 </div>
+                              </a>
+                           </div>
+                         ))}
                       </div>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {/* POST-JOURNEY INTELLIGENCE */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-20">
-                 {/* Market Stats */}
-                 {marketInsights && (
-                   <div className="neo-box bg-[#F3F4F6] p-10 space-y-8 shadow-[8px_8px_0px_0px_rgba(37,99,235,1)]">
-                      <h4 className="text-xl font-black uppercase italic border-b-4 border-black pb-4">Market Stats</h4>
-                      <div className="space-y-6">
-                         <div>
-                            <p className="text-[10px] font-black text-black/40 uppercase">India Avg Salary</p>
-                            <p className="text-2xl font-black">{marketInsights.salaryIndia}</p>
-                         </div>
-                         <div>
-                            <p className="text-[10px] font-black text-black/40 uppercase">Global Ceiling</p>
-                            <p className="text-2xl font-black">{marketInsights.salaryGlobal}</p>
-                         </div>
-                         <div className={`px-4 py-2 border-2 border-black inline-block ${marketInsights.demandLevel === 'High' ? 'bg-green-400' : 'bg-yellow-400'}`}>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-black">DEMAND: {marketInsights.demandLevel}</p>
-                         </div>
-                      </div>
-                   </div>
-                 )}
+              {/* Market Intelligence */}
+              <div className="bg-white rounded-[2.5rem] p-10 md:p-12 border border-stone-100 shadow-sm space-y-12">
+                 <div className="flex items-center gap-4">
+                    <div className="p-3 bg-blue-50 rounded-2xl"><Globe className="w-8 h-8 text-blue-600" /></div>
+                    <h2 className="text-2xl font-extrabold text-stone-900 tracking-tight">Market Outlook</h2>
+                 </div>
+                 
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div className="space-y-6">
+                       <h4 className="text-xs font-bold text-stone-300 uppercase tracking-widest">Financial Future</h4>
+                       <div className="space-y-4">
+                          <div className="p-4 bg-stone-50 rounded-2xl">
+                             <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Avg India Salary</p>
+                             <p className="text-2xl font-extrabold text-stone-800">{marketInsights?.salaryIndia}</p>
+                          </div>
+                          <div className="p-4 bg-stone-50 rounded-2xl">
+                             <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Global Ceiling</p>
+                             <p className="text-2xl font-extrabold text-stone-800">{marketInsights?.salaryGlobal}</p>
+                          </div>
+                       </div>
+                    </div>
 
-                 {/* Real Job Roles */}
-                 <div className="md:col-span-2 neo-box bg-white p-10 space-y-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                    <h4 className="text-xl font-black uppercase italic border-b-4 border-black pb-4">Industry Roles & Targets</h4>
-                    <div className="grid sm:grid-cols-2 gap-8">
-                       {realJobRoles.map((job, idx) => (
-                         <div key={idx} className="space-y-3">
-                            <h5 className="font-black text-lg uppercase">{job.title}</h5>
-                            <p className="text-xs text-[#2563EB] font-black">@ {job.companies}</p>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase">{job.skills}</p>
-                         </div>
-                       ))}
+                    <div className="md:col-span-2 space-y-6">
+                       <h4 className="text-xs font-bold text-stone-300 uppercase tracking-widest">Career Variations</h4>
+                       <div className="grid sm:grid-cols-2 gap-4">
+                          {realJobRoles.map((job, idx) => (
+                            <div key={idx} className="p-6 border border-stone-50 rounded-2xl hover:border-blue-100 hover:bg-blue-50/20 transition-all">
+                               <h5 className="font-bold text-stone-800 mb-1">{job.title}</h5>
+                               <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-2">@ {job.companies}</p>
+                               <p className="text-[10px] font-medium text-stone-400 uppercase leading-snug">{job.skills}</p>
+                            </div>
+                          ))}
+                       </div>
                     </div>
                  </div>
               </div>
 
-              {/* Critical Intelligence */}
+              {/* Pro Tips / Hiring Intelligence */}
               {criticalIntelligence && (
-                 <div className="neo-box bg-black text-white p-16 space-y-12 shadow-[12px_12px_0px_0px_rgba(250,204,21,1)]">
-                    <div className="flex items-center gap-6 border-b-4 border-white/20 pb-8">
-                       <ShieldCheck className="w-12 h-12 text-[#FACC15]" />
-                       <h3 className="text-4xl font-black uppercase italic text-[#FACC15]">Critical Intelligence</h3>
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-16">
-                       <div className="space-y-4">
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#2563EB]">What Actually Matters</h4>
-                          <p className="text-sm font-bold leading-relaxed">{criticalIntelligence.whatMatters}</p>
+                 <div className="bg-stone-900 rounded-[3rem] p-12 md:p-16 text-white space-y-12 shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-16 opacity-10"><ShieldCheck className="w-32 h-32" /></div>
+                    <div className="relative z-10 space-y-12">
+                       <div className="flex items-center gap-6">
+                          <h3 className="text-4xl font-extrabold tracking-tight">Success Advice</h3>
                        </div>
-                       <div className="space-y-4">
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">Mistakes To Avoid</h4>
-                          <p className="text-sm font-bold leading-relaxed">{criticalIntelligence.mistakesToAvoid}</p>
-                       </div>
-                       <div className="space-y-4">
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-green-500">Hiring Protocol</h4>
-                          <p className="text-sm font-bold leading-relaxed">{criticalIntelligence.hiringTips}</p>
+                       <div className="grid md:grid-cols-3 gap-12">
+                          <div className="space-y-4">
+                             <div className="text-[10px] font-bold uppercase tracking-widest text-blue-400">What Matters Most</div>
+                             <p className="text-stone-300 font-medium leading-relaxed">{criticalIntelligence.whatMatters}</p>
+                          </div>
+                          <div className="space-y-4">
+                             <div className="text-[10px] font-bold uppercase tracking-widest text-rose-400">Mistakes to Avoid</div>
+                             <p className="text-stone-300 font-medium leading-relaxed">{criticalIntelligence.mistakesToAvoid}</p>
+                          </div>
+                          <div className="space-y-4">
+                             <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">How to get Hired</div>
+                             <p className="text-stone-300 font-medium leading-relaxed">{criticalIntelligence.hiringTips}</p>
+                          </div>
                        </div>
                     </div>
                  </div>
@@ -461,20 +372,19 @@ export default function Roadmap() {
 
       <style jsx global>{`
         @media print {
-          .no-print, header, .marquee-neo, .journey-box, .neo-btn-secondary, button { display: none !important; }
+          .no-print, header, footer { display: none !important; }
           body { background: white !important; color: black !important; }
-          .neo-box { box-shadow: none !important; border: 1px solid black !important; background: white !important; }
-          .min-h-screen { min-height: 0 !important; }
-          .py-20 { padding: 40px 0 !important; }
-          .border-l-8 { border-left-width: 2px !important; }
+          .bg-white { box-shadow: none !important; border: 1px solid #eee !important; }
+          .rounded-[2.5rem], .rounded-[3rem] { border-radius: 1rem !important; }
           * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
-          /* Filter out emojis or complex graphics for clean ATS-friendly look */
-          svg:not(.w-5) { display: none !important; }
-          .bg-black { background-color: #000 !important; color: #fff !important; }
-          .bg-[#FACC15] { background-color: #eee !important; color: #000 !important; }
-          .text-[#2563EB] { color: #000 !important; font-weight: bold !important; text-decoration: underline !important; }
         }
       `}</style>
     </div>
+  );
+}
+
+function PlayCircle({ className }: { className?: string }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
   );
 }

@@ -24,10 +24,14 @@ import {
   Fingerprint,
   Zap,
   Coffee,
-  ShieldCheck
+  ShieldCheck,
+  Star,
+  Globe,
+  Bell
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 function ProfileContent() {
   const [user, setUser] = useState<any>(null);
@@ -78,9 +82,9 @@ function ProfileContent() {
           last_sync: new Date().toISOString()
         }, { merge: true });
         setAvatarUrl(currentPhoto);
-        setMessage({ type: 'success', text: 'PROFILE SYNC COMPLETE.' });
+        setMessage({ type: 'success', text: 'Identity synced successfully' });
       } else {
-        setMessage({ type: 'error', text: 'NO SOURCE PHOTO DETECTED. MANUAL UPDATE REQUIRED.' });
+        setMessage({ type: 'error', text: 'No photo source detected' });
       }
     } catch (err) {
       console.error('Headless sync failed');
@@ -100,7 +104,7 @@ function ProfileContent() {
         avatar_url: avatarUrl,
         updated_at: new Date().toISOString(),
       }, { merge: true });
-      setMessage({ type: 'success', text: 'PROFILE UPDATED SUCCESSFULLY.' });
+      setMessage({ type: 'success', text: 'Profile updated successfully' });
     } catch (err: any) {
       setMessage({ type: 'error', text: err.message });
     } finally {
@@ -119,9 +123,8 @@ function ProfileContent() {
       const url = await getDownloadURL(storageRef);
       setAvatarUrl(url);
       await setDoc(doc(db, 'users', user.uid), { avatar_url: url }, { merge: true });
-      setMessage({ type: 'success', text: 'PROFILE PHOTO UPDATED.' });
+      setMessage({ type: 'success', text: 'Photo updated' });
     } catch (err: any) {
-      console.warn('Storage blocked, fallback sync initiated...');
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = async () => {
@@ -129,15 +132,13 @@ function ProfileContent() {
         try {
           setAvatarUrl(base64data);
           await setDoc(doc(db, 'users', user.uid), { avatar_url: base64data }, { merge: true });
-          setMessage({ type: 'success', text: 'PROFILE PHOTO UPLOADED.' });
+          setMessage({ type: 'success', text: 'Photo updated locally' });
         } catch (dbErr: any) {
-          setMessage({ type: 'error', text: 'SYNC FAILED. FILE SIZE EXCEEDS BUFFER.' });
+          setMessage({ type: 'error', text: 'File too large to sync' });
         } finally {
           setUploading(false);
         }
       };
-    } finally {
-        // Handled in reader
     }
   };
 
@@ -147,7 +148,7 @@ function ProfileContent() {
     setLoading(true);
     try {
       await updatePassword(auth.currentUser!, newPassword);
-      setMessage({ type: 'success', text: 'SECURITY SETTINGS UPDATED SUCCESSFULLY.' });
+      setMessage({ type: 'success', text: 'Security settings updated' });
       setNewPassword('');
       setCurrentPassword('');
     } catch (err: any) {
@@ -169,7 +170,7 @@ function ProfileContent() {
       await deleteUser(auth.currentUser!);
       router.push('/signup');
     } catch (err: any) {
-      setMessage({ type: 'error', text: 'PLEASE RE-LOGIN TO DELETE ACCOUNT.' });
+      setMessage({ type: 'error', text: 'Please log in again to delete account' });
     } finally {
       setLoading(false);
     }
@@ -182,96 +183,96 @@ function ProfileContent() {
   };
 
   if (loading && !user) return (
-     <div className="min-h-screen bg-[#F3F4F6] flex items-center justify-center">
-        <div className="neo-box p-10 bg-white">
-           <Loader2 className="w-12 h-12 text-black animate-spin" />
-        </div>
+     <div className="min-h-screen bg-stone-50/50 flex items-center justify-center">
+        <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
      </div>
   );
 
-  const userName = name?.split(' ')[0] || "Vishwajeet Srk";
-
   return (
-    <div className="min-h-screen bg-[#F3F4F6] pt-40 pb-20 px-6 md:px-12 text-black selection:bg-[#FACC15]/40 relative overflow-hidden">
+    <div className="min-h-screen bg-stone-50/50 pt-32 pb-24 px-6 selection:bg-blue-100">
       
-      <div className="max-w-6xl mx-auto z-10 relative">
+      <div className="max-w-6xl mx-auto space-y-16">
         
-        {/* Header Architecture (Audit Recap State) */}
-        <div className="mb-20 flex flex-col md:flex-row justify-between items-end gap-10 border-b-8 border-black pb-16">
+        {/* Profile Header */}
+        <header className="flex flex-col lg:flex-row justify-between items-end gap-10 pb-12 border-b border-stone-200">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-black text-white shadow-[3px_3px_0px_0px_rgba(37,99,235,1)]">
+              <div className="p-3 bg-stone-900 text-white rounded-2xl shadow-lg">
                 <Fingerprint className="w-8 h-8" />
               </div>
-              <span className="text-xs font-black uppercase tracking-[0.4em] text-black/40">User Profile Data</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">Personal Identity</span>
             </div>
-            <h1 className="text-6xl md:text-[100px] font-black tracking-tighter leading-none text-black uppercase">
-              User <br /> <span className="text-[#2563EB] drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] italic">Profile</span>
+            <h1 className="text-5xl md:text-7xl font-extrabold text-stone-900 tracking-tight leading-none">
+              My <span className="text-blue-600 underline decoration-blue-100 decoration-8 underline-offset-8">Profile</span>
             </h1>
           </div>
           
-          <div className="flex bg-white p-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="bg-white p-2 rounded-[2rem] border border-stone-100 shadow-xl shadow-stone-200/50 flex gap-1">
             <button 
               onClick={() => setActiveTab('profile')}
-              className={`px-8 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'profile' ? 'bg-[#2563EB] text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'text-black/40 hover:text-black'}`}
+              className={`px-8 py-4 rounded-[1.5rem] font-bold text-xs uppercase tracking-widest transition-all ${activeTab === 'profile' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-stone-400 hover:bg-stone-50'}`}
             >
-              PROFILE
+              Identity
             </button>
             <button 
               onClick={() => setActiveTab('settings')}
-              className={`px-8 py-4 text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'settings' ? 'bg-[#2563EB] text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'text-black/40 hover:text-black'}`}
+              className={`px-8 py-4 rounded-[1.5rem] font-bold text-xs uppercase tracking-widest transition-all ${activeTab === 'settings' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-stone-400 hover:bg-stone-50'}`}
             >
-              SETTINGS
+              Security
             </button>
           </div>
-        </div>
+        </header>
 
         <AnimatePresence mode="wait">
           {activeTab === 'profile' ? (
             <motion.div 
               key="profile" 
-              initial={{ opacity: 0, y: 30 }} 
+              initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              exit={{ opacity: 0, y: -20 }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-16"
+              exit={{ opacity: 0, y: -10 }}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-12"
             >
-              {/* Profile Context Card */}
-              <div className="lg:col-span-4 space-y-10">
-                <div className="neo-box p-12 flex flex-col items-center text-center space-y-10 group overflow-hidden bg-white">
-                  <div className="relative w-56 h-56 border-8 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] group-hover:scale-105 transition-transform overflow-hidden">
+              {/* Profile Card */}
+              <div className="lg:col-span-4 space-y-8">
+                <div className="bg-white p-10 rounded-[3rem] border border-stone-100 shadow-xl shadow-stone-200/50 flex flex-col items-center text-center space-y-8 group">
+                  <div className="relative w-48 h-48 rounded-[3rem] p-1.5 bg-stone-50 shadow-inner overflow-hidden">
                     {avatarUrl ? (
-                      <img src={avatarUrl} alt="Identity" className="w-full h-full object-cover" />
+                      <img src={avatarUrl} alt="User Avatar" className="w-full h-full object-cover rounded-[2.7rem]" />
                     ) : (
-                      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                         <UserIcon className="w-24 h-24 text-black/10" />
+                      <div className="w-full h-full bg-stone-100 flex items-center justify-center rounded-[2.7rem]">
+                         <UserIcon className="w-20 h-20 text-stone-300" />
                       </div>
                     )}
                     {uploading && (
-                      <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
-                        <Loader2 className="w-12 h-12 text-black animate-spin" />
+                      <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center">
+                        <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
                       </div>
                     )}
                     <input type="file" id="avatar-upload-profile" hidden accept="image/*" onChange={handleAvatarUpload} />
-                    <label htmlFor="avatar-upload-profile" className="absolute inset-0 bg-[#2563EB]/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer">
-                      <Camera className="w-16 h-16 text-white" />
+                    <label htmlFor="avatar-upload-profile" className="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer rounded-[3rem]">
+                      <Camera className="w-12 h-12 text-white" />
                     </label>
                   </div>
 
                   <div className="space-y-4">
-                    <h3 className="text-4xl font-black tracking-tighter text-black uppercase leading-none">{name || 'Vishwajeet Srk'}</h3>
-                    <div className="px-5 py-1.5 bg-black text-white text-[10px] font-black uppercase tracking-[0.3em] inline-block">VERIFIED</div>
-                    <p className="text-xs font-black text-black/30 uppercase tracking-widest block pt-2">{user?.email}</p>
+                    <h3 className="text-3xl font-extrabold text-stone-900 tracking-tight">{name || 'Your Name'}</h3>
+                    <div className="flex flex-col items-center gap-2">
+                       <div className="px-4 py-1.5 bg-emerald-50 text-emerald-600 text-[9px] font-bold uppercase tracking-widest rounded-full inline-flex items-center gap-1.5">
+                         <ShieldCheck className="w-3 h-3" /> Verified Member
+                       </div>
+                       <p className="text-xs font-bold text-stone-400 uppercase tracking-tight pt-2">{user?.email}</p>
+                    </div>
                   </div>
 
-                  <div className="w-full pt-10 border-t-4 border-black grid grid-cols-2 gap-8">
+                  <div className="w-full pt-8 border-t border-stone-50 grid grid-cols-2 gap-4">
                     <div className="text-center">
-                      <div className="text-[10px] font-black uppercase text-black/20 mb-2 tracking-widest">ACCESS</div>
-                      <div className="text-xs font-black text-[#2563EB] uppercase">STANDARD</div>
+                      <p className="text-[9px] font-bold uppercase text-stone-300 mb-1 tracking-widest">Growth plan</p>
+                      <p className="text-xs font-extrabold text-blue-600 uppercase tracking-widest">Free Explorer</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-[10px] font-black uppercase text-black/20 mb-2 tracking-widest">STATUS</div>
-                      <div className="text-xs font-black text-green-600 uppercase tracking-widest flex items-center justify-center gap-1">
-                         <Zap className="w-3 h-3 fill-current" /> ACTIVE
+                      <p className="text-[9px] font-bold uppercase text-stone-300 mb-1 tracking-widest">Connectivity</p>
+                      <div className="text-xs font-extrabold text-emerald-500 uppercase tracking-widest flex items-center justify-center gap-1">
+                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live
                       </div>
                     </div>
                   </div>
@@ -279,109 +280,128 @@ function ProfileContent() {
 
                 <Link 
                   href="/donate" 
-                  className="w-full bg-[#FACC15] border-4 border-black p-6 font-black uppercase text-center flex items-center justify-center gap-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  className="w-full bg-amber-50 group hover:bg-amber-100 border border-amber-100 p-6 rounded-[2.5rem] flex items-center justify-between gap-4 transition-all shadow-sm"
                 >
-                   <Coffee className="w-6 h-6 fill-current" /> SUPPORT DREAMSYNC
+                   <div className="flex items-center gap-4">
+                      <div className="p-3 bg-white rounded-2xl shadow-sm text-amber-500 group-hover:scale-110 transition-transform">
+                        <Coffee className="w-6 h-6 fill-current" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-xs font-extrabold text-amber-900 uppercase tracking-widest leading-none">Support Us</p>
+                        <p className="text-[10px] font-bold text-amber-700/60 uppercase mt-1">Help more students</p>
+                      </div>
+                   </div>
+                   <ArrowRight className="w-5 h-5 text-amber-300 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
 
-              {/* Identity Modification Infrastructure */}
-              <div className="lg:col-span-8 space-y-12">
-                <div className="neo-box p-16 bg-white">
-                  <h3 className="text-sm font-black uppercase tracking-[0.4em] text-black/30 mb-12 flex items-center gap-4">
-                    <Settings className="w-6 h-6 text-black" /> PROFILE INFORMATION
-                  </h3>
+              {/* Form Area */}
+              <div className="lg:col-span-8 space-y-8">
+                <div className="bg-white p-10 md:p-16 rounded-[3rem] border border-stone-100 shadow-xl shadow-stone-200/50 space-y-12">
+                  <div className="space-y-4">
+                    <h3 className="text-xs font-bold uppercase tracking-[0.4em] text-stone-300 flex items-center gap-3">
+                      <Settings className="w-5 h-5" /> Information Management
+                    </h3>
+                  </div>
                   
-                  <form onSubmit={handleUpdateProfile} className="space-y-12">
-                    <div className="space-y-6">
-                      <label className="text-xs font-black uppercase tracking-widest text-[#2563EB] block">FULL NAME</label>
+                  <form onSubmit={handleUpdateProfile} className="space-y-10">
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest ml-1">Your Full Name</label>
                       <input 
                         type="text" 
                         value={name} 
                         onChange={(e) => setName(e.target.value)} 
-                        className="neo-input text-2xl" 
-                        placeholder="e.g. VISHWAJEET SRK"
+                        className="input-field text-xl font-bold" 
+                        placeholder="John Doe"
                       />
                     </div>
 
-                    <div className="pt-8">
-                       <button type="submit" className="neo-btn-primary w-full md:w-auto px-16 py-6 text-xl flex items-center justify-center gap-6 group">
-                         <Save className="w-8 h-8 group-hover:rotate-12 transition-transform" /> SAVE CHANGES
+                    <div className="pt-6 border-t border-stone-50">
+                       <button type="submit" className="btn-primary px-12 !py-4 flex items-center justify-center gap-4 group">
+                         <Save className="w-5 h-5 group-hover:scale-110 transition-transform" /> <span>Update Profile Identity</span>
                        </button>
                     </div>
                   </form>
                 </div>
 
-                <div className="neo-box p-12 bg-[#FACC15] text-black">
-                  <div className="flex items-start gap-8">
-                    <ShieldCheck className="w-12 h-12 shrink-0" strokeWidth={3} />
-                    <div className="space-y-4">
-                       <h4 className="text-sm font-black uppercase tracking-widest">Data Privacy Notice</h4>
-                       <p className="text-lg font-bold leading-tight">Your profile data is protected via the DreamSync Security Protocol. Identity updates are synchronized across our redundant systems in milliseconds.</p>
-                    </div>
-                  </div>
+                {/* Notifications Hint */}
+                <div className="bg-blue-600 p-10 rounded-[3rem] text-white flex flex-col md:flex-row items-center gap-10 shadow-xl shadow-blue-500/20">
+                   <div className="p-5 bg-white/10 rounded-[2rem] shrink-0"><Bell className="w-10 h-10" /></div>
+                   <div className="space-y-3 text-center md:text-left">
+                      <h4 className="text-2xl font-extrabold tracking-tight">Stay synchronized.</h4>
+                      <p className="text-blue-100 font-medium opacity-80 leading-relaxed">We'll alert you to new roadmap steps, ATS updates, and career opportunities directly in your dashboard.</p>
+                   </div>
                 </div>
               </div>
             </motion.div>
           ) : (
             <motion.div 
               key="settings" 
-              initial={{ opacity: 0, scale: 0.95 }} 
+              initial={{ opacity: 0, scale: 0.98 }} 
               animate={{ opacity: 1, scale: 1 }} 
-              exit={{ opacity: 0, scale: 0.95 }} 
-              className="space-y-16"
+              exit={{ opacity: 0, scale: 0.98 }} 
+              className="space-y-12"
             >
-              <div className="neo-box p-16 bg-white">
-                <h2 className="text-3xl font-black uppercase mb-16 flex items-center gap-6 tracking-tighter">
-                  <Lock className="w-10 h-10 text-[#2563EB]" /> SECURITY SETTINGS
-                </h2>
-                <form onSubmit={handleChangePassword} className="space-y-12 max-w-2xl text-black">
-                  <div className="space-y-6">
-                    <label className="text-xs font-black uppercase tracking-widest text-[#2563EB] block">Current Password</label>
-                    <input 
-                      type="password" 
-                      value={currentPassword} 
-                      onChange={(e) => setCurrentPassword(e.target.value)} 
-                      placeholder="••••••••••••••••"
-                      className="neo-input text-2xl" 
-                    />
+              <div className="bg-white p-10 md:p-16 rounded-[3rem] border border-stone-100 shadow-xl shadow-stone-200/50 space-y-12">
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.4em] text-stone-300 flex items-center gap-3">
+                    <Shield className="w-5 h-5" /> Security Protocol
+                  </h3>
+                  <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight">Credential Management</h2>
+                </div>
+
+                <form onSubmit={handleChangePassword} className="space-y-10 max-w-2xl">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest ml-1">Current Password</label>
+                      <input 
+                        type="password" 
+                        value={currentPassword} 
+                        onChange={(e) => setCurrentPassword(e.target.value)} 
+                        placeholder="••••••••"
+                        className="input-field" 
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-stone-400 uppercase tracking-widest ml-1">New Password</label>
+                      <input 
+                        type="password" 
+                        value={newPassword} 
+                        onChange={(e) => setNewPassword(e.target.value)} 
+                        placeholder="••••••••"
+                        className="input-field" 
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-6">
-                    <label className="text-xs font-black uppercase tracking-widest text-[#2563EB] block">New Password</label>
-                    <input 
-                      type="password" 
-                      value={newPassword} 
-                      onChange={(e) => setNewPassword(e.target.value)} 
-                      placeholder="••••••••••••••••"
-                      className="neo-input text-2xl" 
-                    />
-                  </div>
-                  <button type="submit" className="neo-btn-primary px-16 py-6 text-xl flex items-center gap-6 group">
-                    <Shield className="w-8 h-8 group-hover:scale-110 transition-transform" /> AUTHORIZE UPDATE
+                  <button type="submit" className="btn-primary px-12 !py-4 flex items-center gap-4 group">
+                    <Lock className="w-5 h-5 group-hover:-translate-y-1 transition-transform" /> <span>Update Credentials</span>
                   </button>
                 </form>
               </div>
 
-              {/* Termination Zone Architecture */}
-              <div className="neo-box p-16 bg-red-50 border-red-600 flex flex-col xl:flex-row xl:items-center justify-between gap-16">
-                <div className="space-y-6">
-                  <h3 className="text-4xl font-black uppercase tracking-tighter text-red-600">DANGER ZONE</h3>
-                  <p className="text-lg font-bold text-red-600/60 max-w-xl leading-snug uppercase">
-                    WARNING: Full de-authorization of account and permanent erasure of all career synchronization data within the system.
+              {/* Danger Zone */}
+              <div className="bg-rose-50 border border-rose-100 p-12 rounded-[3rem] flex flex-col xl:flex-row xl:items-center justify-between gap-12">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-100 text-rose-600 rounded-full text-[9px] font-bold uppercase tracking-widest">
+                    <ShieldAlert className="w-3.5 h-3.5" /> High Sensitivity Area
+                  </div>
+                  <h3 className="text-3xl font-extrabold text-rose-900 tracking-tight leading-none">Terminate Session</h3>
+                  <p className="text-rose-700/60 font-medium max-w-xl">
+                    Full de-authorization of account and permanent erasure of all career synchronization data within our system. This action cannot be reversed.
                   </p>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-8">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <button 
                     onClick={handleSignOut}
-                    className="px-12 py-6 bg-black text-white border-4 border-black font-black uppercase text-sm tracking-widest shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
+                    className="px-10 py-4 bg-white text-stone-600 border border-stone-100 font-bold uppercase text-[10px] tracking-widest rounded-2xl hover:bg-stone-50 transition-all flex items-center justify-center gap-3 shadow-sm"
                   >
-                    Logout
+                    <LogOut className="w-4 h-4" /> Log Out
                   </button>
                   <button 
                     onClick={handleDeleteAccount}
-                    className={`px-12 py-6 border-4 border-black font-black uppercase text-sm tracking-widest transition-all shadow-[6px_6px_0px_rgba(0,0,0,1)] ${confirmDelete ? 'bg-red-600 text-white animate-pulse' : 'bg-transparent text-red-600 hover:bg-red-600 hover:text-white'}`}
+                    className={`px-10 py-4 font-bold uppercase text-[10px] tracking-widest rounded-2xl flex items-center justify-center gap-3 transition-all shadow-sm ${confirmDelete ? 'bg-rose-600 text-white animate-pulse' : 'bg-rose-100 text-rose-600 hover:bg-rose-600 hover:text-white'}`}
                   >
-                    {confirmDelete ? 'CONFIRM DELETE?' : 'Delete Account'}
+                    <Trash2 className="w-4 h-4" /> {confirmDelete ? 'De-authorizing...' : 'Revoke Account'}
                   </button>
                 </div>
               </div>
@@ -389,26 +409,21 @@ function ProfileContent() {
           )}
         </AnimatePresence>
 
-        {/* Global Feedback Matrix */}
+        {/* Floating Feedback */}
         <AnimatePresence>
           {message && (
             <motion.div 
-              initial={{ opacity: 0, x: 50 }} 
-              animate={{ opacity: 1, x: 0 }} 
-              exit={{ opacity: 0, x: 50 }}
-              className={`fixed bottom-12 right-12 p-10 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] z-[100] flex flex-col gap-4 max-w-sm ${message.type === 'success' ? 'bg-[#2563EB] text-white' : 'bg-black text-red-500'}`}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }} 
+              animate={{ opacity: 1, scale: 1, y: 0 }} 
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className={`fixed bottom-10 right-6 md:right-10 p-6 rounded-[2rem] shadow-2xl z-[100] flex gap-4 items-center border ${message.type === 'success' ? 'bg-stone-900 text-white border-stone-800' : 'bg-rose-600 text-white border-rose-500'}`}
             >
-              <div className="flex items-center gap-6">
-                {message.type === 'success' ? <CheckCircle2 className="w-10 h-10" /> : <ShieldAlert className="w-10 h-10 animate-pulse" />}
-                <p className="text-lg font-black uppercase tracking-tight leading-tighter w-48">{message.text}</p>
+              <div className={`p-3 rounded-2xl ${message.type === 'success' ? 'bg-blue-600' : 'bg-rose-500'}`}>
+                {message.type === 'success' ? <CheckCircle2 className="w-6 h-6" /> : <ShieldAlert className="w-6 h-6" />}
               </div>
-              <div className="w-full h-3 bg-white/20 border-2 border-black/10 overflow-hidden">
-                <motion.div 
-                   initial={{ width: "100%" }}
-                   animate={{ width: "0%" }}
-                   transition={{ duration: 5 }}
-                   className="h-full bg-white"
-                />
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-widest text-white/50">{message.type === 'success' ? 'Sync Complete' : 'Alert'}</p>
+                <p className="text-lg font-extrabold tracking-tight leading-none">{message.text}</p>
               </div>
             </motion.div>
           )}
@@ -421,8 +436,8 @@ function ProfileContent() {
 export default function Profile() {
   return (
     <Suspense fallback={
-       <div className="min-h-screen bg-[#F3F4F6] flex items-center justify-center">
-          <Loader2 className="w-12 h-12 text-black animate-spin" />
+       <div className="min-h-screen bg-stone-50/50 flex items-center justify-center">
+          <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
        </div>
     }>
       <ProfileContent />

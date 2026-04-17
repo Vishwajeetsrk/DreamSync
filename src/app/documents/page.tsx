@@ -6,510 +6,384 @@ import {
   BookOpen, ExternalLink, FileText, Info, AlertTriangle,
   Code2, Database, GitBranch, Globe, Smartphone, Terminal,
   Shield, ChevronRight, Layers, CheckCircle2, ChevronDown, ChevronUp,
-  Landmark, GraduationCap, Sparkles, Brain
+  Landmark, GraduationCap, Sparkles, Brain, ArrowRight, Star
 } from 'lucide-react';
 
-// ── Government Docs (with step-by-step apply instructions) ────────
+// --- Government Docs ---
 const govDocs = [
   {
     title: "PAN Card",
-    desc: "A PAN Card is needed to get your salary, open a bank account, and pay taxes correctly in India.",
+    desc: "A matching identity is needed for salary, bank accounts, and professional tax compliance in India.",
     link: "https://www.protean-tinpan.com/",
-    time: "approx 15–20 days",
+    time: "15–20 days",
     fee: "₹107 (approx)",
     required: ["Aadhaar Card", "Date of Birth Proof", "Passport Size Photos"],
     type: "government",
     steps: [
-      "Go to NSDL portal: onlineservices.nsdl.com → Click 'Apply Online' under PAN",
-      "Select 'New PAN – Indian Citizen (Form 49A)' and fill personal details exactly as on Aadhaar",
-      "Upload scanned passport photo, signature, and Aadhaar as identity + address proof",
-      "Pay ₹107 online via net banking / UPI / debit card",
-      "Note down the 15-digit Acknowledgment Number for tracking",
-      "E-PAN delivered to email in 2–3 days; physical card delivered in 15–20 days",
+      "Visit NSDL portal: onlineservices.nsdl.com",
+      "Select 'New PAN – Indian Citizen (Form 49A)'",
+      "Upload scanned photo, signature, and Aadhaar",
+      "Pay ₹107 online via net banking / UPI",
+      "Track with 15-digit Acknowledgment Number",
+      "E-PAN delivered in 2–3 days via email",
     ],
-    tips: "Ensure your name spelling matches exactly across Aadhaar and Class 10 marksheet to avoid BGV issues.",
-    altLink: "https://www.pan.utiitsl.com/",
-    altLinkLabel: "Apply via UTIITSL",
+    tips: "Ensure your name spelling matches exactly across Aadhaar and Class 10th marksheet.",
   },
   {
-    title: "Aadhaar Card Update",
-    desc: "Make sure your mobile number is connected to your Aadhaar card for easy online verification.",
+    title: "Aadhaar Update",
+    desc: "Ensure your mobile number is linked for seamless multi-step online verification.",
     link: "https://myaadhaar.uidai.gov.in/",
-    time: "approx 5–15 days",
-    fee: "₹50 (demographic update)",
+    time: "5–15 days",
+    fee: "₹50 (demographic)",
     required: ["Proof of Identity", "Proof of Address"],
     type: "government",
     steps: [
-      "Visit myaadhaar.uidai.gov.in → Log in with your Aadhaar number + OTP",
-      "Click 'Update Demographics' to update name, address, DOB, or gender",
-      "To link mobile: visit your nearest Aadhaar Enrolment Centre (can't do online)",
-      "Upload supporting documents (Aadhaar-accepted POI / POA list on UIDAI website)",
-      "Pay ₹50 update fee and note the URN (Update Request Number)",
-      "Track update status at myaadhaar.uidai.gov.in using URN",
+      "Log in at myaadhaar.uidai.gov.in with OTP",
+      "Click 'Update Demographics' for name/address",
+      "To link mobile: visit an Enrolment Centre in person",
+      "Upload supporting documents (POI / POA)",
+      "Pay ₹50 fee and track via URN number",
     ],
-    tips: "Mobile linking must be done in person at an Aadhaar centre. Carry original documents — photocopies are not accepted.",
-    altLink: "https://uidai.gov.in/",
-    altLinkLabel: "UIDAI Official Website",
+    tips: "Mobile linking requires physical biometrics at a center. Carry original documents for verification.",
   },
   {
     title: "UAN / EPF Number",
-    desc: "Your Employee Provident Fund (EPF) is your savings. Your first employer will create this number for you.",
+    desc: "Your Employee Provident Fund (EPF) is your primary career savings protocol.",
     link: "https://unifiedportal-mem.epfindia.gov.in/memberinterface/",
     time: "Instant (Digital)",
     fee: "Free",
     required: ["Aadhaar", "PAN", "Bank Account Details"],
     type: "career",
     steps: [
-      "Your employer registers your details with EPFO and generates UAN on your first salary",
-      "You'll receive UAN via SMS on your Aadhaar-linked mobile number",
-      "Activate UAN at unifiedportal-mem.epfindia.gov.in/memberinterface/",
-      "Click 'Activate UAN' → Enter UAN, Aadhaar, mobile → verify OTP",
-      "After activation, link PAN and bank account under 'KYC' section",
-      "Get Aadhaar linked and verified by employer to enable online withdrawals",
+      "Employer generates UAN upon first salary deposit",
+      "Receive UAN via SMS on your linked mobile number",
+      "Activate at unifiedportal-mem.epfindia.gov.in",
+      "Link PAN and bank account under 'KYC' section",
     ],
-    tips: "Always verify your employer has deposited EPF by checking passbook under 'View Passbook'. If switching jobs, transfer (not withdraw) PF using online transfer claim.",
-    altLink: "https://epfindia.gov.in/",
-    altLinkLabel: "EPFO Official Website",
+    tips: "Always verify your passbook monthly to ensure employer contributions are deposited.",
   },
   {
     title: "Passport",
-    desc: "A passport is important for identity checks and if you ever need to travel or work outside of India.",
+    desc: "The gold standard of identity and essential for global career growth opportunities.",
     link: "https://www.passportindia.gov.in/",
-    time: "30–45 days (normal), 7–14 days (Tatkal)",
-    fee: "₹1,500 (36 pages) / ₹2,000 (60 pages) | Tatkal: +₹2,000",
-    required: ["Aadhaar", "10th Marksheet", "Birth Certificate / PAN"],
+    time: "30–45 days (Normal)",
+    fee: "₹1,500 (36 pages)",
+    required: ["Aadhaar", "10th Marksheet", "Birth Certificate"],
     type: "government",
     steps: [
-      "Register at passportindia.gov.in → Click 'New User Registration'",
-      "Login → Select 'Fresh Passport' or 'Tatkal' → Fill Form online",
-      "Upload Aadhaar (address proof), 10th certificate (DOB proof), and PAN",
-      "Pay fee online → Book appointment at nearest Passport Seva Kendra (PSK)",
-      "Visit PSK on appointment date with all originals + one set of photocopies",
-      "Police verification happens post-submission (online in most cities now)",
-      "Passport dispatched via India Post Speed Post — track at India Post website",
+      "Register at passportindia.gov.in",
+      "Choose 'Fresh Passport' and fill the online form",
+      "Pay fee and book appointment at nearest PSK",
+      "Visit PSK with originals + standard photocopies",
+      "Police verification occurs post-submission",
     ],
-    tips: "Book Tatkal if you need passport within 2 weeks. Police verification may take longer in smaller cities — apply early before job joining.",
-    altLink: "https://www.passportindia.gov.in/AppOnlineProject/welcomeLink",
-    altLinkLabel: "Direct Application Portal",
+    tips: "Book 'Tatkal' if you need a passport within 14 days for urgent joining/travel.",
   },
   {
-    title: "Savings Bank Account",
-    desc: "You need a bank account to receive your salary, use apps like Google Pay/UPI, and save your money.",
+    title: "Savings Account",
+    desc: "The foundation of financial independence and digital payment connectivity.",
     link: "https://www.jansamarth.in/",
-    time: "Instant (Online) / 1–3 days branch",
-    fee: "Free (zero-balance)",
-    required: ["Aadhaar", "PAN", "Passport Photo", "Mobile Number"],
+    time: "Instant (e-KYC)",
+    fee: "Free (Zero-Balance)",
+    required: ["Aadhaar", "PAN", "Mobile Number"],
     type: "career",
     steps: [
-      "Choose bank: SBI (YONO app), HDFC, ICICI, or Kotak Mahindra (known for zero-balance)",
-      "Download bank app or visit website → Click 'Open Savings Account Online'",
-      "Enter Aadhaar number → Complete OTP-based e-KYC verification",
-      "Enter PAN details and nominee information",
-      "Account number generated instantly; debit card and passbook delivered in 5–7 days",
-      "For Jan Dhan account: walk into any bank branch with Aadhaar — no minimum balance needed",
+      "Open online via SBI (YONO), Kotak 811, or HDFC",
+      "Submit Aadhaar number for OTP-based e-KYC",
+      "Complete video-KYC if prompted by the bank",
+      "Account is activated within 24–48 hours",
     ],
-    tips: "Keep one dedicated salary account separate from expenses. Ensure your employer has your exact account number + IFSC — wrong details delay salary by months.",
-    altLink: "https://www.onlinesbi.sbi/",
-    altLinkLabel: "Open SBI Account Online",
+    tips: "Ensure your name matches your PAN exactly to avoid bank verification failures.",
   },
   {
     title: "Tax Filing (ITR)",
-    desc: "ITR filing is a simple way to show the government how much you earn and is great for your legal record.",
+    desc: "ITR filing builds your legal financial record for future loans and visa applications.",
     link: "https://www.incometax.gov.in/iec/foportal/",
-    time: "Employer issues by June 15 | ITR deadline: July 31",
-    fee: "Free (self-filing) / CA charges apply",
-    required: ["Form 16 from employer", "PAN", "Bank Account Statement"],
+    time: "Deadline: July 31st",
+    fee: "Free (Self-Filing)",
+    required: ["Form 16 from HR", "PAN", "Bank Details"],
     type: "career",
     steps: [
-      "Collect Form 16 from HR/Finance team by June 15 (mandatory for employers to issue)",
-      "Visit incometax.gov.in → Login with PAN + OTP",
-      "Click 'File Income Tax Return' → Choose Assessment Year (e.g. AY 2025–26 for FY24–25)",
-      "Select ITR-1 (for salaried with income up to ₹50L — most freshers use this)",
-      "Import pre-filled data from Form 26AS and AIS (auto-populated from Form 16)",
-      "Verify deductions (Section 80C, 80D) → Submit → E-verify using Aadhaar OTP",
+      "Collect Form 16 from HR/Finance by June 15",
+      "Log in at incometax.gov.in with PAN",
+      "Select ITR-1 (for most salaried employees)",
+      "Import pre-filled data and e-verify with Aadhaar",
     ],
-    tips: "Even if TDS was deducted and tax paid, filing ITR is mandatory above ₹2.5L income. It also helps for visa applications and loan approvals later.",
-    altLink: "https://eportal.incometax.gov.in/iec/foservices/#/pre-login/bl-link?lang=en",
-    altLinkLabel: "Quick ITR E-file Link",
-  },
-  {
-    title: "Driving Licence",
-    desc: "Accepted as a photo ID for BGV in many companies. Get a smart card DL from your state transport office.",
-    link: "https://sarathi.parivahan.gov.in/",
-    time: "7–15 days (after passing test)",
-    fee: "₹200–₹800 (state-wise)",
-    required: ["Aadhaar", "Age Proof", "Medical Certificate"],
-    type: "government",
-    steps: [
-      "Visit sarathi.parivahan.gov.in → Select your state",
-      "Apply for Learner's Licence first: fill form, upload Aadhaar + age proof, pay fee",
-      "Book slot for Learner's Licence test (computer-based multiple choice, traffic rules)",
-      "After passing, wait 30 days → Apply for Permanent Driving Licence test",
-      "Book a slot at your RTO (Regional Transport Office) for practical driving test",
-      "If passed, DL card dispatched via post in 7–15 days (or collect from RTO)",
-    ],
-    tips: "Get a Learner's Licence first — it's also accepted as valid ID at most places. DL is useful for domestic travel without passport.",
-    altLink: "https://parivahan.gov.in/parivahan/",
-    altLinkLabel: "Parivahan – Govt Transport Portal",
+    tips: "Even if your income is below the tax limit, filing ITR is highly recommended for credit history.",
   },
 ];
 
-// ── Skill Guides ─────────────────────────────────────────────────
+// --- Skill Guides ---
 const skillGuides = [
   {
-    title: "Generative AI & LLMs",
+    title: "Generative AI",
     icon: Sparkles,
-    color: "bg-violet-100",
-    border: "border-violet-400",
-    level: "2026 High Demand",
+    color: "bg-blue-50",
+    text: "text-blue-600",
+    level: "2026 Core Demand",
     duration: "2–3 months",
-    skills: ["Prompt Engineering", "Fine-tuning LLMs", "RAG Systems", "Vector DBs", "OpenAI / Claude API"],
-    resources: [
-      { name: "DeepLearning.AI – LLM Specialization", url: "https://www.deeplearning.ai/" },
-      { name: "Andrej Karpathy – Intro to LLMs (Video)", url: "https://www.youtube.com/watch?v=zjkBMFhNj_g" },
-      { name: "Build a Custom RAG (Project)", url: "https://github.com/langchain-ai/langchain" },
-    ],
+    skills: ["Prompt Engineering", "Fine-tuning LLMs", "RAG Systems", "Vector DBs"],
     jobs: "https://www.naukri.com/generative-ai-jobs",
-    salary: "₹8L – ₹25L (Fresher/1yr)",
+    salary: "₹8L – ₹25L (FY)",
   },
   {
     title: "Agentic AI Developer",
     icon: Brain,
-    color: "bg-indigo-100",
-    border: "border-indigo-400",
+    color: "bg-violet-50",
+    text: "text-violet-600",
     level: "Cutting Edge",
     duration: "3–4 months",
-    skills: ["LangChain / LangGraph", "CrewAI / AutoGen", "Tool Selection", "Multi-Agent Systems", "Stateful Agents"],
-    resources: [
-      { name: "LangChain Official (Docs)", url: "https://python.langchain.com/docs/get_started/introduction" },
-      { name: "Building AI Agents (Video)", url: "https://www.youtube.com/watch?v=F8NKVhkZZWI" },
-      { name: "Multi-Agent Sales System (Project)", url: "https://github.com/joaomdmoura/crewAI-examples" },
-    ],
+    skills: ["LangGraph", "Multi-Agent Systems", "Stateful Agents", "AI Orchestration"],
     jobs: "https://www.naukri.com/ai-agent-jobs",
-    salary: "₹12L – ₹35L (Specialized)",
+    salary: "₹12L – ₹35L+",
   },
   {
-    title: "Web Development (Frontend)",
-    icon: Globe,
-    color: "bg-blue-100",
-    border: "border-blue-400",
-    level: "Beginner → Job-Ready",
-    duration: "4–6 months",
-    skills: ["HTML5 & CSS3", "JavaScript (ES6+)", "React / Next.js", "Tailwind CSS", "Git & GitHub"],
-    resources: [
-      { name: "The Odin Project (Free)", url: "https://www.theodinproject.com/" },
-      { name: "JS Mastery – Next.js guide (Video)", url: "https://www.youtube.com/@javascriptmastery" },
-      { name: "Portfolio Site (Project)", url: "https://github.com/adrianhajdin/project_nextjs_portfolio" },
-    ],
-    jobs: "https://www.naukri.com/frontend-developer-jobs",
-    salary: "₹3L – ₹12L / year (fresher)",
-  },
-  {
-    title: "Python & Data Science",
-    icon: Database,
-    color: "bg-yellow-100",
-    border: "border-yellow-400",
-    level: "Essential",
-    duration: "5–7 months",
-    skills: ["Python Basics", "Pandas & NumPy", "Data Visualization", "Machine Learning", "SQL"],
-    resources: [
-      { name: "Kaggle Learn (Free)", url: "https://www.kaggle.com/learn" },
-      { name: "StatQuest (YouTube)", url: "https://www.youtube.com/@statquest" },
-      { name: "Movie Recommender (Project)", url: "https://github.com/topics/recommender-system" },
-    ],
-    jobs: "https://www.naukri.com/data-science-jobs",
-    salary: "₹4L – ₹15L / year (fresher)",
-  },
-  {
-    title: "DSA & Interviews",
-    icon: Code2,
-    color: "bg-purple-100",
-    border: "border-purple-400",
-    level: "Placement Ready",
-    duration: "3–5 months",
-    skills: ["Arrays & Strings", "Trees & Graphs", "DP", "Sorting", "System Design"],
-    resources: [
-      { name: "Striver's A2Z Sheet (Free)", url: "https://takeuforward.org/strivers-a2z-dsa-course/" },
-      { name: "NeetCode DSA (Video)", url: "https://www.youtube.com/@NeetCode" },
-      { name: "AlgoVisualizer (Project)", url: "https://github.com/williamfiset/Algorithms" },
-    ],
-    jobs: "https://www.naukri.com/software-developer-jobs",
-    salary: "FAANG: ₹20L–₹60L+",
-  },
-  {
-    title: "UI/UX Design",
+    title: "Product Design (UI/UX)",
     icon: Layers,
-    color: "bg-pink-100",
-    border: "border-pink-400",
+    color: "bg-pink-50",
+    text: "text-pink-600",
     level: "Creative Focus",
     duration: "3–4 months",
-    skills: ["Figma Basics", "User Research", "Prototyping", "Hierarchy", "Design Systems"],
-    resources: [
-      { name: "Google UX Course (Coursera Free-ish)", url: "https://www.coursera.org/google-certificates/ux-design-certificate" },
-      { name: "Figma for Beginners (Video)", url: "https://www.youtube.com/watch?v=dXQ7IHkTiMM" },
-      { name: "Re-designing Swiggy (Project)", url: "https://www.behance.net/search/projects?search=ux%20case%20study" },
-    ],
+    skills: ["Figma Mastery", "User Research", "Design Systems", "Prototyping"],
     jobs: "https://www.naukri.com/ux-designer-jobs",
-    salary: "₹4L – ₹20L (Portfolio based)",
+    salary: "₹4L – ₹20L",
+  },
+  {
+    title: "Full-Stack Web (Next.js)",
+    icon: Globe,
+    color: "bg-emerald-50",
+    text: "text-emerald-600",
+    level: "High Employment",
+    duration: "4–6 months",
+    skills: ["TypeScript", "Next.js 15", "Server Components", "Tailwind CSS"],
+    jobs: "https://www.naukri.com/frontend-developer-jobs",
+    salary: "₹3L – ₹15L",
+  },
+  {
+    title: "Cloud & DevSecOps",
+    icon: Shield,
+    color: "bg-rose-50",
+    text: "text-rose-600",
+    level: "Systems Infrastructure",
+    duration: "6–8 months",
+    skills: ["AWS / Azure", "Docker & K8s", "CI/CD Pipelines", "Terraform"],
+    jobs: "https://www.naukri.com/devops-jobs",
+    salary: "₹6L – ₹22L",
+  },
+  {
+    title: "Data Intelligence",
+    icon: Database,
+    color: "bg-amber-50",
+    text: "text-amber-600",
+    level: "Enterprise Strategy",
+    duration: "5–7 months",
+    skills: ["Python", "Pandas", "SQL", "PowerBI / Tableau"],
+    jobs: "https://www.naukri.com/data-science-jobs",
+    salary: "₹5L – ₹18L",
   },
 ];
 
-// ── Document Card (with expandable How to Apply) ───────────────────
 function DocCard({ doc, i }: { doc: typeof govDocs[0]; i: number }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: i * 0.07 }}
-      className="bg-white border-4 border-black flex flex-col neo-box"
+      transition={{ delay: i * 0.05 }}
+      className="bg-white rounded-[3rem] border border-stone-100 shadow-xl shadow-stone-200/50 flex flex-col group overflow-hidden"
     >
-      <div className="p-6 flex-1 space-y-4">
-        {/* Header */}
+      <div className="p-8 md:p-10 space-y-6 flex-1">
         <div className="flex justify-between items-start gap-4">
-          <h3 className="text-2xl font-black">{doc.title}</h3>
-          <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider border-2 border-black shrink-0 ${doc.type === 'government' ? 'bg-blue-100 text-blue-900' : 'bg-green-100 text-green-900'}`}>
+          <h3 className="text-2xl font-extrabold text-stone-900 tracking-tight group-hover:text-blue-600 transition-colors">{doc.title}</h3>
+          <span className={`px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${doc.type === 'government' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'}`}>
             {doc.type}
           </span>
         </div>
-        <p className="font-medium text-muted-foreground">{doc.desc}</p>
+        <p className="text-stone-500 font-medium leading-relaxed">{doc.desc}</p>
 
-        {/* Meta */}
-        <div className="bg-gray-50 border-2 border-black p-4 space-y-2">
-          <p className="text-sm font-bold flex gap-2"><Info className="w-4 h-4 text-primary shrink-0" /> Cost: <span className="font-normal text-muted-foreground">{doc.fee}</span></p>
-          <p className="text-sm font-bold flex gap-2"><FileText className="w-4 h-4 text-primary shrink-0" /> Time: <span className="font-normal text-muted-foreground">{doc.time}</span></p>
+        <div className="grid grid-cols-2 gap-4">
+           <div className="p-4 bg-stone-50 rounded-2xl">
+              <p className="text-[9px] font-bold text-stone-400 uppercase tracking-widest mb-1">Timeframe</p>
+              <p className="text-sm font-bold text-stone-700">{doc.time}</p>
+           </div>
+           <div className="p-4 bg-stone-50 rounded-2xl">
+              <p className="text-[9px] font-bold text-stone-400 uppercase tracking-widest mb-1">Standard Fee</p>
+              <p className="text-sm font-bold text-stone-700">{doc.fee}</p>
+           </div>
         </div>
 
-        {/* Required docs */}
-        <div>
-          <h4 className="font-bold text-sm mb-2 uppercase tracking-wide">Documents Required:</h4>
-          <ul className="space-y-1">
+        <div className="space-y-3">
+          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Mandatory Tools:</p>
+          <div className="flex flex-wrap gap-2">
             {doc.required.map(req => (
-              <li key={req} className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-600 shrink-0" /> {req}
-              </li>
+              <span key={req} className="px-3 py-1 bg-stone-50 border border-stone-100 rounded-lg text-xs font-bold text-stone-500">{req}</span>
             ))}
-          </ul>
+          </div>
         </div>
 
-        {/* How to Apply — Expandable */}
         <AnimatePresence>
           {expanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <div className="pt-1 space-y-4">
-                {/* Steps */}
-                <div className="border-t-2 border-dashed border-black pt-4">
-                  <p className="text-xs font-black uppercase tracking-wider text-gray-500 mb-3 flex items-center gap-1.5">
-                    <ChevronRight className="w-3.5 h-3.5" /> Step-by-Step — How to Apply
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+              <div className="pt-6 space-y-6 border-t border-stone-50 mt-6">
+                <div className="space-y-4">
+                  <p className="text-[10px] font-bold text-blue-600 uppercase tracking-[0.2em] flex items-center gap-2">
+                    <ChevronRight className="w-3.5 h-3.5" /> Step-by-Step Pathway
                   </p>
-                  <ol className="space-y-2.5">
+                  <div className="space-y-4">
                     {doc.steps.map((step, idx) => (
-                      <li key={idx} className="flex gap-3 items-start">
-                        <span className="w-5 h-5 rounded-full bg-primary text-white text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
-                          {idx + 1}
-                        </span>
-                        <span className="text-sm font-medium text-gray-700 leading-relaxed">{step}</span>
-                      </li>
+                      <div key={idx} className="flex gap-4 items-start">
+                        <div className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{idx + 1}</div>
+                        <p className="text-sm font-medium text-stone-600 leading-relaxed">{step}</p>
+                      </div>
                     ))}
-                  </ol>
+                  </div>
                 </div>
-
-                {/* Pro Tip */}
-                <div className="bg-amber-50 border-2 border-amber-400 p-3 flex gap-2 items-start">
-                  <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <p className="text-sm font-medium text-amber-900"><strong>Pro Tip:</strong> {doc.tips}</p>
+                <div className="p-5 bg-amber-50 rounded-2xl border border-amber-100 flex gap-4">
+                  <Info className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                  <p className="text-xs font-bold text-amber-900 leading-relaxed"><span className="uppercase text-[10px] tracking-widest block mb-1">Critical Insight:</span> {doc.tips}</p>
                 </div>
-
-                {/* Alternate link */}
-                {doc.altLink && (
-                  <a
-                    href={doc.altLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" /> {doc.altLinkLabel}
-                  </a>
-                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Footer actions */}
-      <div className="border-t-4 border-black grid grid-cols-2">
+      <div className="border-t border-stone-50 grid grid-cols-2 p-4 gap-2 bg-stone-50/50">
         <button
           onClick={() => setExpanded(e => !e)}
-          className="p-3 font-bold text-sm hover:bg-primary hover:text-white transition-colors border-r-2 border-black flex items-center justify-center gap-1.5"
+          className={`py-3 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition-all ${expanded ? 'bg-stone-900 text-white shadow-lg' : 'bg-white text-stone-400 border border-stone-100 hover:text-stone-900 shadow-sm'}`}
         >
-          {expanded
-            ? <><ChevronUp className="w-4 h-4" /> Hide Steps</>
-            : <><ChevronDown className="w-4 h-4" /> How to Apply</>
-          }
+          {expanded ? <><ChevronUp className="w-4 h-4" /> Close Steps</> : <><ChevronDown className="w-4 h-4" /> View How-To</>}
         </button>
-        <a
-          href={doc.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-3 font-bold text-sm hover:bg-gray-100 transition-colors flex items-center justify-center gap-1.5"
-        >
-          Official Site <ExternalLink className="w-3.5 h-3.5" />
+        <a href={doc.link} target="_blank" rel="noopener noreferrer" className="py-3 bg-white border border-stone-100 rounded-2xl font-bold text-xs text-stone-400 hover:text-blue-600 shadow-sm flex items-center justify-center gap-2 transition-all">
+          Direct Portal <ExternalLink className="w-3.5 h-3.5" />
         </a>
       </div>
     </motion.div>
   );
 }
 
-// ── Skill Card ─────────────────────────────────────────────────────
 function SkillCard({ guide, i }: { guide: typeof skillGuides[0]; i: number }) {
-  const [expanded, setExpanded] = useState(false);
   const Icon = guide.icon;
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.98 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      transition={{ delay: i * 0.07 }}
-      className="bg-white border-4 border-black neo-box flex flex-col"
+      transition={{ delay: i * 0.05 }}
+      className="bg-white rounded-[3rem] border border-stone-100 shadow-xl shadow-stone-200/50 p-10 space-y-8 flex flex-col group hover:border-blue-100 transition-colors"
     >
-      <div className="p-6 space-y-4 flex-1">
-        {/* Header */}
-        <div className="flex items-start gap-4">
-          <div className={`p-3 border-2 border-black ${guide.color} shrink-0 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}>
-            <Icon className="w-6 h-6" />
-          </div>
-          <div>
-            <h3 className="text-xl font-black leading-tight">{guide.title}</h3>
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{guide.level}</span>
-          </div>
+      <div className="flex items-center gap-5">
+        <div className={`w-14 h-14 rounded-2xl ${guide.color} ${guide.text} flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform`}>
+           <Icon className="w-7 h-7" />
         </div>
-
-        {/* Meta */}
-        <div className="flex gap-3 flex-wrap">
-          <span className="px-2 py-1 bg-accent border-2 border-black text-xs font-bold">⏱ {guide.duration}</span>
-          <span className="px-2 py-1 bg-green-100 border-2 border-black text-xs font-bold text-green-900">₹ {guide.salary}</span>
+        <div className="space-y-1">
+           <p className="text-[9px] font-bold text-stone-300 uppercase tracking-widest">{guide.level}</p>
+           <h3 className="text-xl font-extrabold text-stone-900 tracking-tight leading-none">{guide.title}</h3>
         </div>
-
-        {/* Skills */}
-        <div className="flex flex-wrap gap-1.5">
-          {guide.skills.map(s => (
-            <span key={s} className="px-2 py-1 bg-gray-100 border border-black text-xs font-medium">{s}</span>
-          ))}
-        </div>
-
-        {/* Resources — expandable */}
-        <AnimatePresence>
-          {expanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <div className="pt-2 space-y-2">
-                <p className="text-xs font-black uppercase tracking-wider text-gray-500 mb-2 flex items-center gap-1.5">
-                  <BookOpen className="w-3.5 h-3.5" /> Free Resources
-                </p>
-                {guide.resources.map(r => (
-                  <a key={r.name} href={r.url} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm font-medium text-primary hover:underline">
-                    <ChevronRight className="w-3 h-3 shrink-0" /> {r.name}
-                  </a>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
-      {/* Actions */}
-      <div className="border-t-4 border-black grid grid-cols-2">
-        <button
-          onClick={() => setExpanded(e => !e)}
-          className="p-3 font-bold text-sm hover:bg-gray-100 transition-colors border-r-2 border-black flex items-center justify-center gap-1"
-        >
-          {expanded ? <><ChevronUp className="w-4 h-4" /> Hide</> : <><ChevronDown className="w-4 h-4" /> Resources</>}
-        </button>
-        <a href={guide.jobs} target="_blank" rel="noopener noreferrer"
-          className="p-3 font-bold text-sm hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-1">
-          Find Jobs <ExternalLink className="w-3 h-3" />
-        </a>
+      <div className="grid grid-cols-2 gap-3">
+         <div className="p-3 bg-stone-50 rounded-xl">
+            <p className="text-[8px] font-bold text-stone-300 uppercase tracking-widest mb-1">Timeline</p>
+            <p className="text-[11px] font-extrabold text-stone-700 uppercase tracking-widest">{guide.duration}</p>
+         </div>
+         <div className="p-3 bg-emerald-50 rounded-xl">
+            <p className="text-[8px] font-bold text-emerald-300 uppercase tracking-widest mb-1">India Salary</p>
+            <p className="text-[11px] font-extrabold text-emerald-600 uppercase tracking-widest">{guide.salary}</p>
+         </div>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+         {guide.skills.map(s => (
+           <span key={s} className="px-3 py-1 bg-stone-50 border border-stone-100 rounded-lg text-[10px] font-bold text-stone-400">{s}</span>
+         ))}
+      </div>
+
+      <div className="pt-6 border-t border-stone-50 flex items-center justify-between gap-4">
+         <a href={guide.jobs} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 bg-stone-900 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest text-center shadow-lg hover:shadow-blue-500/20 hover:bg-blue-600 transition-all flex items-center justify-center gap-2">
+            Find Opportunities <ArrowRight className="w-4 h-4" />
+         </a>
       </div>
     </motion.div>
   );
 }
 
-// ── Page ───────────────────────────────────────────────────────────
 export default function Documents() {
   const [tab, setTab] = useState<'skills' | 'docs'>('skills');
 
   return (
-    <div className="space-y-10 pb-16">
-      {/* Header */}
-      <header className="border-b-4 border-black pb-8">
-        <h1 className="text-4xl md:text-5xl font-black mb-3 flex items-center gap-4">
-          <BookOpen className="w-10 h-10" /> Roadmaps & Docs
-        </h1>
-        <p className="text-xl text-muted-foreground font-medium">
-          Step-by-step skill guides and essential government documents for Indian students & professionals.
-        </p>
-      </header>
+    <div className="min-h-screen bg-stone-50/50 pt-32 pb-24 px-6">
+      <div className="max-w-7xl mx-auto space-y-16">
+        
+        {/* Header */}
+        <header className="space-y-6 max-w-3xl">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-blue-600 text-white rounded-2xl">
+               <BookOpen className="w-8 h-8" />
+            </div>
+            <p className="text-[10px] font-bold text-stone-400">Resources & protocol</p>
+          </div>
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
+              Roadmaps & <span className="text-blue-600 underline underline-offset-8 decoration-stone-200">Docs</span>
+            </h1>
+            <p className="text-lg md:text-xl text-stone-500 font-medium leading-relaxed">
+              Step-by-step skill guides and essential government documentation frameworks, optimized for Indian career seekers.
+            </p>
+          </div>
+        </header>
 
-      {/* Tab Switcher */}
-      <div className="flex gap-0 border-4 border-black w-fit neo-box">
-        <button
-          onClick={() => setTab('skills')}
-          className={`px-8 py-3 font-black text-sm uppercase tracking-wider transition-colors flex items-center gap-2 ${tab === 'skills' ? 'bg-[#2563EB] text-white' : 'bg-white hover:bg-gray-100'}`}
-        >
-          <GraduationCap className="w-4 h-4" /> Skill Guides (Videos/Projects)
-        </button>
-        <button
-          onClick={() => setTab('docs')}
-          className={`px-8 py-3 font-black text-sm uppercase tracking-wider transition-colors border-l-4 border-black flex items-center gap-2 ${tab === 'docs' ? 'bg-[#2563EB] text-white' : 'bg-white hover:bg-gray-100'}`}
-        >
-          <Landmark className="w-4 h-4" /> Government Docs
-        </button>
+        {/* Tab Control */}
+        <div className="flex bg-white p-2 border border-stone-100 rounded-[2.5rem] shadow-xl shadow-stone-200/50 w-fit">
+          <button
+            onClick={() => setTab('skills')}
+            className={`px-8 py-4 rounded-[1.75rem] font-bold text-xs transition-all flex items-center gap-3 ${tab === 'skills' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/10' : 'text-stone-400 hover:bg-stone-50'}`}
+          >
+            <GraduationCap className="w-4 h-4" /> Career skill roadmaps
+          </button>
+          <button
+            onClick={() => setTab('docs')}
+            className={`px-8 py-4 rounded-[1.75rem] font-bold text-xs transition-all flex items-center gap-3 ${tab === 'docs' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/10' : 'text-stone-400 hover:bg-stone-50'}`}
+          >
+            <Landmark className="w-4 h-4" /> Government document path
+          </button>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {tab === 'skills' ? (
+            <motion.div key="skills" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="space-y-12">
+              <div className="bg-blue-50 border border-blue-100 p-8 rounded-[3rem] shadow-sm flex flex-col md:flex-row items-center gap-8 group">
+                <div className="p-5 bg-white rounded-3xl text-blue-600 shadow-sm group-hover:scale-105 transition-transform"><Star className="w-8 h-8 fill-current" /></div>
+                <div className="text-center md:text-left space-y-2">
+                  <h3 className="text-2xl font-extrabold text-stone-900 tracking-tight leading-none">India-Focused Growth Guides</h3>
+                  <p className="text-stone-500 font-medium leading-relaxed max-w-2xl">Each protocol includes real-world expected timelines, localized salary intelligence, and direct connectivity to Naukri job nodes.</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                {skillGuides.map((guide, i) => <SkillCard key={i} guide={guide} i={i} />)}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div key="docs" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-12">
+              <div className="bg-amber-50 border border-amber-100 p-8 rounded-[3rem] shadow-sm flex flex-col md:flex-row items-center gap-8 group">
+                <div className="p-5 bg-white rounded-3xl text-amber-500 shadow-sm group-hover:scale-105 transition-transform"><AlertTriangle className="w-8 h-8 fill-current" /></div>
+                <div className="text-center md:text-left space-y-2">
+                  <h3 className="text-2xl font-extrabold text-stone-900 tracking-tight leading-none">Critical Identity Checklist</h3>
+                  <p className="text-stone-500 font-medium leading-relaxed max-w-2xl">
+                    Crucial: Your name, DOB, and guardian name must match <span className="text-stone-900 font-extrabold underline decoration-amber-200 decoration-4">exactly</span> across all protocols to avoid verification failures.
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {govDocs.map((doc, i) => <DocCard key={i} doc={doc} i={i} />)}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      <AnimatePresence mode="wait">
-        {tab === 'skills' ? (
-          <motion.div key="skills" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <div className="bg-blue-50 border-4 border-black p-5 flex items-start gap-4 neo-box mb-8">
-              <Info className="text-blue-600 shrink-0 w-7 h-7 mt-0.5" />
-              <div>
-                <h3 className="font-bold text-lg mb-1 text-blue-900">India-Focused Skill Roadmaps</h3>
-                <p className="text-blue-800 font-medium">Each guide includes free learning resources, expected timeline, salary range (India), and direct job search links on Naukri.</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {skillGuides.map((guide, i) => <SkillCard key={i} guide={guide} i={i} />)}
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div key="docs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <div className="bg-yellow-50 border-4 border-black p-5 flex items-start gap-4 neo-box mb-8">
-              <AlertTriangle className="text-yellow-600 shrink-0 w-7 h-7 mt-0.5" />
-              <div>
-                <h3 className="font-bold text-lg mb-1 text-yellow-900">Important Checklist</h3>
-                <p className="text-yellow-800 font-medium">
-                  Important: Make sure your Name, Birthday, and Father&apos;s Name are exactly the same on all your documents!
-                </p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {govDocs.map((doc, i) => <DocCard key={i} doc={doc} i={i} />)}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

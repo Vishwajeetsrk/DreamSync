@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MessageCircle, Send, MapPin, Globe, CheckCircle2, Loader2 } from 'lucide-react';
+import { Mail, Phone, MessageCircle, Send, MapPin, Globe, CheckCircle2, Loader2, Star, ShieldCheck } from 'lucide-react';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -44,114 +44,170 @@ export default function Contact() {
       setTimeout(() => setStatus('idle'), 5000);
     }
   };
+
   return (
-    <div className="space-y-12 max-w-6xl mx-auto py-8">
-      <header className="border-b-4 border-black pb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-black mb-4 flex items-center justify-center gap-4">
-          <MessageCircle className="w-12 h-12" /> Get in Touch
-        </h1>
-        <p className="text-xl text-muted-foreground font-medium">Have questions? We're here to help you sync your dreams to reality.</p>
-      </header>
+    <div className="min-h-screen bg-stone-50/50 pt-32 pb-24 px-6">
+      <div className="max-w-6xl mx-auto space-y-16">
+        
+        {/* Header */}
+        <header className="text-center space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-[10px] font-bold"
+          >
+            <Star className="w-3.5 h-3.5 fill-current" />
+            <span>We're here for you</span>
+          </motion.div>
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
+              Get in Touch
+            </h1>
+            <p className="text-lg md:text-xl text-stone-500 font-medium max-w-2xl mx-auto leading-relaxed">
+              Have questions? We're here to help you sync your dreams to reality. Reach out to us anytime.
+            </p>
+          </div>
+        </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* Contact Form */}
-        <div className="bg-white border-4 border-black p-8 neo-box">
-          <h2 className="text-3xl font-black mb-6">Send a Message</h2>
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-white p-8 md:p-12 rounded-[3rem] border border-stone-100 shadow-xl shadow-stone-200/50 space-y-10"
+          >
             <div className="space-y-2">
-              <label className="font-bold">Your Name</label>
-              <input 
-                type="text" 
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full p-3 border-2 border-black focus:outline-none focus:ring-4 focus:ring-primary/20 neo-box" 
-                placeholder="John Doe" 
-              />
+              <h2 className="text-2xl font-extrabold text-stone-900 tracking-tight">Send a Message</h2>
+              <p className="text-stone-400 font-medium">Leave a message and we'll reply as soon as possible.</p>
             </div>
-            <div className="space-y-2">
-              <label className="font-bold">Email Address</label>
-              <input 
-                type="email" 
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full p-3 border-2 border-black focus:outline-none focus:ring-4 focus:ring-primary/20 neo-box" 
-                placeholder="john@example.com" 
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="font-bold">Message</label>
-              <textarea 
-                required
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                rows={5} 
-                className="w-full p-3 border-2 border-black focus:outline-none focus:ring-4 focus:ring-primary/20 neo-box" 
-                placeholder="How can we help?" 
-              />
-            </div>
-            
-            {status === 'success' && (
-              <div className="p-3 bg-green-100 border-2 border-green-500 text-green-800 font-bold flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5" /> Message sent successfully! We'll get back to you soon.
+
+            <form className="space-y-6" onSubmit={handleSubmit}>
+               <div className="space-y-2">
+                <label className="text-[10px] font-bold text-stone-400 ml-1">Your full name</label>
+                <input 
+                  type="text" 
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="input-field" 
+                  placeholder="Arjun Sharma" 
+                />
               </div>
-            )}
-            
-            {status === 'error' && (
-              <div className="p-3 bg-red-100 border-2 border-red-500 text-red-800 font-bold">
-                Failed to send message. Please try again or use direct email.
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-stone-400 ml-1">Email address</label>
+                <input 
+                  type="email" 
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="input-field" 
+                  placeholder="Arjun@example.com" 
+                />
               </div>
-            )}
-
-            <button 
-              type="submit" 
-              disabled={status === 'loading' || status === 'success'}
-              className="w-full py-4 bg-black text-white font-black text-xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(37,99,235,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex justify-center items-center gap-3 disabled:opacity-70 uppercase tracking-tighter"
-            >
-              {status === 'loading' ? (
-                <><Loader2 className="w-5 h-5 animate-spin" /> SYNCHRONIZING...</>
-              ) : status === 'success' ? (
-                <><CheckCircle2 className="w-5 h-5" /> SENT!</>
-              ) : (
-                <><Send className="w-5 h-5" /> Send Message</>
-              )}
-            </button>
-          </form>
-        </div>
-
-        {/* Contact Info Card */}
-        <div className="space-y-8">
-          <div className="bg-accent text-black border-4 border-black p-8 neo-box transform md:rotate-2">
-            <h2 className="text-3xl font-black mb-6 border-b-2 border-black pb-2">Direct Contact</h2>
-            <div className="space-y-6 text-lg font-medium">
-              <a href="mailto:dreamsyncbangalore@gmail.com" className="flex items-center gap-4 hover:underline">
-                <div className="p-3 bg-white border-2 border-black hidden sm:block"><Mail className="w-6 h-6" /></div>
-                <div>
-                  <p className="font-bold">Email Us</p>
-                  dreamsyncbangalore@gmail.com
-                </div>
-              </a>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-stone-400 ml-1">Message</label>
+                <textarea 
+                  required
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  rows={5} 
+                  className="input-field min-h-[160px] py-4" 
+                  placeholder="How can we help you today?" 
+                />
+              </div>
               
-              <a href="https://whatsapp.com/channel/0029VaFRiHbKrWR0L22onC0f" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 hover:underline">
-                <div className="p-3 bg-[#25D366] text-white border-2 border-black hidden sm:block"><Phone className="w-6 h-6" /></div>
-                <div>
-                  <p className="font-bold">WhatsApp Channel</p>
-                  Join Official Channel
-                </div>
-              </a>
-            </div>
-          </div>
+              {status === 'success' && (
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="p-5 bg-emerald-50 border border-emerald-100 rounded-2xl text-emerald-700 font-bold flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 shrink-0" /> <p>Message sent! We'll get back to you soon.</p>
+                </motion.div>
+              )}
+              
+              {status === 'error' && (
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="p-5 bg-rose-50 border border-rose-100 rounded-2xl text-rose-700 font-bold">
+                  Failed to send message. Please try again or use direct email.
+                </motion.div>
+              )}
 
-          <div className="bg-white border-4 border-black p-8 neo-box transform md:-rotate-1">
-            <h2 className="text-2xl font-black mb-6 border-b-2 border-black pb-2 flex items-center gap-2"><Globe /> Social Media</h2>
-            <div className="flex flex-col gap-4 font-bold">
-              <a href="https://www.linkedin.com/company/dreamsync-community/" target="_blank" rel="noopener noreferrer" className="p-3 border-2 border-black hover:bg-[#0A66C2] hover:text-white transition-colors text-center">LinkedIn</a>
-              <a href="https://instagram.com/dream_sync_hub" target="_blank" rel="noopener noreferrer" className="p-3 border-2 border-black hover:bg-[#E1306C] hover:text-white transition-colors text-center">Instagram</a>
-              <a href="https://www.facebook.com/groups/605404708473694/" target="_blank" rel="noopener noreferrer" className="p-3 border-2 border-black hover:bg-[#1877F2] hover:text-white transition-colors text-center">Facebook Group</a>
-              <a href="https://twitter.com/ADreamsync" target="_blank" rel="noopener noreferrer" className="p-3 border-2 border-black hover:bg-black hover:text-white transition-colors text-center">X (Twitter)</a>
+              <button 
+                type="submit" 
+                disabled={status === 'loading' || status === 'success'}
+                className="btn-primary w-full !py-4 text-lg flex justify-center items-center gap-3 mt-4"
+              >
+                {status === 'loading' ? (
+                  <><Loader2 className="w-5 h-5 animate-spin" /> Sending...</>
+                ) : status === 'success' ? (
+                  <><CheckCircle2 className="w-5 h-5" /> Message Sent</>
+                ) : (
+                  <><Send className="w-5 h-5" /> Send Message</>
+                )}
+              </button>
+            </form>
+          </motion.div>
+
+          {/* Contact Info & Socials */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="space-y-8"
+          >
+            {/* Direct Contact */}
+            <div className="bg-stone-900 text-white p-8 md:p-12 rounded-[3rem] shadow-xl space-y-10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-10 opacity-10"><ShieldCheck className="w-24 h-24" /></div>
+              <div className="space-y-4 relative z-10">
+                <h2 className="text-3xl font-extrabold tracking-tight">Direct Support</h2>
+                <p className="text-stone-400 font-medium">Reach out via our official channels.</p>
+              </div>
+
+              <div className="space-y-6 relative z-10">
+                <a href="mailto:dreamsyncbangalore@gmail.com" className="group flex items-center gap-6 p-6 bg-white/5 border border-white/10 rounded-[2rem] hover:bg-white/10 transition-all">
+                  <div className="p-4 bg-blue-600 rounded-2xl shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                    <Mail className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-1">Email Us</p>
+                    <p className="text-lg font-bold text-white break-all">dreamsyncbangalore@gmail.com</p>
+                  </div>
+                </a>
+                
+                <a href="https://whatsapp.com/channel/0029VaFRiHbKrWR0L22onC0f" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-6 p-6 bg-emerald-600 rounded-[2rem] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
+                  <div className="p-4 bg-white/20 rounded-2xl group-hover:scale-110 transition-transform">
+                    <Phone className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-white/60 mb-1">WhatsApp channel</p>
+                    <p className="text-lg font-bold text-white">Join official channel</p>
+                  </div>
+                </a>
+              </div>
             </div>
-          </div>
+
+            {/* Social Media */}
+            <div className="bg-white p-10 rounded-[3rem] border border-stone-100 shadow-xl shadow-stone-200/50 space-y-8">
+              <div className="flex items-center gap-3">
+                <Globe className="w-5 h-5 text-blue-600" />
+                <h3 className="font-extrabold text-stone-900 tracking-tight">Community Links</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { name: 'LinkedIn', color: 'hover:bg-blue-600 hover:text-white', url: 'https://www.linkedin.com/company/dreamsync-community/' },
+                  { name: 'Instagram', color: 'hover:bg-rose-600 hover:text-white', url: 'https://instagram.com/dream_sync_hub' },
+                  { name: 'Facebook', color: 'hover:bg-blue-700 hover:text-white', url: 'https://www.facebook.com/groups/605404708473694/' },
+                  { name: 'X / Twitter', color: 'hover:bg-stone-900 hover:text-white', url: 'https://twitter.com/ADreamsync' }
+                ].map((s) => (
+                  <a 
+                    key={s.name} 
+                    href={s.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className={`p-4 border border-stone-100 rounded-2xl text-center text-sm font-bold text-stone-600 transition-all shadow-sm ${s.color}`}
+                  >
+                    {s.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>

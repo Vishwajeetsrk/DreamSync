@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Heart, Zap, Globe, DollarSign, ArrowRight, ArrowLeft, 
-  Sparkles, Brain, Briefcase, TrendingUp, CheckCircle2,
-  RefreshCcw, Download, Share2, Rocket, Star, Target, AlertCircle, ExternalLink
+  Sparkles, TrendingUp, CheckCircle2,
+  RefreshCcw, Rocket, Star, Target, AlertCircle, ExternalLink,
+  Brain, Lightbulb, Compass, Award
 } from 'lucide-react';
 import { IkigaiDiagram } from '@/components/IkigaiDiagram';
 import { validateCareerInput } from '@/lib/aiGuard';
@@ -39,35 +40,35 @@ interface IkigaiResult {
 const steps = [
   { 
     id: 'passions', 
-    title: '❤️ What You Love', 
-    desc: 'List your passions, interests, and things that make you lose track of time.',
+    title: 'What You Love', 
+    desc: 'List your passions, interests, and things that make you happy.',
     icon: Heart,
-    color: 'bg-rose-500',
-    placeholder: 'e.g. Graphic design, writing, coding, public speaking, gaming'
+    color: 'bg-rose-50 text-rose-600 border-rose-100',
+    placeholder: 'e.g. Design, writing, coding, public speaking...'
   },
   { 
     id: 'skills', 
-    title: '💪 What You Are Good At', 
-    desc: 'List your technical skills, soft skills, and natural talents.',
-    icon: Zap,
-    color: 'bg-emerald-500',
-    placeholder: 'e.g. React.js, leadership, problem solving, creative thinking'
+    title: 'What You Are Good At', 
+    desc: 'List your practical skills and natural talents.',
+    icon: Star,
+    color: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+    placeholder: 'e.g. Leadership, problem solving, creative thinking...'
   },
   { 
     id: 'marketNeeds', 
-    title: '🌍 What The World Needs', 
-    desc: 'Think about current problems, trends, and demands in the 2026 market.',
+    title: 'What The World Needs', 
+    desc: 'Think about problems you want to help solve.',
     icon: Globe,
-    color: 'bg-indigo-500',
-    placeholder: 'e.g. AI automation, digital privacy, mental health support, sustainable tech'
+    color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+    placeholder: 'e.g. Health support, sustainable tech, education...'
   },
   { 
     id: 'incomeGoals', 
-    title: '💰 What You Can Be Paid For', 
-    desc: 'Mention your salary expectations and career goals.',
+    title: 'Your Future Goals', 
+    desc: 'Mention your career expectations and life goals.',
     icon: DollarSign,
-    color: 'bg-amber-500',
-    placeholder: 'e.g. Remote role, 15-25 LPA, freelancing high-income roles'
+    color: 'bg-amber-50 text-amber-600 border-amber-100',
+    placeholder: 'e.g. Remote role, financial security, teaching others...'
   }
 ];
 
@@ -111,7 +112,6 @@ export default function IkigaiPage() {
   };
 
   const analyzeIkigai = async () => {
-    // 1. Safety Guard
     const combinedInput = `${form.passions.join(' ')} ${form.skills.join(' ')} ${form.marketNeeds.join(' ')} ${form.incomeGoals}`;
     const safety = validateCareerInput(combinedInput);
     if (!safety.allowed) {
@@ -128,12 +128,7 @@ export default function IkigaiPage() {
         body: JSON.stringify(form)
       });
       const data = await res.json();
-      if (!res.ok) {
-        if (res.status === 400 && data.error === 'Safety Violation') {
-          throw new Error(data.details);
-        }
-        throw new Error(data.error || 'Failed to analyze Ikigai');
-      }
+      if (!res.ok) throw new Error(data.error || 'Failed to analyze Ikigai');
       setResult(data);
     } catch (err: any) {
       setError(err.message);
@@ -146,295 +141,243 @@ export default function IkigaiPage() {
 
   if (result) {
     return (
-      <div className="max-w-6xl mx-auto space-y-12 pb-24">
+      <div className="max-w-6xl mx-auto pt-32 pb-24 px-6 space-y-12">
         {/* Results Header */}
         <header className="text-center space-y-4">
-          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="inline-block p-3 bg-black text-white neo-box mb-4">
-            <Sparkles className="w-8 h-8 mx-auto" />
-          </motion.div>
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight leading-tight">Your Ikigai Career Path</h1>
-          <p className="text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
-            The intersection of your heart, your skills, the world, and your future.
-          </p>
+           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 text-xs font-bold uppercase tracking-widest mb-2">
+              <Compass className="w-4 h-4" /> Discovery Complete
+           </div>
+           <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
+              Your Personal <span className="text-blue-600">Career Vibe.</span>
+           </h1>
+           <p className="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
+             A clear path built from your passions, skills, and the world&apos;s needs.
+           </p>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Visual Diagram */}
-          <div className="space-y-8 sticky top-24">
-            <div className="bg-white border-4 border-black p-8 neo-box">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Visual Diagram Area */}
+          <div className="lg:col-span-5 space-y-8 sticky top-32">
+            <div className="bg-white rounded-[2.5rem] border border-stone-100 p-8 shadow-sm">
               <IkigaiDiagram activeZone={hoveredZone as any} />
-              <div className="mt-8 grid grid-cols-2 gap-4 text-center">
-                <div onMouseEnter={() => setHoveredZone('passion')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-rose-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(244,63,94,1)] text-rose-700">❤️ Passion Zone</div>
-                <div onMouseEnter={() => setHoveredZone('profession')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-emerald-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(16,185,129,1)] text-emerald-700">💪 Profession Zone</div>
-                <div onMouseEnter={() => setHoveredZone('mission')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-indigo-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(79,70,229,1)] text-indigo-700">🌍 Mission Zone</div>
-                <div onMouseEnter={() => setHoveredZone('vocation')} onMouseLeave={() => setHoveredZone(null)} className="p-3 border-2 border-black bg-amber-50 font-bold text-xs uppercase cursor-help shadow-[2px_2px_0px_0px_rgba(245,158,11,1)] text-amber-700">💰 Vocation Zone</div>
+              <div className="mt-8 grid grid-cols-2 gap-3">
+                <button onMouseEnter={() => setHoveredZone('passion')} onMouseLeave={() => setHoveredZone(null)} className="p-4 bg-rose-50 rounded-2xl text-[10px] font-bold text-rose-600 uppercase tracking-widest border border-rose-100 transition-all hover:shadow-md">Passion</button>
+                <button onMouseEnter={() => setHoveredZone('profession')} onMouseLeave={() => setHoveredZone(null)} className="p-4 bg-emerald-50 rounded-2xl text-[10px] font-bold text-emerald-600 uppercase tracking-widest border border-emerald-100 transition-all hover:shadow-md">Profession</button>
+                <button onMouseEnter={() => setHoveredZone('mission')} onMouseLeave={() => setHoveredZone(null)} className="p-4 bg-indigo-50 rounded-2xl text-[10px] font-bold text-indigo-600 uppercase tracking-widest border border-indigo-100 transition-all hover:shadow-md">Mission</button>
+                <button onMouseEnter={() => setHoveredZone('vocation')} onMouseLeave={() => setHoveredZone(null)} className="p-4 bg-amber-50 rounded-2xl text-[10px] font-bold text-amber-600 uppercase tracking-widest border border-amber-100 transition-all hover:shadow-md">Vocation</button>
               </div>
+            </div>
+            
+            <div className="bg-blue-600 rounded-[2rem] p-8 text-white shadow-xl">
+               <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-white/20 rounded-lg"><Rocket className="w-5 h-5 text-white" /></div>
+                  <div className="text-xs font-bold uppercase tracking-widest opacity-80">Top Recommendation</div>
+               </div>
+               <h3 className="text-2xl font-bold mb-4">{result.primaryPath.title}</h3>
+               <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/20">
+                  <div>
+                    <div className="text-[10px] font-bold uppercase opacity-60 mb-1">Market Demand</div>
+                    <div className="text-xl font-bold">{result.primaryPath.marketDemand}</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-bold uppercase opacity-60 mb-1">Growth Score</div>
+                    <div className="text-xl font-bold">{result.ikigaiMatchScore}%</div>
+                  </div>
+               </div>
             </div>
           </div>
 
-          {/* Details */}
-          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="space-y-8">
-            {/* Primary Path */}
-            {/* 🎯 RECOMMENDED IKIGAI PATH */}
-            <div className="bg-[#0F172A] text-white border-[3px] border-black p-8 neo-box shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-              <div className="flex justify-between items-start mb-6">
-                <div className="text-[#FACC15] font-black uppercase text-xs tracking-[0.2em] flex items-center gap-2">
-                  <Rocket className="w-4 h-4" /> RECOMMENDED IKIGAI PATH
-                </div>
-                <div className="bg-[#7C3AED] text-white px-3 py-1 border-2 border-black text-[10px] font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                   Ikigai Match: {result.ikigaiMatchScore}%
-                </div>
-              </div>
-
-              <h2 className="text-[22px] font-black mb-4 text-[#22C55E] uppercase italic">{result.primaryPath.title}</h2>
-              
-              <div className="space-y-4 mb-8">
-                <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Why this fits you:</p>
-                <ul className="space-y-2">
-                   {result.primaryPath.whyFits?.map((point, i) => (
-                     <li key={i} className="text-sm font-bold flex gap-2 text-gray-200">
-                        <span className="text-[#22C55E]">✦</span> {point}
-                     </li>
-                   ))}
-                </ul>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/10">
-                <div>
-                  <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Market Demand</div>
-                  <div className="text-xl font-black text-[#22C55E] flex items-center gap-2 uppercase">
-                    {result.primaryPath.marketDemand} 📈
-                  </div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Exp. Salary (India 2026)</div>
-                  <div className="text-xl font-black text-[#FACC15]">{result.primaryPath.salaryRange}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Multiple Career Options & Gaps */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <div className="bg-white border-4 border-black p-6 neo-box">
-                  <h3 className="text-lg font-black mb-4 uppercase flex items-center gap-2 italic">
-                     <Star className="w-5 h-5 text-amber-500" /> Career Variants
+          {/* Detailed Content area */}
+          <div className="lg:col-span-7 space-y-10">
+            {/* Why this fits */}
+            <div className="bg-white rounded-[2.5rem] border border-stone-100 p-10 md:p-12 shadow-sm space-y-8">
+               <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-stone-900 flex items-center gap-3">
+                     <Lightbulb className="w-6 h-6 text-amber-500" /> Why this fits you
                   </h3>
-                  <div className="flex flex-wrap gap-2">
-                     {result.multipleCareerOptions?.map((opt, i) => (
-                       <span key={i} className="px-3 py-1.5 bg-gray-50 border-2 border-black text-[10px] font-black uppercase">{opt}</span>
-                     ))}
-                  </div>
+                  <p className="text-stone-400 font-medium">Based on your interests and skills, this path offers the best balance.</p>
                </div>
-               <div className="bg-[#FEF2F2] border-4 border-black p-6 neo-box">
-                  <h3 className="text-lg font-black mb-4 uppercase flex items-center gap-2 italic text-red-600">
-                     <AlertCircle className="w-5 h-5" /> Skill Gaps
-                  </h3>
-                  <ul className="space-y-2">
-                     {result.skillGaps?.map((gap, i) => (
-                       <li key={i} className="text-[10px] font-black uppercase flex gap-2 text-red-800">
-                          <span className="text-red-500">•</span> {gap}
-                       </li>
-                     ))}
-                  </ul>
+               <div className="space-y-4">
+                  {result.primaryPath.whyFits?.map((point, i) => (
+                    <div key={i} className="flex gap-4 items-start">
+                       <div className="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 mt-0.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /></div>
+                       <p className="text-stone-700 font-medium leading-relaxed">{point}</p>
+                    </div>
+                  ))}
                </div>
             </div>
-
 
             {/* Analysis Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white border-4 border-black p-6 neo-box">
-                <h3 className="text-xl font-black mb-4 flex items-center gap-2 underline decoration-4 decoration-emerald-400">
-                  <Star className="w-5 h-5 text-emerald-500" /> Core Strengths
-                </h3>
-                <ul className="space-y-3">
-                  {result.strengths.map((s, i) => (
-                    <li key={i} className="text-sm font-bold flex items-start gap-2">
-                      <span className="w-5 h-5 bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">✓</span>
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="bg-white border-4 border-black p-6 neo-box">
-                <h3 className="text-xl font-black mb-4 flex items-center gap-2 underline decoration-4 decoration-rose-400">
-                  <Target className="w-5 h-5 text-rose-500" /> Improvement Areas
-                </h3>
-                <ul className="space-y-3">
-                  {result.weaknesses.map((w, i) => (
-                    <li key={i} className="text-sm font-bold flex items-start gap-2">
-                      <span className="w-5 h-5 bg-rose-100 flex items-center justify-center text-rose-700 text-xs shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">!</span>
-                      {w}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Next Steps / Roadmap */}
-            {/* 💡 NEXT ACTION STEPS & RESOURCES */}
-            <div className="bg-white border-4 border-black p-8 neo-box space-y-8">
-               <div className="border-b-4 border-black pb-4">
-                  <h3 className="text-2xl font-black uppercase italic flex items-center gap-3">
-                     <TrendingUp className="w-7 h-7 text-[#7C3AED]" /> Next Action Steps
-                  </h3>
-               </div>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                     {result.nextActionSteps?.map((step, i) => (
-                       <div key={i} className="flex gap-4 items-start">
-                          <div className="w-8 h-8 bg-black text-white flex items-center justify-center font-black text-xs shrink-0">{i + 1}</div>
-                          <p className="text-sm font-bold leading-tight">{step}</p>
-                       </div>
+               <div className="bg-stone-50 rounded-[2.5rem] p-8 border border-stone-100 space-y-6">
+                  <div className="flex items-center gap-3">
+                     <div className="p-2 bg-emerald-100 rounded-xl"><Star className="w-4 h-4 text-emerald-600" /></div>
+                     <h3 className="text-lg font-bold text-stone-900">Your Strengths</h3>
+                  </div>
+                  <div className="space-y-3">
+                     {result.strengths.map((s, i) => (
+                       <div key={i} className="px-4 py-2 bg-white rounded-xl border border-stone-100 text-sm font-bold text-stone-600 shadow-sm">{s}</div>
                      ))}
                   </div>
-                  <div className="space-y-4">
-                     <p className="text-[10px] font-black uppercase tracking-widest text-[#2563EB]">Free Resources</p>
-                     <div className="space-y-2">
-                        {result.freeResources?.map((res, i) => (
-                          <Link key={i} href={res.url} target="_blank" className="flex items-center justify-between p-3 bg-gray-100 border-2 border-black text-[10px] font-black uppercase hover:bg-white transition-all">
-                             {res.title} <ExternalLink className="w-3 h-3" />
-                          </Link>
-                        ))}
-                     </div>
+               </div>
+               <div className="bg-rose-50/30 rounded-[2.5rem] p-8 border border-rose-100/50 space-y-6">
+                  <div className="flex items-center gap-3">
+                     <div className="p-2 bg-rose-100 rounded-xl"><Target className="w-4 h-4 text-rose-600" /></div>
+                     <h3 className="text-lg font-bold text-stone-900">Areas to Grow</h3>
+                  </div>
+                  <div className="space-y-3">
+                     {result.weaknesses.map((w, i) => (
+                       <div key={i} className="px-4 py-2 bg-white rounded-xl border border-stone-100 text-sm font-bold text-stone-600 shadow-sm">{w}</div>
+                     ))}
                   </div>
                </div>
             </div>
 
+            {/* Next Steps */}
+            <div className="bg-white rounded-[2.5rem] border border-stone-100 p-10 md:p-12 shadow-sm space-y-10">
+               <div className="flex items-center justify-between border-b border-stone-50 pb-6">
+                  <div className="space-y-1">
+                     <h3 className="text-2xl font-bold text-stone-900 flex items-center gap-3">
+                        <TrendingUp className="w-6 h-6 text-blue-600" /> What to do next
+                     </h3>
+                     <p className="text-stone-400 text-sm font-medium">Simple steps to start moving towards this path today.</p>
+                  </div>
+               </div>
+               
+               <div className="space-y-6">
+                  {result.nextActionSteps?.map((step, i) => (
+                    <div key={i} className="flex gap-6 items-start group">
+                       <div className="w-10 h-10 rounded-2xl bg-stone-50 border border-stone-100 flex items-center justify-center font-bold text-blue-600 shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">{i + 1}</div>
+                       <p className="text-stone-700 font-bold leading-relaxed pt-2">{step}</p>
+                    </div>
+                  ))}
+               </div>
 
-            {/* Integration CTAs */}
-            <div className="flex flex-col gap-4">
-               <Link href="/resume-builder" className="w-full flex items-center justify-between p-5 bg-[#7C3AED] text-white font-black border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all uppercase italic">
-                 Build Resume for this Path <ArrowRight className="w-6 h-6 text-white" />
+               <div className="pt-6 border-t border-stone-50 space-y-4">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-stone-300">Helpful Free Resources</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                     {result.freeResources?.map((res, i) => (
+                       <Link key={i} href={res.url} target="_blank" className="flex items-center justify-between p-4 bg-stone-50 rounded-2xl border border-stone-100 text-[10px] font-bold text-stone-500 uppercase tracking-widest hover:bg-white hover:text-blue-600 transition-all shadow-sm">
+                          {res.title} <ExternalLink className="w-3 h-3" />
+                       </Link>
+                     ))}
+                  </div>
+               </div>
+            </div>
+
+            {/* CTAs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <Link href="/resume-builder" className="btn-primary !py-5 flex items-center justify-center gap-3 text-lg">
+                 Update My Resume <ArrowRight className="w-5 h-5" />
                </Link>
-               <Link href="/roadmap" className="w-full flex items-center justify-between p-5 bg-black text-white font-black border-4 border-black shadow-[6px_6px_0px_0px_rgba(124,58,237,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all uppercase italic">
-                 Generate Technical Roadmap <ArrowRight className="w-6 h-6 text-white" />
+               <Link href="/roadmap" className="btn-secondary !py-5 flex items-center justify-center gap-3 text-lg">
+                 See Career Roadmap <ArrowRight className="w-5 h-5 text-blue-600" />
                </Link>
             </div>
 
-            <button onClick={() => setResult(null)} className="w-full text-center py-4 font-black flex items-center justify-center gap-2 text-muted-foreground hover:text-black">
-              <RefreshCcw className="w-4 h-4" /> Start Over
+            <button onClick={() => setResult(null)} className="w-full text-center py-6 text-stone-400 font-bold hover:text-stone-900 transition-colors flex items-center justify-center gap-2">
+              <RefreshCcw className="w-4 h-4" /> Start discovery again
             </button>
-          </motion.div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-12 pb-24">
-      {/* Landing / Intro Area */}
-      <AnimatePresence mode="wait">
-        {isAnalyzing ? (
-          <motion.div
-            key="analyzing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-center min-h-[500px] text-center space-y-8"
-          >
-            <div className="relative">
-              <motion.div
-                className="w-24 h-24 border-8 border-black border-t-primary rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-              />
-              <Sparkles className="absolute inset-0 m-auto w-8 h-8 text-primary animate-pulse" />
-            </div>
-            <div className="space-y-4">
-              <h2 className="text-3xl font-black">Finding Your Ikigai...</h2>
-              <p className="text-xl text-muted-foreground font-medium">Analysing your heart and the 2026 job market.</p>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="form"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-12"
-          >
-            {/* Steps Visualizer */}
-            <div className="space-y-8">
-              <header className="text-center md:text-left">
-                <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
-                   <motion.span 
-                     animate={{ scale: [1, 1.05, 1], rotate: [-1, 1, -1] }}
-                     transition={{ repeat: Infinity, duration: 2 }}
-                     className="px-6 py-2 bg-[#FACC15] text-black font-black text-xs border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest"
-                   >
-                     💎 PREMIUM FEATURE
-                   </motion.span>
+    <div className="min-h-screen bg-stone-50/50 pb-24">
+      <div className="pt-32 max-w-4xl mx-auto px-6 space-y-12">
+        <AnimatePresence mode="wait">
+          {isAnalyzing ? (
+            <motion.div key="analyzing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center min-h-[500px] text-center space-y-8 bg-white rounded-[3rem] shadow-sm border border-stone-100 p-12">
+              <div className="relative">
+                <motion.div className="w-32 h-32 border-[10px] border-stone-100 border-t-blue-600 rounded-full" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }} />
+                <div className="absolute inset-0 flex items-center justify-center">
+                   <Brain className="w-10 h-10 text-blue-600 animate-pulse" />
                 </div>
-                <h1 className="text-5xl md:text-6xl font-black mb-4 tracking-tighter uppercase italic">Find Your <span className="text-[#7C3AED]">Vibe</span></h1>
-                <p className="text-xl text-muted-foreground font-medium uppercase tracking-tight">Find exactly what you love and get a step-by-step path to a happy life.</p>
+              </div>
+              <div className="space-y-4">
+                <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight">Exploring your path...</h2>
+                <p className="text-lg text-stone-500 font-medium">Looking at the world and how your heart fits in it.</p>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div key="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
+              <header className="text-center space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-xs font-bold uppercase tracking-widest mb-2">
+                   <Award className="w-4 h-4" /> Career Discovery
+                </div>
+                <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
+                   Find what <span className="text-blue-600">truly fits</span> you.
+                </h1>
+                <p className="text-lg text-stone-500 font-medium max-w-2xl mx-auto">
+                  Ikigai is a Japanese concept meaning &quot;a reason for being.&quot; We&apos;ll help you find yours.
+                </p>
               </header>
 
               {/* Progress Bar */}
-              <div className="h-2 bg-gray-200 border-2 border-black overflow-hidden mb-12">
-                <motion.div
-                  className="h-full bg-[#7C3AED]"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                />
+              <div className="max-w-xl mx-auto space-y-3">
+                 <div className="flex justify-between text-[10px] font-bold text-stone-300 uppercase tracking-widest">
+                    <span>Your Journey</span>
+                    <span>{Math.round(progress)}% Complete</span>
+                 </div>
+                 <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
+                   <motion.div className="h-full bg-blue-600 rounded-full shadow-lg shadow-blue-500/20" initial={{ width: 0 }} animate={{ width: `${progress}%` }} />
+                 </div>
               </div>
 
               {/* Form Step */}
-              <div className="bg-white border-4 border-black neo-box p-8 space-y-8">
-                <div className="flex items-center gap-4 border-b-4 border-black pb-6">
-                  <div className={`p-4 ${currentStepData.color} border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`}>
-                    <currentStepData.icon className="w-8 h-8 text-white" />
+              <div className="bg-white rounded-[3rem] p-10 md:p-12 shadow-sm border border-stone-100 space-y-10">
+                <div className="flex flex-col md:flex-row items-center gap-6 pb-10 border-b border-stone-50">
+                  <div className={`p-6 ${currentStepData.color} rounded-[2rem] border transition-colors shadow-sm`}>
+                    <currentStepData.icon className="w-8 h-8" />
                   </div>
-                  <div>
-                    <h2 className="text-3xl font-black leading-none text-[#2563EB]">{currentStepData.title}</h2>
-                    <p className="text-gray-500 font-medium mt-2 uppercase text-[10px] tracking-widest">{currentStepData.desc}</p>
+                  <div className="text-center md:text-left space-y-1">
+                    <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight leading-tight">{currentStepData.title}</h2>
+                    <p className="text-stone-400 font-medium">{currentStepData.desc}</p>
                   </div>
                 </div>
 
                 {/* Input Area */}
-                {currentStepData.id === 'incomeGoals' ? (
-                  <textarea
-                    value={form.incomeGoals}
-                    onChange={e => setForm(f => ({ ...f, incomeGoals: e.target.value }))}
-                    className="w-full p-6 text-lg font-black border-4 border-black bg-white focus:outline-none focus:bg-gray-50 resize-none min-h-[200px] text-gray-900 placeholder:text-gray-400"
-                    placeholder={currentStepData.placeholder}
-                  />
-                ) : (
-                  <div className="space-y-6">
-                    <div className="flex gap-4">
-                      <input
-                        type="text"
-                        value={tempInput}
-                        onChange={e => setTempInput(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && handleAddItem()}
-                        placeholder={currentStepData.placeholder}
-                        className="flex-1 p-5 text-lg font-black border-4 border-black bg-white focus:outline-none focus:bg-gray-50 text-gray-900 placeholder:text-gray-400"
-                      />
-                      <button onClick={handleAddItem} className="px-8 py-4 bg-[#7C3AED] text-white font-black uppercase border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
-                        Add
-                      </button>
-                    </div>
+                <div className="space-y-6">
+                  {currentStepData.id === 'incomeGoals' ? (
+                    <textarea
+                      value={form.incomeGoals}
+                      onChange={e => setForm(f => ({ ...f, incomeGoals: e.target.value }))}
+                      className="input-field min-h-[180px] p-6 text-lg font-bold"
+                      placeholder={currentStepData.placeholder}
+                    />
+                  ) : (
+                    <div className="space-y-8">
+                      <div className="flex gap-4">
+                        <input
+                          type="text"
+                          value={tempInput}
+                          onChange={e => setTempInput(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && handleAddItem()}
+                          placeholder={currentStepData.placeholder}
+                          className="flex-1 input-field !py-5 px-6 text-lg font-bold"
+                        />
+                        <button onClick={handleAddItem} className="px-10 py-5 bg-blue-600 text-white font-bold rounded-[1.5rem] hover:bg-blue-700 transition-all shadow-lg text-sm">
+                          Add
+                        </button>
+                      </div>
 
-                    <div className="flex flex-wrap gap-3">
-                      {(form[currentStepData.id as keyof typeof form] as string[]).map((item, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ scale: 0.8, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-black font-bold text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                        >
-                          {item}
-                          <button onClick={() => handleRemoveItem(i)} className="text-gray-400 hover:text-rose-500">×</button>
-                        </motion.div>
-                      ))}
+                      <div className="flex flex-wrap gap-3">
+                        {(form[currentStepData.id as keyof typeof form] as string[]).map((item, i) => (
+                          <motion.div key={i} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex items-center gap-3 px-5 py-2.5 bg-stone-50 rounded-[1.25rem] border border-stone-100 font-bold text-stone-600 shadow-sm text-sm">
+                            {item}
+                            <button onClick={() => handleRemoveItem(i)} className="p-1 hover:bg-rose-100 hover:text-rose-600 rounded-lg transition-colors leading-none">×</button>
+                          </motion.div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
 
                 {/* Controls */}
-                <div className="flex justify-between items-center pt-8 border-t-2 border-gray-100">
-                  <button
-                    onClick={() => setCurrentStep(s => s - 1)}
-                    disabled={currentStep === 0}
-                    className="flex items-center gap-2 px-6 py-3 font-black text-muted-foreground hover:text-black disabled:opacity-0"
-                  >
+                <div className="flex justify-between items-center pt-10 border-t border-stone-50">
+                  <button onClick={() => setCurrentStep(s => s - 1)} disabled={currentStep === 0} className="flex items-center gap-2 px-6 py-3 font-bold text-stone-400 hover:text-stone-900 disabled:opacity-0 transition-colors">
                     <ArrowLeft className="w-5 h-5" /> Previous
                   </button>
                   <button
@@ -443,23 +386,23 @@ export default function IkigaiPage() {
                       (currentStepData.id !== 'incomeGoals' && (form[currentStepData.id as keyof typeof form] as string[]).length === 0) ||
                       (currentStepData.id === 'incomeGoals' && !form.incomeGoals.trim())
                     }
-                    className="flex items-center gap-3 px-12 py-5 bg-[#7C3AED] text-white font-black text-sm border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all disabled:opacity-50 disabled:bg-[#C4B5FD] disabled:text-[#1F2937] uppercase italic"
+                    className="btn-primary !px-12 !py-5 flex items-center gap-3 text-lg"
                   >
-                    {isLastStep ? 'Analyze My Ikigai ✨' : 'Continue Execution →'}
+                    {isLastStep ? 'Find My Path' : 'Continue'} <ArrowRight className="w-5 h-5" />
                   </button>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {error && (
-        <div className="p-4 bg-rose-50 border-2 border-rose-200 text-rose-700 font-bold flex items-center gap-3">
-          <RefreshCcw className="w-5 h-5" /> {error}
-          <button onClick={analyzeIkigai} className="underline ml-auto">Retry</button>
-        </div>
-      )}
+        {error && (
+          <div className="p-6 bg-rose-50 rounded-2xl border border-rose-100 text-rose-700 font-bold flex items-center gap-3 shadow-sm">
+            <AlertCircle className="w-5 h-5" /> {error}
+            <button onClick={analyzeIkigai} className="underline ml-auto hover:text-rose-900 transition-colors">Retry</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

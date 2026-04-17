@@ -205,7 +205,7 @@ export default function MentalHealthAgent() {
         window.speechSynthesis.onvoiceschanged = trySpeak;
       }
     });
-  }, []);
+  }, [selectedLang]);
 
   // Stop speaking
   const stopSpeaking = () => {
@@ -258,7 +258,7 @@ export default function MentalHealthAgent() {
 
     recognitionRef.current = recognition;
     recognition.start();
-  }, [voiceMode]);  // eslint-disable-line
+  }, [voiceMode, selectedLang]);  // eslint-disable-line
 
   const stopListening = () => {
     recognitionRef.current?.stop();
@@ -347,365 +347,234 @@ export default function MentalHealthAgent() {
   // ── Mood Selection Screen ─────────────────────────────────────────
   if (!mood) {
     return (
-      <div className="max-w-2xl mx-auto py-8 space-y-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
-          {/* Avatar */}
-          <motion.div
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-            className="w-24 h-24 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 border-4 border-rose-300 flex items-center justify-center mx-auto shadow-xl shadow-rose-200"
-          >
-            <HeartHandshake className="w-12 h-12 text-white" />
+      <div className="min-h-screen bg-stone-50/50 pt-32 px-6">
+        <div className="max-w-2xl mx-auto space-y-12">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-6">
+            <motion.div
+              animate={{ scale: [1, 1.05, 1], y: [0, -5, 0] }}
+              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+              className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-rose-400 to-pink-500 border-2 border-white flex items-center justify-center mx-auto shadow-xl shadow-rose-200"
+            >
+              <HeartHandshake className="w-12 h-12 text-white" />
+            </motion.div>
+            <div className="space-y-2">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight leading-tight">
+                Hi{userName ? `, ${userName}` : ''}! I&apos;m Serenity 🌸
+              </h1>
+              <p className="text-lg text-stone-500 font-medium max-w-md mx-auto">
+                Your safe, private space to talk. No judgment, just support for your mental well-being.
+              </p>
+            </div>
           </motion.div>
-          <h1 className="text-4xl font-black">
-            Hi{userName ? `, ${userName}` : ''}! I&apos;m Serenity 🌸
-          </h1>
-          <p className="text-xl text-muted-foreground font-medium max-w-md mx-auto">
-            Your safe space to talk — whether it&apos;s about exams, work pressure, family, or just how you&apos;re feeling.
-            I&apos;m here for you, no judgment.
-          </p>
-        </motion.div>
 
-        {/* Affirmation */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-          className="bg-gradient-to-r from-rose-50 to-pink-50 border-2 border-rose-200 rounded-2xl p-5 text-center">
-          <AnimatePresence mode="wait">
-            <motion.p key={affirmationIdx}
-              initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}
-              className="text-base font-medium text-rose-800 italic">
-              &quot;{affirmations[affirmationIdx]}&quot;
-            </motion.p>
-          </AnimatePresence>
-        </motion.div>
+          {/* Affirmation Card */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+            className="bg-white border border-stone-100 rounded-[2.5rem] p-8 text-center shadow-sm">
+            <AnimatePresence mode="wait">
+              <motion.p key={affirmationIdx}
+                initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}
+                className="text-lg font-bold text-rose-500 italic leading-relaxed">
+                &ldquo;{affirmations[affirmationIdx]}&rdquo;
+              </motion.p>
+            </AnimatePresence>
+          </motion.div>
 
-        {/* Mood Picker */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-          <p className="text-lg font-black text-center mb-4">How are you feeling right now?</p>
-          <div className="grid grid-cols-3 gap-3">
-            {moods.map((m, i) => (
-              <motion.button
-                key={m.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 + i * 0.07 }}
-                onClick={() => setMood(m.label)}
-                whileHover={{ scale: 1.06 }}
-                whileTap={{ scale: 0.97 }}
-                className={`p-5 border-2 rounded-2xl font-bold flex flex-col items-center gap-2 transition-all ${m.color} hover:shadow-md`}
-              >
-                <span className="text-3xl">{m.emoji}</span>
-                <span className="text-sm">{m.label}</span>
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
+          {/* Mood Picker */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="space-y-6">
+            <p className="text-lg font-bold text-stone-800 text-center">How are you feeling right now?</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {moods.map((m, i) => (
+                <motion.button
+                  key={m.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 + i * 0.07 }}
+                  onClick={() => setMood(m.label)}
+                  whileHover={{ scale: 1.05, y: -3 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`p-6 bg-white border border-stone-100 rounded-[2rem] font-bold flex flex-col items-center gap-3 transition-all shadow-sm hover:shadow-md hover:border-rose-100`}
+                >
+                  <span className="text-4xl">{m.emoji}</span>
+                  <span className="text-sm text-stone-600">{m.label}</span>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
 
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
-          className="text-xs text-center text-muted-foreground">
-          This is a supportive space. Serenity is an AI and does not replace professional mental health care.
-        </motion.p>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
+            className="text-xs text-center text-stone-400 font-medium pb-12">
+            This is a safe space. Serenity is an AI companion and does not replace professional therapy.
+          </motion.p>
+        </div>
       </div>
     );
   }
 
   // ── Chat Screen ───────────────────────────────────────────────────
   return (
-    <div className="max-w-2xl mx-auto space-y-4 pb-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <motion.div
-            animate={speaking ? { scale: [1, 1.12, 1] } : { scale: 1 }}
-            transition={{ repeat: speaking ? Infinity : 0, duration: 0.8 }}
-            className={`w-11 h-11 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 border-2 flex items-center justify-center shadow-md transition-all ${speaking ? 'border-rose-500 shadow-rose-200 shadow-lg' : 'border-rose-300'}`}
-          >
-            <HeartHandshake className="w-5 h-5 text-white" />
-          </motion.div>
-          <div>
-            <h1 className="text-2xl font-black">Serenity</h1>
-            <div className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full ${speaking ? 'bg-rose-500 animate-ping' : 'bg-green-500 animate-pulse'}`} />
-              <span className="text-xs text-muted-foreground font-medium">
-                {speaking ? 'Serenity is talking...' : listening ? 'Listening patiently...' : `At your service · Feeling ${mood}`}
-              </span>
+    <div className="min-h-screen bg-stone-50/50 pt-32 px-6">
+      <div className="max-w-2xl mx-auto space-y-6 pb-20">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-white border border-stone-100 rounded-[2.5rem] shadow-sm">
+          <div className="flex items-center gap-4">
+            <motion.div
+              animate={speaking ? { scale: [1, 1.1, 1] } : { scale: 1 }}
+              transition={{ repeat: speaking ? Infinity : 0, duration: 1 }}
+              className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-400 to-pink-500 border-2 border-white flex items-center justify-center shadow-lg transition-all ${speaking ? 'shadow-rose-200' : ''}`}
+            >
+              <HeartHandshake className="w-7 h-7 text-white" />
+            </motion.div>
+            <div className="text-center sm:text-left">
+              <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">Serenity</h1>
+              <div className="flex items-center justify-center sm:justify-start gap-2">
+                <span className={`w-2 h-2 rounded-full ${speaking ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'}`} />
+                <span className="text-xs text-stone-400 font-bold uppercase tracking-widest">
+                  {speaking ? 'Talking...' : listening ? 'Listening...' : 'Online'}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Action buttons */}
-        <div className="flex gap-2 relative">
-          {/* Language Selector */}
-          <div className="relative">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setShowLangMenu(!showLangMenu)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 bg-white border-gray-300 text-gray-600 font-bold text-xs hover:border-rose-400 transition-all"
-              title="Select language"
+              className="flex items-center gap-2 px-4 py-2 bg-stone-50 rounded-2xl border border-stone-100 text-stone-500 font-bold text-xs hover:bg-white hover:text-blue-600 transition-all"
             >
               <Globe className="w-3.5 h-3.5" />
               {selectedLang.native}
-              <ChevronDown className={`w-3 h-3 transition-transform ${showLangMenu ? 'rotate-180' : ''}`} />
             </button>
-
-            <AnimatePresence>
-              {showLangMenu && (
-                <>
-                  <div className="fixed inset-0 z-10" onClick={() => setShowLangMenu(false)} />
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute right-0 mt-2 w-48 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-20 py-2 max-h-64 overflow-y-auto"
-                  >
-                    {languages.map((lang) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => {
-                          setSelectedLang(lang);
-                          setShowLangMenu(false);
-                        }}
-                        className={`w-full text-left px-4 py-2 text-sm font-bold hover:bg-rose-50 transition-colors flex items-center justify-between ${selectedLang.code === lang.code ? 'bg-rose-50 text-rose-600' : 'text-gray-700'}`}
-                      >
-                        <span>{lang.native}</span>
-                        <span className="text-[10px] text-gray-400 font-medium">{lang.name}</span>
-                      </button>
-                    ))}
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
+            <button
+              onClick={handleVoiceModeToggle}
+              className={`flex items-center gap-2 px-4 py-2 rounded-2xl border font-bold text-xs transition-all ${voiceMode ? 'bg-rose-500 text-white border-rose-500 shadow-md' : 'bg-stone-50 border-stone-100 text-stone-500 hover:bg-white'}`}
+            >
+              {voiceMode ? <Mic className="w-3.5 h-3.5" /> : <MessageCircle className="w-3.5 h-3.5" />}
+              {voiceMode ? 'Voice' : 'Text'}
+            </button>
+            <button onClick={() => setShowResources(!showResources)} className="p-2.5 bg-stone-50 rounded-2xl border border-stone-100 text-stone-400 hover:text-rose-500 hover:bg-rose-50 transition-all">
+              <Phone className="w-5 h-5" />
+            </button>
           </div>
-
-          {/* Voice mode toggle */}
-          <button
-            onClick={handleVoiceModeToggle}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 text-xs font-bold transition-all ${voiceMode ? 'bg-rose-500 text-white border-rose-500 shadow-md' : 'bg-white border-gray-300 text-gray-600 hover:border-rose-300'}`}
-            title={voiceMode ? 'Switch to text mode' : 'Switch to voice mode'}
-          >
-            {voiceMode ? <Mic className="w-3.5 h-3.5" /> : <MessageCircle className="w-3.5 h-3.5" />}
-            {voiceMode ? 'Voice On' : 'Voice Off'}
-          </button>
-          <button
-            onClick={() => setShowResources(r => !r)}
-            className="p-2 rounded-full border-2 bg-white border-gray-300 text-gray-500 hover:border-rose-400 transition-all"
-            title="Crisis resources"
-          >
-            <Phone className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => { setMood(null); setMessages([]); stopSpeaking(); stopListening(); }}
-            className="p-2 rounded-full border-2 bg-white border-gray-300 text-gray-500 hover:border-gray-500 transition-all"
-            title="Start over"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
         </div>
-      </div>
 
-      {/* Crisis Resources */}
-      <AnimatePresence>
-        {showResources && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-            className="bg-red-50 border-2 border-red-300 rounded-2xl p-4 space-y-3">
-            <p className="font-black text-red-900 flex items-center gap-2">
-              <Phone className="w-4 h-4" /> India Mental Health Helplines
-            </p>
-            {resources.map(r => (
-              <div key={r.name} className="flex items-center justify-between">
-                <div>
-                  <p className="font-bold text-sm text-red-900">{r.name}</p>
-                  <p className="text-xs text-red-700">{r.desc}</p>
-                </div>
-                <a href={`tel:${r.number}`} className="font-black text-red-700 text-sm hover:underline">{r.number}</a>
+        {/* Crisis Resources */}
+        <AnimatePresence>
+          {showResources && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+              className="bg-rose-50 border border-rose-100 rounded-[2rem] p-8 space-y-4">
+              <p className="font-bold text-rose-800 flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-rose-500" /> Crisis Support (India)
+              </p>
+              <div className="grid grid-cols-1 gap-4">
+                {resources.map(r => (
+                  <div key={r.name} className="flex items-center justify-between p-4 bg-white rounded-xl border border-rose-100 shadow-sm">
+                    <div>
+                      <p className="font-bold text-sm text-stone-800">{r.name}</p>
+                      <p className="text-[10px] text-stone-400 uppercase font-bold tracking-widest">{r.desc}</p>
+                    </div>
+                    <a href={`tel:${r.number}`} className="flex items-center gap-2 px-4 py-2 bg-rose-500 text-white font-bold rounded-xl text-xs shadow-md">
+                      Call {r.number}
+                    </a>
+                  </div>
+                ))}
               </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Affirmation ticker */}
-      <div className="bg-gradient-to-r from-rose-50 to-pink-50 border border-rose-200 rounded-xl px-4 py-2 text-center">
-        <AnimatePresence mode="wait">
-          <motion.p key={affirmationIdx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="text-xs font-medium text-rose-700 italic">
-            {affirmations[affirmationIdx]}
-          </motion.p>
+            </motion.div>
+          )}
         </AnimatePresence>
-      </div>
 
-      {/* ── VOICE MODE UI ─────────────────────────────────────────── */}
-      <AnimatePresence>
-        {voiceMode && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gradient-to-b from-rose-50 to-pink-50 border-2 border-rose-200 rounded-3xl p-8 flex flex-col items-center gap-6 text-center"
-          >
-            {/* Live status label */}
-            <p className="text-base font-black text-rose-700">
-              {speaking
-                ? '✨ Serenity is speaking...'
-                : listening
-                  ? `🎙 Listening to you${userName ? `, ${userName}` : ''}...`
-                  : loading
-                    ? '💭 Reflecting on what you shared...'
-                    : `I'm here to listen${userName ? `, ${userName}` : ''}. Tap to talk.`}
-            </p>
-
-            {/* Wave animation */}
-            <VoiceWave active={listening || speaking} />
-
-            {/* Live transcript */}
-            {transcript && (
-              <motion.p
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                className="text-sm text-gray-500 italic max-w-xs"
-              >
-                &ldquo;{transcript}&rdquo;
-              </motion.p>
-            )}
-
-            {/* BIG Mic Button */}
-            <motion.button
-              whileTap={{ scale: 0.93 }}
-              onClick={listening ? stopListening : (speaking ? stopSpeaking : startListening)}
-              disabled={loading}
-              className={`w-28 h-28 rounded-full flex items-center justify-center shadow-2xl border-4 transition-all disabled:opacity-50 ${
-                listening
-                  ? 'bg-rose-500 border-rose-300 shadow-rose-300 animate-pulse'
-                  : speaking
-                    ? 'bg-purple-500 border-purple-300 shadow-purple-200'
-                    : 'bg-gradient-to-br from-rose-400 to-pink-500 border-rose-300 hover:scale-105 shadow-rose-200'
-              }`}
-            >
-              {listening
-                ? <MicOff className="w-12 h-12 text-white" />
-                : speaking
-                  ? <StopCircle className="w-12 h-12 text-white" />
-                  : <Mic className="w-12 h-12 text-white" />
-              }
-            </motion.button>
-
-            <p className="text-xs text-rose-400 font-medium">
-              {listening ? 'Tap again when you are finished' : speaking ? 'Tap to pause Serenity' : 'I am listening with an open heart'}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Chat Area */}
-      <div className="bg-gradient-to-b from-rose-50/50 to-pink-50/30 border-2 border-rose-200 rounded-2xl min-h-[320px] max-h-[450px] overflow-y-auto p-5 space-y-4">
-        {messages.length === 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-10 space-y-3">
-            <div className="text-5xl">🌸</div>
-            <p className="font-bold text-gray-600">
-              {userName ? `I'm so glad you're here, ${userName}.` : "I'm so glad you're here."}
-            </p>
-            <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-              {voiceMode
-                ? "Tap the big mic above and speak freely — I'm listening."
-                : "Share what's on your mind — whether it's big or small, I'm listening."}
-            </p>
-            {/* Starter suggestions (text mode) */}
-            {!voiceMode && (
-              <div className="flex flex-col gap-2 mt-4">
-                {[
-                  `I'm feeling ${mood?.toLowerCase() || 'stressed'} because of placement pressure`,
-                  "I'm struggling to stay motivated to study",
-                  "I feel like I'm disappointing my family",
-                ].map((s, i) => (
-                  <button key={i} onClick={() => sendMessage(s)}
-                    className="text-sm text-left px-4 py-2 bg-white border border-rose-200 rounded-xl hover:bg-rose-50 transition-colors text-gray-700 font-medium">
-                    {s}
-                  </button>
-                ))}
-              </div>
-            )}
-          </motion.div>
-        )}
-
-        {messages.map((msg, i) => (
-          <ChatBubble
-            key={i}
-            msg={msg}
-            onSpeak={(t) => speak(t)}
-            isSpeaking={i === messages.length - 1 && speaking && msg.role === 'assistant'}
-          />
-        ))}
-
-        {loading && (
-          <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 border-2 border-rose-300 flex items-center justify-center shrink-0">
-              <HeartHandshake className="w-4 h-4 text-white" />
-            </div>
-            <div className="bg-white border border-rose-200 rounded-2xl rounded-tl-sm px-4 py-3">
-              <div className="flex gap-1.5 items-center">
-                {[0, 1, 2].map(i => (
-                  <motion.div key={i} className="w-2 h-2 bg-rose-400 rounded-full"
-                    animate={{ y: [0, -5, 0] }}
-                    transition={{ repeat: Infinity, delay: i * 0.15, duration: 0.6 }} />
-                ))}
+        {/* Chat Area */}
+        <div className="bg-white border border-stone-100 rounded-[2.5rem] shadow-sm min-h-[400px] max-h-[500px] overflow-y-auto p-8 space-y-6 scrollbar-hide">
+          {messages.length === 0 && (
+            <div className="text-center py-10 space-y-4 opacity-50">
+              <div className="text-6xl">✨</div>
+              <p className="font-bold text-stone-800">
+                {userName ? `I'm here for you, ${userName}.` : "I'm here for you."}
+              </p>
+              <p className="text-sm text-stone-400 font-medium max-w-xs mx-auto">
+                Whatever is on your mind, you can share it here safely.
+              </p>
+              <div className="flex flex-col gap-2 pt-4">
+                 <button onClick={() => sendMessage("I'm feeling a bit overwhelmed")} className="mx-auto px-6 py-2 rounded-full border border-stone-100 text-xs font-bold text-stone-500 hover:bg-stone-50 transition-all">I&apos;m feeling overwhelmed</button>
+                 <button onClick={() => sendMessage("I need some motivation")} className="mx-auto px-6 py-2 rounded-full border border-stone-100 text-xs font-bold text-stone-500 hover:bg-stone-50 transition-all">I need some motivation</button>
               </div>
             </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
+          )}
 
-      {/* ── TEXT MODE Input ───────────────────────────────────────── */}
-      {!voiceMode && (
-        <div className="bg-white border-2 border-rose-200 rounded-2xl flex items-end gap-0 overflow-hidden shadow-sm">
-          <textarea
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={`Share what's on your mind${userName ? `, ${userName}` : ''}...`}
-            rows={2}
-            className="flex-1 p-4 text-sm font-medium resize-none focus:outline-none bg-transparent placeholder:text-rose-300"
-            disabled={loading}
-          />
-          <div className="flex flex-col border-l border-rose-200 p-2 gap-2">
-            {/* Quick mic (in text mode, just fills the input) */}
-            <button
-              onClick={listening ? stopListening : startListening}
-              className={`p-2 rounded-xl transition-all ${listening ? 'bg-rose-500 text-white animate-pulse' : 'bg-rose-50 text-rose-400 hover:bg-rose-100'}`}
-              title="Voice input"
-            >
-              {listening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={() => sendMessage()}
-              disabled={loading || !input.trim()}
-              className="p-2 rounded-xl bg-rose-500 text-white hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </div>
+          {messages.map((msg, i) => (
+            <ChatBubble
+              key={i}
+              msg={msg}
+              onSpeak={(t) => speak(t)}
+              isSpeaking={i === messages.length - 1 && speaking && msg.role === 'assistant'}
+            />
+          ))}
+
+          {loading && (
+            <div className="flex gap-4">
+              <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center shrink-0">
+                <HeartHandshake className="w-5 h-5 text-rose-500" />
+              </div>
+              <div className="bg-stone-50 border border-stone-100 rounded-[2rem] rounded-tl-sm px-6 py-4">
+                <div className="flex gap-2">
+                  <motion.div className="w-2 h-2 bg-rose-400 rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1 }} />
+                  <motion.div className="w-2 h-2 bg-rose-400 rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} />
+                  <motion.div className="w-2 h-2 bg-rose-400 rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} />
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={bottomRef} />
         </div>
-      )}
 
-      {/* Listening status (text mode) */}
-      {listening && !voiceMode && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          className="text-center text-sm text-rose-600 font-medium flex items-center justify-center gap-2">
-          <span className="w-2 h-2 bg-rose-500 rounded-full animate-ping" />
-          Listening{userName ? `, ${userName}` : ''}... speak now
-        </motion.div>
-      )}
+        {/* VOICE MODE BIG BUTTON area */}
+        {voiceMode && (
+           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-[2.5rem] border border-stone-100 p-10 flex flex-col items-center gap-8 shadow-sm">
+              <VoiceWave active={listening || speaking} />
+              
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={listening ? stopListening : (speaking ? stopSpeaking : startListening)}
+                className={`w-32 h-32 rounded-full flex items-center justify-center border-4 transition-all shadow-2xl ${listening ? 'bg-rose-500 border-rose-200' : speaking ? 'bg-blue-600 border-blue-200' : 'bg-stone-900 border-stone-100'}`}
+              >
+                {listening ? <MicOff className="w-12 h-12 text-white" /> : speaking ? <StopCircle className="w-12 h-12 text-white" /> : <Mic className="w-12 h-12 text-white" />}
+              </motion.button>
+              
+              <div className="text-center space-y-2">
+                <p className="text-lg font-bold text-stone-800">
+                  {speaking ? 'Serenity is talking...' : listening ? 'I am listening...' : 'Tap the mic to talk'}
+                </p>
+                {transcript && <p className="text-sm text-stone-400 font-medium italic">&ldquo;{transcript}&rdquo;</p>}
+              </div>
+           </motion.div>
+        )}
 
-      {/* Speaking indicator (text mode) */}
-      {speaking && !voiceMode && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          className="text-center text-sm text-purple-600 font-medium flex items-center justify-center gap-2">
-          <Volume2 className="w-4 h-4 animate-pulse" />
-          Serenity is speaking...
-          <button onClick={stopSpeaking} className="text-xs underline text-purple-400">Stop</button>
-        </motion.div>
-      )}
+        {/* Input Bar (Text mode) */}
+        {!voiceMode && (
+          <div className="bg-white border border-stone-100 rounded-[2.5rem] shadow-sm p-4 flex items-end gap-3">
+             <textarea
+               value={input}
+               onChange={e => setInput(e.target.value)}
+               onKeyDown={handleKeyDown}
+               placeholder="Share what is on your mind..."
+               rows={1}
+               className="flex-1 p-4 bg-transparent text-stone-800 font-medium focus:outline-none resize-none placeholder:text-stone-300"
+             />
+             <div className="flex items-center gap-2">
+                <button onClick={listening ? stopListening : startListening} className={`p-4 rounded-2xl transition-all ${listening ? 'bg-rose-500 text-white' : 'bg-stone-50 text-stone-400 hover:text-stone-600'}`}>
+                   {listening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                </button>
+                <button onClick={() => sendMessage()} disabled={!input.trim() || loading} className="btn-primary !p-4 disabled:opacity-30">
+                   <Send className="w-5 h-5" />
+                </button>
+             </div>
+          </div>
+        )}
 
-      <p className="text-xs text-center text-muted-foreground">
-        Serenity is an AI companion, not a licensed therapist. For emergencies, please call iCall: 9152987821 🌸
-      </p>
+        <div className="text-center">
+           <p className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">
+              Serenity · DreamSync AI Assistant
+           </p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,19 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { Coffee, Globe, Shield, Zap, Sparkles, Linkedin, Mail } from 'lucide-react';
+import { Coffee, Globe, Shield, Zap, Sparkles, Linkedin, Mail, Instagram, Twitter } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-white border-t-8 border-black pt-32 pb-20 px-6 md:px-12 text-black font-bold uppercase relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20">
+    <footer className="bg-white border-t border-stone-100 pt-24 pb-12 px-6 md:px-12 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-20">
         
         {/* Brand Identity */}
-        <div className="space-y-8">
-          <Link href="/" className="inline-block">
+        <div className="space-y-6">
+          <Link href="/" className="inline-block transition-transform hover:scale-105">
             <Image 
               src="/DreamSynclogo.png" 
               alt="DreamSync Logo" 
@@ -22,147 +22,87 @@ export default function Footer() {
               className="object-contain" 
             />
           </Link>
-          <p className="text-xs font-bold leading-relaxed text-gray-400 max-w-xs uppercase">
-            AI-powered career guidance for Indian students. Find your path, build your resume, and grow your career.
+          <p className="text-sm font-medium leading-relaxed text-stone-400 max-w-xs">
+            Helping students build bright careers with friendly guidance, professional resumes, and life support tools.
           </p>
         </div>
         
         {/* Features column */}
         <div className="space-y-6">
-          <h4 className="text-xs font-black uppercase tracking-widest text-black">Features</h4>
-          <ul className="space-y-3 text-[10px] font-bold text-gray-500 uppercase">
-            <li><Link href="/resume-builder" className="hover:text-black">Resume Builder</Link></li>
-            <li><Link href="/ats-check" className="hover:text-black">ATS Check</Link></li>
-            <li><Link href="/roadmap" className="hover:text-black">AI Roadmap</Link></li>
-            <li><Link href="/portfolio" className="hover:text-black">Portfolio Gen</Link></li>
-            <li><Link href="/linkedin" className="hover:text-black">LinkedIn Optimizer</Link></li>
+          <h4 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Our Tools</h4>
+          <ul className="space-y-4 text-sm font-semibold text-stone-500">
+            <li><Link href="/resume-builder" className="hover:text-blue-600 transition-colors">Resume Builder</Link></li>
+            <li><Link href="/ats-check" className="hover:text-blue-600 transition-colors">ATS Score Check</Link></li>
+            <li><Link href="/roadmap" className="hover:text-blue-600 transition-colors">Career Roadmap</Link></li>
+            <li><Link href="/portfolio" className="hover:text-blue-600 transition-colors">Web Portfolio</Link></li>
+            <li><Link href="/mental-health" className="hover:text-blue-600 transition-colors">Mental Wellbeing</Link></li>
           </ul>
         </div>
         
-        {/* Company column */}
+        {/* Community column */}
         <div className="space-y-6">
-          <h4 className="text-xs font-black uppercase tracking-widest text-black">Company</h4>
-          <ul className="space-y-3 text-[10px] font-bold text-gray-500 uppercase">
-            <li><Link href="/about" className="hover:text-black">About Us</Link></li>
-            <li><Link href="/team" className="hover:text-black">Team</Link></li>
-            <li><Link href="/contact" className="hover:text-black">Contact</Link></li>
+          <h4 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Connect</h4>
+          <ul className="space-y-4 text-sm font-semibold text-stone-500">
+            <li><Link href="/about" className="hover:text-blue-600 transition-colors">About Story</Link></li>
+            <li><Link href="/community" className="hover:text-blue-600 transition-colors">Join Community</Link></li>
+            <li><Link href="/team" className="hover:text-blue-600 transition-colors">Meet the Team</Link></li>
+            <li><Link href="/contact" className="hover:text-blue-600 transition-colors">Contact Us</Link></li>
+            <li><Link href="/donate" className="hover:text-blue-600 transition-colors font-bold text-blue-600">Support Our Mission</Link></li>
           </ul>
         </div>
 
-        {/* Connect column */}
+        {/* Social column */}
         <div className="space-y-6">
-          <h4 className="text-xs font-black uppercase tracking-widest text-black">Connect</h4>
-          <div className="flex flex-col gap-3">
+          <h4 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Follow Us</h4>
+          <div className="flex flex-wrap gap-3">
             <a 
               href="https://www.instagram.com/dream_sync_hub?igsh=MW50dHk3Znh5eTczcg==" 
               target="_blank" 
               rel="noopener noreferrer"
-              title="Follow us on Instagram"
-              className="bg-white border-2 border-black shadow-[4px_4px_0px_black] px-4 py-2 flex items-center gap-2 text-[10px] font-black uppercase hover:bg-[#E1306C] hover:text-white hover:scale-105 transition-all w-fit"
+              className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white transition-all shadow-sm"
             >
-              <InstagramIcon className="w-4 h-4" /> Instagram
+              <Instagram className="w-5 h-5" />
             </a>
 
             <a 
               href="https://x.com/ADreamsync" 
               target="_blank" 
               rel="noopener noreferrer"
-              title="Follow us on X"
-              className="bg-white border-2 border-black shadow-[4px_4px_0px_black] px-4 py-2 flex items-center gap-2 text-[10px] font-black uppercase hover:bg-black hover:text-white hover:scale-105 transition-all w-fit"
+              className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 hover:bg-stone-900 hover:text-white transition-all shadow-sm"
             >
-              <XIcon className="w-4 h-4" /> X (Twitter)
+              <Twitter className="w-5 h-5" />
             </a>
 
             <a 
               href="https://www.linkedin.com/company/dreamsync-community/" 
               target="_blank" 
               rel="noopener noreferrer"
-              title="Join our LinkedIn Community"
-              className="bg-white border-2 border-black shadow-[4px_4px_0px_black] px-4 py-2 flex items-center gap-2 text-[10px] font-black uppercase hover:bg-[#0A66C2] hover:text-white hover:scale-105 transition-all w-fit"
+              className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 hover:bg-[#0A66C2] hover:text-white transition-all shadow-sm"
             >
-              <Linkedin className="w-4 h-4" /> LinkedIn
+              <Linkedin className="w-5 h-5" />
             </a>
             
             <a 
               href="mailto:dreamsyncbangalore@gmail.com"
-              title="Email Us"
-              className="bg-white border-2 border-black shadow-[4px_4px_0px_black] px-4 py-2 flex items-center gap-2 text-[10px] font-black uppercase hover:bg-[#EA4335] hover:text-white hover:scale-105 transition-all w-fit"
+              className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 hover:bg-blue-600 hover:text-white transition-all shadow-sm"
             >
-              <Mail className="w-4 h-4" /> Email Us
+              <Mail className="w-5 h-5" />
             </a>
           </div>
+          <p className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full inline-block">
+            Made with ❤️ for Indian Students
+          </p>
         </div>
       </div>
       
       {/* Bottom Meta */}
-      <div className="max-w-7xl mx-auto mt-24 pt-10 border-t-2 border-black/5 flex justify-between items-center text-[10px] font-black uppercase text-gray-400">
-        <span>© {currentYear} Dream Sync. All rights reserved.</span>
+      <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-stone-50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold text-stone-400">
+        <p>© {currentYear} Dream Sync. Empowering Care-Experienced Youth.</p>
         <div className="flex gap-8">
-          <Link href="/privacy" className="hover:text-black">Privacy</Link>
-          <Link href="/terms" className="hover:text-black">Terms</Link>
+          <Link href="/privacy" className="hover:text-stone-900 transition-colors underline underline-offset-4 decoration-stone-200">Privacy Policy</Link>
+          <Link href="/terms" className="hover:text-stone-900 transition-colors underline underline-offset-4 decoration-stone-200">Terms of Service</Link>
         </div>
       </div>
     </footer>
-  );
-}
-
-function InstagramIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-    </svg>
-  );
-}
-
-function XIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 4l11.733 16h4.267l-11.733-16z" />
-      <path d="M4 20l6.768-6.768m2.46-2.46L20 4" />
-    </svg>
-  );
-}
-
-function ArrowRight(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
   );
 }
