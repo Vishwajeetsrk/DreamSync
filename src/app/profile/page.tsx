@@ -58,6 +58,7 @@ function ProfileContent() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const userId = user?.uid || (user as any)?.id;
 
   useEffect(() => {
     if (authLoading) return;
@@ -82,7 +83,7 @@ function ProfileContent() {
     try {
       const currentPhoto = currentUser.photoURL || '';
       if (currentPhoto) {
-        await setDoc(doc(db, 'users', currentUser.uid), {
+        await setDoc(doc(db, 'users', userId), {
           avatar_url: currentPhoto,
           last_sync: new Date().toISOString()
         }, { merge: true });
@@ -104,7 +105,7 @@ function ProfileContent() {
     setMessage(null);
 
     try {
-      await setDoc(doc(db, 'users', user.uid), {
+      await setDoc(doc(db, 'users', userId), {
         name,
         avatar_url: avatarUrl,
         bio,
@@ -131,23 +132,22 @@ function ProfileContent() {
 
     setResumeUploading(true);
     try {
-      const storageRef = ref(storage, `resumes/${user.uid}/${file.name}`);
+      const storageRef = ref(storage, `resumes/${userId}/${file.name}`);
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       setResumeUrl(url);
       setResumeName(file.name);
-      await setDoc(doc(db, 'users', user.uid), { resume_url: url, resume_name: file.name }, { merge: true });
+      await setDoc(doc(db, 'users', userId), { resume_url: url, resume_name: file.name }, { merge: true });
       setMessage({ type: 'success', text: 'Resume uploaded successfully' });
+      setResumeUploading(false);
     } catch (err: any) {
-      // Fallback base64 upload if storage fails
       const reader = new FileReader();
-      reader.readAsDataURL(file);
       reader.onloadend = async () => {
         const base64data = reader.result as string;
         try {
           setResumeUrl(base64data);
           setResumeName(file.name);
-          await setDoc(doc(db, 'users', user.uid), { resume_url: base64data, resume_name: file.name }, { merge: true });
+          await setDoc(doc(db, 'users', userId), { resume_url: base64data, resume_name: file.name }, { merge: true });
           setMessage({ type: 'success', text: 'Resume uploaded locally' });
         } catch (dbErr: any) {
           setMessage({ type: 'error', text: 'File too large to sync locally' });
@@ -155,13 +155,11 @@ function ProfileContent() {
           setResumeUploading(false);
         }
       };
-      return;
-    } finally {
-      // Keep loading active for base64 reader if it entered catch, otherwise close
-      if (e.target.files?.[0]) {
-        // Safe check
-      }
-      setResumeUploading(false);
+      reader.onerror = () => {
+        setMessage({ type: 'error', text: 'Failed to read file' });
+        setResumeUploading(false);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -171,20 +169,20 @@ function ProfileContent() {
 
     setUploading(true);
     try {
-      const storageRef = ref(storage, `avatars/${user.uid}`);
+      const storageRef = ref(storage, `avatars/${userId}`);
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       setAvatarUrl(url);
-      await setDoc(doc(db, 'users', user.uid), { avatar_url: url }, { merge: true });
+      await setDoc(doc(db, 'users', userId), { avatar_url: url }, { merge: true });
       setMessage({ type: 'success', text: 'Photo updated' });
+      setUploading(false);
     } catch (err: any) {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
       reader.onloadend = async () => {
         const base64data = reader.result as string;
         try {
           setAvatarUrl(base64data);
-          await setDoc(doc(db, 'users', user.uid), { avatar_url: base64data }, { merge: true });
+          await setDoc(doc(db, 'users', userId), { avatar_url: base64data }, { merge: true });
           setMessage({ type: 'success', text: 'Photo updated locally' });
         } catch (dbErr: any) {
           setMessage({ type: 'error', text: 'File too large to sync' });
@@ -192,15 +190,24 @@ function ProfileContent() {
           setUploading(false);
         }
       };
+      reader.onerror = () => {
+        setMessage({ type: 'error', text: 'Failed to read image file' });
+        setUploading(false);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPassword) return;
+    if (!auth.currentUser) {
+      setMessage({ type: 'error', text: 'Password change is only available for email/password accounts. Use social login provider to update credentials.' });
+      return;
+    }
     setLoading(true);
     try {
-      await updatePassword(auth.currentUser!, newPassword);
+      await updatePassword(auth.currentUser, newPassword);
       setMessage({ type: 'success', text: 'Security settings updated' });
       setNewPassword('');
       setCurrentPassword('');
@@ -216,11 +223,14 @@ function ProfileContent() {
       setConfirmDelete(true);
       return;
     }
+    if (!auth.currentUser) {
+      setMessage({ type: 'error', text: 'De-authorization requires a re-login. Please sign in again.' });
+      return;
+    }
     setLoading(true);
     try {
-      const uid = user.uid;
-      await deleteDoc(doc(db, 'users', uid));
-      await deleteUser(auth.currentUser!);
+      await deleteDoc(doc(db, 'users', userId));
+      await deleteUser(auth.currentUser);
       router.push('/signup');
     } catch (err: any) {
       setMessage({ type: 'error', text: 'Please log in again to delete account' });
@@ -450,7 +460,7 @@ function ProfileContent() {
                                 onClick={async () => {
                                   setResumeUrl('');
                                   setResumeName('');
-                                  await setDoc(doc(db, 'users', user.uid), { resume_url: '', resume_name: '' }, { merge: true });
+                                  await setDoc(doc(db, 'users', userId), { resume_url: '', resume_name: '' }, { merge: true });
                                   setMessage({ type: 'success', text: 'Resume removed' });
                                 }} 
                                 className="text-xs font-bold text-rose-500 hover:underline"
