@@ -89,6 +89,27 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
 // --- MAIN PAGE ---
 
 export default function About() {
+  const [stats, setStats] = useState({
+    citiesReached: '1+',
+    resumesBuilt: '0+',
+    supportSessions: '1+',
+    activeMembers: '1+'
+  });
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(res => res.json())
+      .then(data => {
+        setStats({
+          citiesReached: `${data.supportLocations || 1}+`,
+          resumesBuilt: `${data.resumesCreated || 0}+`,
+          supportSessions: `${data.supportSessions || 1}+`,
+          activeMembers: `${data.happyStudents || 1}+`
+        });
+      })
+      .catch(err => console.error('Error fetching about page stats:', err));
+  }, []);
+
   const featureCards = [
     { 
       title: "Document Support", 
@@ -212,12 +233,12 @@ export default function About() {
            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-center relative z-10">
-             {[
-               { value: "5+", label: "Cities Reached", icon: MapPin, color: 'text-blue-400' },
-               { value: "100+", label: "Resumes Built", icon: ClipboardCheck, color: 'text-emerald-400' },
-               { value: "10+", label: "Support Sessions", icon: MonitorPlay, color: 'text-rose-400' },
-               { value: "50+", label: "Active Members", icon: Network, color: 'text-amber-400' }
-             ].map((stat, i) => (
+              {[
+                { value: stats.citiesReached, label: "Cities Reached", icon: MapPin, color: 'text-blue-400' },
+                { value: stats.resumesBuilt, label: "Resumes Built", icon: ClipboardCheck, color: 'text-emerald-400' },
+                { value: stats.supportSessions, label: "Support Sessions", icon: MonitorPlay, color: 'text-rose-400' },
+                { value: stats.activeMembers, label: "Active Members", icon: Network, color: 'text-amber-400' }
+              ].map((stat, i) => (
                <div key={i} className="space-y-4">
                   <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                      <stat.icon className={`w-6 h-6 ${stat.color}`} />

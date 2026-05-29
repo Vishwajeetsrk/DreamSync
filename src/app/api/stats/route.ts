@@ -25,6 +25,7 @@ export async function GET() {
     let supportLocations = 1;
     let successfulPlacements = 1;
     let weeklyActivities = 3;
+    let supportSessions = 10;
     
     if (statsDocSnap.exists) {
       const data = statsDocSnap.data();
@@ -32,9 +33,10 @@ export async function GET() {
       supportLocations = data?.supportLocations || 1;
       successfulPlacements = data?.successfulPlacements || 1;
       weeklyActivities = data?.weeklyActivities || 3;
+      supportSessions = data?.supportSessions || 10;
     } else {
       // Initialize if it doesn't exist
-      await statsDocRef.set({ resumesCreated: 0, supportLocations: 1, successfulPlacements: 1, weeklyActivities: 3 });
+      await statsDocRef.set({ resumesCreated: 0, supportLocations: 1, successfulPlacements: 1, weeklyActivities: 3, supportSessions: 10 });
     }
 
     return NextResponse.json({
@@ -43,6 +45,7 @@ export async function GET() {
       supportLocations: supportLocations,
       successfulPlacements: successfulPlacements,
       weeklyActivities: weeklyActivities,
+      supportSessions: supportSessions,
     });
   } catch (error: any) {
     console.error('[API Stats] Error fetching real metrics:', error);
@@ -53,6 +56,7 @@ export async function GET() {
       supportLocations: 1,
       successfulPlacements: 1,
       weeklyActivities: 1,
+      supportSessions: 1,
     });
   }
 }
