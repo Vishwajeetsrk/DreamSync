@@ -33,10 +33,12 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
 
 function ProfileContent() {
   const { language, setLanguage, t } = useLanguage();
-  const [user, setUser] = useState<any>(null);
+  const { user, userData, loading: authLoading } = useAuth();
+  
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState('');
@@ -58,35 +60,22 @@ function ProfileContent() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-      if (!currentUser) {
-        router.push('/login');
-        return;
-      }
-      setUser(currentUser);
-      
-      const docRef = doc(db, 'users', currentUser.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setName(data.name || '');
-        setAvatarUrl(data.avatar_url || '');
-        setBio(data.bio || '');
-        setSkills(data.skills || '');
-        setLinkedin(data.linkedin || '');
-        setGithub(data.github || '');
-        setResumeUrl(data.resume_url || '');
-        setResumeName(data.resume_name || 'My_Resume.pdf');
-      }
-      setLoading(false);
+    if (authLoading) return;
+    
+    setName(userData?.name || '');
+    setAvatarUrl(userData?.avatar_url || '');
+    setBio(userData?.bio || '');
+    setSkills(userData?.skills || '');
+    setLinkedin(userData?.linkedin || '');
+    setGithub(userData?.github || '');
+    setResumeUrl(userData?.resume_url || '');
+    setResumeName(userData?.resume_name || 'My_Resume.pdf');
+    setLoading(false);
 
-      if (searchParams.get('action') === 'fix') {
-         await handleHeadlessSync(currentUser);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [router, searchParams]);
+    if (searchParams.get('action') === 'fix') {
+       handleHeadlessSync(user);
+    }
+  }, [authLoading, user, userData]);
 
   const handleHeadlessSync = async (currentUser: any) => {
     setUploading(true);
@@ -246,7 +235,7 @@ function ProfileContent() {
     router.push('/');
   };
 
-  if (loading && !user) return (
+  if (loading) return (
      <div className="min-h-screen bg-stone-50/50 flex items-center justify-center">
         <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
      </div>
