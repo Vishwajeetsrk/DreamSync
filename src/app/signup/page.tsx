@@ -56,8 +56,25 @@ export default function Signup() {
     setLoading(true);
     setError('');
     try {
-      // Use NextAuth for social login to avoid Firebase popup issues on production
-      await nextAuthSignIn(providerName, { callbackUrl: '/dashboard' });
+      const provider = providerName === 'google' ? new GoogleAuthProvider() : new GithubAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Check if user exists in Firestore, if not, create the user document
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (!userDocSnap.exists()) {
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          name: user.displayName || user.email?.split('@')[0] || 'User',
+          email: user.email,
+          avatar_url: user.photoURL || '',
+          created_at: new Date().toISOString(),
+          onboarding_complete: false,
+        });
+      }
+
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || `Failed to sign up. Please try again.`);
     } finally {
