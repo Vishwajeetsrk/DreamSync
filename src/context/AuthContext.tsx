@@ -55,9 +55,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             });
           }
           setLoading(false);
-        }, (error) => {
+        }, async (error) => {
           console.error('[AuthContext] onSnapshot permission/read error:', error);
-          // Fallback to local profile based on Auth state if Firestore permissions fail
+          try {
+            const res = await fetch(`/api/profile?userId=${currentUser.uid}`);
+            if (res.ok) {
+              const data = await res.json();
+              if (data?.profile) {
+                setUserData(data.profile);
+                setLoading(false);
+                return;
+              }
+            }
+          } catch (apiErr) {
+            console.error('[AuthContext] API profile fallback error:', apiErr);
+          }
           setUserData({
             name: currentUser.displayName || currentUser.email?.split('@')[0],
             email: currentUser.email,
@@ -72,18 +84,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (session) {
           setProvider('next-auth');
           
-          // Check if this NextAuth user already has a Firebase record
           const nextAuthEmail = session.user?.email;
           if (nextAuthEmail) {
-            // We use the email as a key or lookup to find/create the user in Firestore
-            // Note: Ideally you'd use a stable ID, but session.user.email is available
             const docRef = doc(db, 'users', (session.user as any).id || nextAuthEmail.replace(/\./g, '_'));
             
             getDoc(docRef).then(async (docSnap) => {
               if (docSnap.exists()) {
                 setUserData(docSnap.data());
               } else {
-                // Create the user record in Firestore if it doesn't exist
                 const newUserData = {
                   name: session.user?.name,
                   email: session.user?.email,
@@ -97,8 +105,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               }
               setUser(session.user);
               setLoading(false);
-            }).catch((err) => {
-              console.error('[AuthContext] NextAuth Firestore error:', err);
+            }).catch(async (err) => {
+              console.error('[AuthContext] NextAuth Firestore error, trying Redis fallback:', err);
+              const fallbackKey = (session.user as any).id || nextAuthEmail.replace(/\./g, '_');
+              try {
+                const res = await fetch(`/api/profile?userId=${fallbackKey}`);
+                if (res.ok) {
+                  const data = await res.json();
+                  if (data?.profile) {
+                    setUserData(data.profile);
+                    setUser(session.user);
+                    setLoading(false);
+                    return;
+                  }
+                }
+              } catch (apiErr) {
+                console.error('[AuthContext] NextAuth API fallback error:', apiErr);
+              }
               setUserData({
                 name: session.user?.name,
                 email: session.user?.email,

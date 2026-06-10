@@ -104,19 +104,35 @@ function ProfileContent() {
     setLoading(true);
     setMessage(null);
 
+    const profileData = {
+      name,
+      avatar_url: avatarUrl,
+      bio,
+      skills,
+      linkedin,
+      github,
+      updated_at: new Date().toISOString(),
+    };
+
     try {
-      await setDoc(doc(db, 'users', userId), {
-        name,
-        avatar_url: avatarUrl,
-        bio,
-        skills,
-        linkedin,
-        github,
-        updated_at: new Date().toISOString(),
-      }, { merge: true });
+      await setDoc(doc(db, 'users', userId), profileData, { merge: true });
       setMessage({ type: 'success', text: 'Profile updated successfully' });
     } catch (err: any) {
-      setMessage({ type: 'error', text: err.message });
+      console.warn('[Profile] Firestore update failed, trying Redis fallback:', err.message);
+      try {
+        const res = await fetch('/api/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, profile: profileData })
+        });
+        if (res.ok) {
+          setMessage({ type: 'success', text: 'Profile updated successfully' });
+        } else {
+          throw new Error('API Sync Failed');
+        }
+      } catch (apiErr: any) {
+        setMessage({ type: 'error', text: 'Failed to update profile: ' + apiErr.message });
+      }
     } finally {
       setLoading(false);
     }
@@ -141,16 +157,30 @@ function ProfileContent() {
       setMessage({ type: 'success', text: 'Resume uploaded successfully' });
       setResumeUploading(false);
     } catch (err: any) {
+      console.warn('[Profile] Firebase Storage upload failed, trying base64 Redis sync:', err.message);
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64data = reader.result as string;
         try {
           setResumeUrl(base64data);
           setResumeName(file.name);
-          await setDoc(doc(db, 'users', userId), { resume_url: base64data, resume_name: file.name }, { merge: true });
-          setMessage({ type: 'success', text: 'Resume uploaded locally' });
+          
+          const res = await fetch('/api/profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              profile: { resume_url: base64data, resume_name: file.name }
+            })
+          });
+
+          if (res.ok) {
+            setMessage({ type: 'success', text: 'Resume uploaded successfully' });
+          } else {
+            throw new Error('API Sync Failed');
+          }
         } catch (dbErr: any) {
-          setMessage({ type: 'error', text: 'File too large to sync locally' });
+          setMessage({ type: 'error', text: 'Failed to upload resume: ' + dbErr.message });
         } finally {
           setResumeUploading(false);
         }
@@ -177,15 +207,27 @@ function ProfileContent() {
       setMessage({ type: 'success', text: 'Photo updated' });
       setUploading(false);
     } catch (err: any) {
+      console.warn('[Profile] Photo upload failed, trying base64 Redis sync:', err.message);
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64data = reader.result as string;
         try {
           setAvatarUrl(base64data);
-          await setDoc(doc(db, 'users', userId), { avatar_url: base64data }, { merge: true });
-          setMessage({ type: 'success', text: 'Photo updated locally' });
+          const res = await fetch('/api/profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              profile: { avatar_url: base64data }
+            })
+          });
+          if (res.ok) {
+            setMessage({ type: 'success', text: 'Photo updated successfully' });
+          } else {
+            throw new Error('API Sync Failed');
+          }
         } catch (dbErr: any) {
-          setMessage({ type: 'error', text: 'File too large to sync' });
+          setMessage({ type: 'error', text: 'Failed to upload photo: ' + dbErr.message });
         } finally {
           setUploading(false);
         }
@@ -460,8 +502,21 @@ function ProfileContent() {
                                 onClick={async () => {
                                   setResumeUrl('');
                                   setResumeName('');
-                                  await setDoc(doc(db, 'users', userId), { resume_url: '', resume_name: '' }, { merge: true });
-                                  setMessage({ type: 'success', text: 'Resume removed' });
+                                  try {
+                                    await setDoc(doc(db, 'users', userId), { resume_url: '', resume_name: '' }, { merge: true });
+                                    setMessage({ type: 'success', text: 'Resume removed' });
+                                  } catch (err) {
+                                    try {
+                                      await fetch('/api/profile', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ userId, profile: { resume_url: '', resume_name: '' } })
+                                      });
+                                      setMessage({ type: 'success', text: 'Resume removed' });
+                                    } catch (apiErr) {
+                                      setMessage({ type: 'error', text: 'Failed to remove resume' });
+                                    }
+                                  }
                                 }} 
                                 className="text-xs font-bold text-rose-500 hover:underline"
                               >

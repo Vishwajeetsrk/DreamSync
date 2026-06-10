@@ -49,7 +49,139 @@ const THEMES = [
     gradient: 'from-emerald-50 to-teal-50',
     border: 'border-emerald-100',
   },
+  {
+    id: 'neo-brutalism',
+    name: 'Neo-Brutalism',
+    desc: 'Bold & High Contrast',
+    preview: { bg: '#FFFBF5', accent: '#FFE500', text: '#000000', card: '#FFFFFF' },
+    gradient: 'from-yellow-100 to-amber-50',
+    border: 'border-black',
+  },
+  {
+    id: 'glass-dark',
+    name: 'Glass Dark (Apple Pro)',
+    desc: 'Premium Dark Mode',
+    preview: { bg: '#0A0A1A', accent: '#8B5CF6', text: '#FFFFFF', card: '#FFFFFF10' },
+    gradient: 'from-slate-900 to-indigo-950',
+    border: 'border-slate-800',
+  },
+  {
+    id: 'data-pro',
+    name: 'Vishwa Pro (Data)',
+    desc: 'Modern Tech & Charts',
+    preview: { bg: '#1E1B4B', accent: '#3B82F6', text: '#E2E8F0', card: '#FFFFFF08' },
+    gradient: 'from-indigo-900 to-purple-950',
+    border: 'border-indigo-800',
+  },
 ];
+
+const previewStyles: Record<string, {
+  containerBg: string;
+  cardBg: string;
+  cardBorder: string;
+  titleColor: string;
+  roleColor: string;
+  textColor: string;
+  badgeBg: string;
+  badgeText: string;
+  hrColor: string;
+  shadow: string;
+  fontFamily: string;
+  brutalism?: boolean;
+}> = {
+  'minimal-dev': {
+    containerBg: 'bg-white',
+    cardBg: 'bg-stone-50',
+    cardBorder: 'border border-stone-200',
+    titleColor: 'text-stone-900',
+    roleColor: 'text-blue-600',
+    textColor: 'text-stone-500',
+    badgeBg: 'bg-stone-100',
+    badgeText: 'text-stone-600',
+    hrColor: 'bg-stone-200',
+    shadow: 'shadow-sm',
+    fontFamily: 'font-sans',
+  },
+  'soft-warm': {
+    containerBg: 'bg-[#FFFBF5]',
+    cardBg: 'bg-[#FFF1F2]',
+    cardBorder: 'border border-rose-100',
+    titleColor: 'text-[#451A03]',
+    roleColor: 'text-rose-600',
+    textColor: 'text-stone-600',
+    badgeBg: 'bg-rose-50',
+    badgeText: 'text-rose-700',
+    hrColor: 'bg-rose-100',
+    shadow: 'shadow-md',
+    fontFamily: 'font-serif',
+  },
+  'glass-light': {
+    containerBg: 'bg-slate-50',
+    cardBg: 'bg-white/40 backdrop-blur-md',
+    cardBorder: 'border border-white/60',
+    titleColor: 'text-slate-900',
+    roleColor: 'text-violet-600',
+    textColor: 'text-slate-600',
+    badgeBg: 'bg-violet-50/50',
+    badgeText: 'text-violet-700',
+    hrColor: 'bg-slate-200/50',
+    shadow: 'shadow-lg',
+    fontFamily: 'font-sans',
+  },
+  'emerald-pro': {
+    containerBg: 'bg-[#F0FDF4]',
+    cardBg: 'bg-white',
+    cardBorder: 'border border-emerald-100',
+    titleColor: 'text-[#064E3B]',
+    roleColor: 'text-emerald-600',
+    textColor: 'text-[#064E3B]/75',
+    badgeBg: 'bg-[#E0F2FE]',
+    badgeText: 'text-[#0369A1]',
+    hrColor: 'bg-emerald-100',
+    shadow: 'shadow-md',
+    fontFamily: 'font-sans',
+  },
+  'neo-brutalism': {
+    containerBg: 'bg-[#FFFBF5]',
+    cardBg: 'bg-white',
+    cardBorder: 'border-[3px] border-black',
+    titleColor: 'text-black font-extrabold',
+    roleColor: 'text-black bg-[#FFE500] px-2 py-0.5 border-2 border-black inline-block',
+    textColor: 'text-black font-semibold',
+    badgeBg: 'bg-[#FF4081] border-2 border-black text-white',
+    badgeText: 'text-white font-bold',
+    hrColor: 'bg-black h-0.5',
+    shadow: 'shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]',
+    fontFamily: 'font-mono',
+    brutalism: true,
+  },
+  'glass-dark': {
+    containerBg: 'bg-[#0a0a1a] bg-gradient-to-b from-[#0a0a1a] to-[#1a0a2e]',
+    cardBg: 'bg-white/5 backdrop-blur-lg',
+    cardBorder: 'border border-white/10',
+    titleColor: 'text-white font-semibold',
+    roleColor: 'text-cyan-400',
+    textColor: 'text-gray-300',
+    badgeBg: 'bg-violet-950/40 border border-violet-500/20',
+    badgeText: 'text-violet-300',
+    hrColor: 'bg-white/10',
+    shadow: 'shadow-2xl shadow-cyan-500/10',
+    fontFamily: 'font-sans',
+  },
+  'data-pro': {
+    containerBg: 'bg-gradient-to-tr from-indigo-950 via-slate-900 to-purple-950',
+    cardBg: 'bg-slate-900/60 border border-indigo-500/20 backdrop-blur-xl',
+    cardBorder: 'border border-indigo-500/30',
+    titleColor: 'text-white font-bold',
+    roleColor: 'text-yellow-400 font-extrabold tracking-wide',
+    textColor: 'text-slate-300',
+    badgeBg: 'bg-emerald-500/10 border border-emerald-500/20',
+    badgeText: 'text-emerald-400',
+    hrColor: 'bg-indigo-500/20',
+    shadow: 'shadow-xl shadow-indigo-500/5',
+    fontFamily: 'font-sans',
+  },
+};
 
 const STEPS = [
   { id: 1, label: 'About You', icon: User },
@@ -534,55 +666,81 @@ export default function PortfolioGenerator() {
                 </button>
               </div>
             )}
-          </div>
+                   {/* Right Column: Dynamic Real-time Preview */}
+          {(() => {
+            const style = previewStyles[selectedTheme] || previewStyles['minimal-dev'];
+            return (
+              <div className="lg:col-span-4 lg:sticky lg:top-32 hidden lg:block">
+                <div className={`rounded-[2.5rem] ${style.cardBorder} ${style.containerBg} ${style.shadow} overflow-hidden min-h-[520px] flex flex-col transition-all duration-300 ${style.fontFamily}`}>
+                   <div className={`p-5 border-b ${style.hrColor} flex items-center justify-between`}>
+                      <span className={`text-[10px] font-bold uppercase tracking-widest ${style.brutalism ? 'text-black' : 'text-stone-400'}`}>Real-time Preview</span>
+                      <div className="flex items-center gap-1.5">
+                         <span className="text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full border border-emerald-500/20">Live</span>
+                         <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                      </div>
+                   </div>
+                   
+                   <div className="flex-1 p-8 space-y-8 flex flex-col justify-between">
+                      <div className={`space-y-6 p-6 rounded-[2rem] ${style.cardBg} ${style.brutalism ? 'border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]' : 'border border-transparent'}`}>
+                         <div className="flex items-start justify-between gap-4">
+                            <div className="space-y-2">
+                               <h3 className={`text-2xl font-extrabold tracking-tight ${style.titleColor} truncate max-w-[180px]`}>
+                                  {fullName || "Your Name"}
+                               </h3>
+                               <div className={`text-[10px] font-extrabold uppercase tracking-widest rounded-md ${style.roleColor}`}>
+                                  {targetRole || "Job Role"}
+                               </div>
+                            </div>
+                            {profileImage ? (
+                               <img src={profileImage} className={`w-14 h-14 rounded-2xl object-cover shrink-0 ${style.brutalism ? 'border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]' : 'border border-white/20'}`} alt="Preview" />
+                            ) : (
+                               <div className={`w-14 h-14 rounded-2xl shrink-0 flex items-center justify-center ${style.brutalism ? 'border-2 border-black bg-stone-100' : 'bg-stone-500/10'}`}>
+                                  <User className={`w-6 h-6 ${style.titleColor}`} />
+                               </div>
+                            )}
+                         </div>
 
-          {/* Right Column: Mini Preview */}
-          <div className="lg:col-span-4 lg:sticky lg:top-32 hidden lg:block">
-            <div className="bg-white rounded-[2.5rem] border border-stone-100 shadow-sm overflow-hidden min-h-[500px] flex flex-col">
-               <div className="bg-stone-50 p-5 border-b border-stone-100 flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Real-time Preview</span>
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-               </div>
-               
-               <div className="flex-1 p-8 space-y-10">
-                  <div className="space-y-4">
-                     {profileImage ? <img src={profileImage} className="w-16 h-16 rounded-2xl border-2 border-stone-100 object-cover" /> : <div className="w-16 h-16 rounded-2xl bg-stone-50" />}
-                     <div className="space-y-1">
-                        <div className="text-xl font-bold text-stone-900 truncate">{fullName || "Your Name"}</div>
-                        <div className="text-xs font-bold text-blue-600 uppercase tracking-widest">{targetRole || "Job Role"}</div>
-                     </div>
-                     <div className="h-px bg-stone-50" />
-                     <p className="text-[10px] text-stone-400 font-medium leading-relaxed italic line-clamp-3">
-                        {summary || "A brief bio about who you are and your career goals..."}
-                     </p>
-                  </div>
+                         <div className={`h-px ${style.hrColor}`} />
+                         
+                         <p className={`text-[11px] font-medium leading-relaxed italic line-clamp-4 ${style.textColor}`}>
+                            {summary || "A brief bio about who you are and your career goals..."}
+                         </p>
+                      </div>
 
-                  <div className="space-y-3">
-                     <span className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">Skills Preview</span>
-                     <div className="flex flex-wrap gap-1.5">
-                        {skills ? skills.split(',').slice(0, 4).map((s: any, i: number) => (
-                          <span key={i} className="px-2 py-0.5 bg-stone-50 text-[9px] font-bold text-stone-500 rounded-full">{s.trim()}</span>
-                        )) : [1,2,3].map(i => <div key={i} className="w-12 h-3 bg-stone-50 rounded-full" />)}
-                     </div>
-                  </div>
+                      <div className="space-y-6">
+                         <div className="space-y-2">
+                            <span className={`text-[9px] font-extrabold uppercase tracking-widest ${style.brutalism ? 'text-black' : 'text-stone-300'}`}>Skills</span>
+                            <div className="flex flex-wrap gap-1.5">
+                               {skills ? skills.split(',').slice(0, 5).map((s: any, i: number) => (
+                                  <span key={i} className={`px-2.5 py-1 text-[9px] font-bold rounded-full transition-all ${style.badgeBg} ${style.badgeText}`}>
+                                     {s.trim()}
+                                  </span>
+                               )) : [1, 2, 3].map(i => (
+                                  <div key={i} className={`w-12 h-4 rounded-full animate-pulse ${style.brutalism ? 'bg-stone-200 border border-black' : 'bg-stone-500/10'}`} />
+                               ))}
+                            </div>
+                         </div>
 
-                  <div className="space-y-4 pt-10 border-t border-stone-50">
-                     <div className="flex items-center gap-2">
-                        <Linkedin className="w-4 h-4 text-blue-600" />
-                        <div className="flex-1 h-3 bg-stone-50 rounded-full" />
-                     </div>
-                     <div className="flex items-center gap-2">
-                        <Github className="w-4 h-4 text-stone-400" />
-                        <div className="flex-1 h-3 bg-stone-50 rounded-full" />
-                     </div>
-                  </div>
-               </div>
-               
-               <div className="p-6 bg-stone-50 text-center">
-                  <p className="text-[9px] font-bold text-stone-300 uppercase tracking-widest">Theme: {selectedTheme}</p>
-               </div>
-            </div>
-          </div>
+                         <div className="space-y-3 pt-4 border-t border-transparent">
+                            <div className={`flex items-center gap-2 text-[10px] font-bold ${style.titleColor}`}>
+                               <Linkedin className={`w-4 h-4 ${style.brutalism ? 'text-black' : 'text-blue-500'}`} />
+                               <span className="opacity-70 truncate max-w-[180px]">{linkedin || 'linkedin.com/in/username'}</span>
+                            </div>
+                            <div className={`flex items-center gap-2 text-[10px] font-bold ${style.titleColor}`}>
+                               <Github className={`w-4 h-4 ${style.brutalism ? 'text-black' : 'text-stone-400'}`} />
+                               <span className="opacity-70 truncate max-w-[180px]">{github || 'github.com/username'}</span>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                   
+                   <div className={`p-4 ${style.brutalism ? 'bg-[#FFE500] border-t-2 border-black text-black font-bold' : 'bg-stone-50 text-stone-400'} text-center text-[9px] font-bold uppercase tracking-widest`}>
+                      Theme: {selectedTheme}
+                   </div>
+                </div>
+              </div>
+            );
+          })()}     </div>
         </div>
       </div>
     </div>

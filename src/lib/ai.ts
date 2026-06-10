@@ -47,39 +47,54 @@ async function callGroq(
   const key = process.env.GROQ_API_KEY;
   if (!key) throw new Error('GROQ_API_KEY not configured');
 
-  const body: Record<string, unknown> = {
-    model: 'llama-3.3-70b-versatile',
-    messages,
-    temperature: opts.temperature ?? 0.7,
-    max_tokens: opts.maxTokens ?? 2048,
-  };
+  const models = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
+  let lastError = '';
 
-  if (opts.jsonMode) {
-    body.response_format = { type: 'json_object' };
+  for (const model of models) {
+    try {
+      const body: Record<string, unknown> = {
+        model,
+        messages,
+        temperature: opts.temperature ?? 0.7,
+        max_tokens: opts.maxTokens ?? 2048,
+        ...(opts.jsonMode ? { response_format: { type: 'json_object' } } : {})
+      };
+
+      // Clamp max_tokens to 4000 for Groq to prevent exceeding limits
+      if (typeof body.max_tokens === 'number' && body.max_tokens > 4000) {
+        body.max_tokens = 4000;
+      }
+
+      const res = await fetchWithTimeout(
+        'https://api.groq.com/openai/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${key}`,
+          },
+          body: JSON.stringify(body),
+        },
+        opts.timeoutMs ?? 45_000
+      );
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`Groq ${res.status}: ${err.slice(0, 200)}`);
+      }
+
+      const data = await res.json();
+      const content = data.choices?.[0]?.message?.content;
+      if (!content) throw new Error('Groq returned empty content');
+      return { content, provider: `groq:${model}` };
+    } catch (e: any) {
+      lastError = e.message;
+      console.warn(`[AI] Groq ${model} failed →`, lastError.slice(0, 120));
+      continue;
+    }
   }
 
-  const res = await fetchWithTimeout(
-    'https://api.groq.com/openai/v1/chat/completions',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${key}`,
-      },
-      body: JSON.stringify(body),
-    },
-    opts.timeoutMs ?? 45_000
-  );
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Groq ${res.status}: ${err.slice(0, 200)}`);
-  }
-
-  const data = await res.json();
-  const content = data.choices?.[0]?.message?.content;
-  if (!content) throw new Error('Groq returned empty content');
-  return { content, provider: 'groq' };
+  throw new Error(`Groq exhaustive failure: ${lastError}`);
 }
 
 // ─── OPENROUTER (Fallback) ────────────────────────────────────────
@@ -90,14 +105,15 @@ async function callOpenRouter(
   const key = process.env.OPENROUTER_API_KEY;
   if (!key) throw new Error('OPENROUTER_API_KEY not configured');
 
-  // Multi-model rotation for OpenRouter resilience
+  // Multi-model rotation with free models first for resiliency
   const models = [
+    'meta-llama/llama-3.3-70b-instruct:free',
+    'qwen/qwen-2.5-72b-instruct:free',
     'openai/gpt-4o-mini',
     'meta-llama/llama-3.3-70b-instruct',
     'meta-llama/llama-3.1-70b-instruct',
     'anthropic/claude-3-haiku',
-    'google/gemini-flash-1.5-8b',
-    'meta-llama/llama-3.1-8b-instruct:free'
+    'google/gemini-flash-1.5-8b'
   ];
 
   let lastError = '';
@@ -137,7 +153,7 @@ async function callOpenRouter(
       return { content, provider: `openrouter:${model}` };
     } catch (e: any) {
       lastError = e.message;
-      console.warn(`[AI] OpenRouter ${model} failed →`, lastError);
+      console.warn(`[AI] OpenRouter ${model} failed →`, lastError.slice(0, 120));
       continue; // try next model
     }
   }
