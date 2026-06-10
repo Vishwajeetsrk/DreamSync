@@ -687,9 +687,11 @@ export default function ResumeBuilder() {
                                   <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 leading-none">{res.label}</h4>
                                   <div className="space-y-1.5 pt-1">
                                      {res.links.map((link, j) => (
-                                        <a key={j} href={link.url} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
-                                           • {link.title} <span className="text-[9px] text-stone-400 font-semibold">({link.platform})</span>
-                                        </a>
+                                        link && (
+                                          <a key={j} href={link.url} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
+                                             • {link.title} <span className="text-[9px] text-stone-400 font-semibold">({link.platform})</span>
+                                          </a>
+                                        )
                                      ))}
                                   </div>
                                </div>

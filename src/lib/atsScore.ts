@@ -114,10 +114,15 @@ export function calculateATSScore(data: ResumeData): ATSAnalysis {
   const resources: ATSAnalysis['freeResources'] = [];
   if (missingKWs.length > 0) {
     const mainMissing = missingKWs[0];
-    const rec = intel.courses[mainMissing] || intel.courses['DSA'];
+    const fallbackCourse = { 
+      title: "CS50 Introduction to Computer Science", 
+      url: "https://pll.harvard.edu/course/cs50-introduction-computer-science", 
+      platform: "Harvard/edX" 
+    };
+    const rec = intel.courses[mainMissing] || intel.courses['DSA'] || fallbackCourse;
     resources.push({
       label: `Master ${mainMissing}`,
-      links: [rec, { title: "YouTube Professional Tutorial", url: "https://youtube.com", platform: "YouTube" }]
+      links: [rec, { title: "YouTube Professional Tutorial", url: "https://youtube.com", platform: "YouTube" }].filter(Boolean)
     });
   }
 
