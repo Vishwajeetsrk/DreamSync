@@ -153,8 +153,8 @@ export default function MentalHealthAgent() {
 
       const fullText = prefix ? `${prefix}. ${text}` : text;
       const utter = new SpeechSynthesisUtterance(fullText);
-      utter.rate   = 0.87;
-      utter.pitch  = 1.08;
+      utter.rate   = 0.90; // Slower, clearer cadence for better comprehension
+      utter.pitch  = 1.0;  // Standard natural pitch (prevents chipmunk/robotic tone)
       utter.volume = 1.0;
 
       utter.onend  = () => { setSpeaking(false); resolve(); };
@@ -174,14 +174,25 @@ export default function MentalHealthAgent() {
           return;
         }
 
-        // 2. Prioritize: Native + Female + High Quality (Google/Microsoft)
+        // 2. Prioritize: Natural/Neural/Online/Google + Female + High Quality
         let preferred = candidates.find(v => 
           v.name.toLowerCase().includes('female') && 
-          (v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural'))
+          (v.name.toLowerCase().includes('natural') || 
+           v.name.toLowerCase().includes('neural') || 
+           v.name.toLowerCase().includes('online') || 
+           v.name.toLowerCase().includes('google'))
         );
 
-        // 3. Fallback: Any Female for this language
-        if (!preferred) preferred = candidates.find(v => v.name.toLowerCase().includes('female'));
+        // 3. Fallback: Any standard female voice for this language (by name or parameter)
+        if (!preferred) {
+          preferred = candidates.find(v => 
+            v.name.toLowerCase().includes('female') || 
+            v.name.toLowerCase().includes('zira') || 
+            v.name.toLowerCase().includes('samantha') || 
+            v.name.toLowerCase().includes('aria') || 
+            v.name.toLowerCase().includes('jenny')
+          );
+        }
 
         // 4. Fallback: Any voice for this language
         if (!preferred) preferred = candidates[0];
@@ -194,7 +205,10 @@ export default function MentalHealthAgent() {
           return;
         }
 
-        if (preferred) utter.voice = preferred;
+        if (preferred) {
+          console.log(`TTS Selected voice: ${preferred.name} (${preferred.lang})`);
+          utter.voice = preferred;
+        }
         utter.lang = langCode;
         window.speechSynthesis.speak(utter);
       };
