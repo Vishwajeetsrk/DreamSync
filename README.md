@@ -17,14 +17,21 @@ DreamSync features an **NGO-Inspired, Supportive, and Highly Accessible** archit
 ## ✨ 9 Core Support Modules
 
 1. **🧠 Ikigai Architect**: Discover your professional alignment at the intersection of Passion, Skills, Market, and Income with automated Venn diagram rendering.
-2. **📄 AI Resume Forge**: Guidance-driven resume editor featuring live layout previewing, custom color themes, and direct printer-ready PDF export.
+2. **📄 AI Resume Forge & Builder**: A tabbed sidebar resume editor. Features **`✨ Optimize Summary with AI`** to generate tailored professional bios, and **`✨ AI Enhance Bullets`** to rewrite experience bullets using the STAR method. Includes a live **ATS Insights** tab calculating real-time compatibility scores, target company checklists (Google, Microsoft), lists of missing keywords, and recommended courses. Supports direct printer-ready PDF & Word exports.
 3. **🛡️ ATS Resume Score Checker**: Drag-and-drop resume scanner that checks keywords and structural alignment against target job descriptions, providing instant rewrite indicators.
 4. **🤖 AI Career Guide & Coach**: Empathetic AI coach delivering real-time salary insights, localized Indian job postings, and structured 90-day progress roadmaps.
 5. **💼 LinkedIn Pro Profile Optimizer**: Instantly tune profile headlines, "About" bios, and personalized outreach networking templates.
 6. **🗺️ Skills & Document Roadmap**: Milestone progress timelines paired with a dedicated guide on obtaining essential Indian documents (Aadhaar, PAN, E-Shram, etc.).
 7. **🌱 Peer Community Hub**: A safe ecosystem for connecting with peer circles, digital mentors, and local NGO career events.
-8. **🖼️ Dynamic Stand-alone Portfolio Engine**: Instantly generate responsive web portfolios in 4 distinct themes: *Minimal Dev*, *Neo-Brutalism*, *Glass Dark*, and *Data Pro (Vishwa)*.
-9. **🌸 Serenity AI Mental Health Companion**: Empathetic voice & text buddy for burnout and stress, with local helplines and interactive vocal speech output (TTS/STT).
+8. **🖼️ Dynamic Stand-alone Portfolio Engine**: Instantly generate responsive web portfolios in 4 distinct themes: *Minimal Dev*, *Neo-Brutalism*, *Glass Dark*, and *Data Pro*. Features a fully styled **Interactive Real-Time Preview Container** that maps theme colors, glassmorphism, fonts, and user updates instantly.
+9. **🌸 Serenity AI Mental Health Companion**: Empathetic voice & text buddy for burnout and stress, with local Indian helplines. Now features a **Language Selection Dropdown** for 11+ Indian languages (Hindi, Telugu, Tamil, Bengali, etc.), a **Dynamic Prompt Language Lock** that restricts AI replies to the chosen language (e.g. pure English in English mode), and optimized TTS settings (pitch `1.0`, rate `0.90`) prioritizing high-quality natural/neural browser voices.
+
+---
+
+## 🛡️ Robustness & Fault Tolerance
+
+- **API Rate Limit Resilience**: Integrates a dynamic model fallback chain (automatically rotating between Groq's `llama-3.3-70b-versatile` and `llama-3.1-8b-instant`, and falling back to OpenRouter's free tier if rate-limited). Portfolio generation is optimized to `4000` tokens to prevent TPM rate limits (503 errors).
+- **Client-Side Auth Fallback**: Automatically intercepts client-side Firestore/Storage write errors (for users logged in via NextAuth without Firebase permissions) and reroutes profile updates and base64-encoded PDF resume uploads securely to a server-side `/api/profile` Redis database using **Upstash**.
 
 ---
 
