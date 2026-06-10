@@ -211,9 +211,17 @@ export async function POST(req: NextRequest) {
 
     } catch (error: any) {
       console.error('Portfolio AI Exhaustion Details:', error.message || error);
+      
+      const errMsg = error.message || String(error);
+      const isMissingKeys = errMsg.includes('not configured') || errMsg.includes('API key');
+      
+      const userFriendlyError = isMissingKeys
+        ? 'Configuration Error: AI API Keys are missing. Please add GROQ_API_KEY, OPENROUTER_API_KEY, or GOOGLE_API_KEY in your Vercel Project Settings > Environment Variables.'
+        : 'AI is currently overloaded with requests in your region. Please try again in 30 seconds.';
+
       return NextResponse.json({ 
-        error: 'AI is currently overloaded with requests in your region. Please try again in 30 seconds.',
-        debug: process.env.NODE_ENV === 'development' ? error.message : undefined
+        error: userFriendlyError,
+        debug: errMsg
       }, { status: 503 });
     }
 
