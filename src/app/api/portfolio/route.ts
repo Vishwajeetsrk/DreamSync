@@ -28,6 +28,7 @@ const portfolioSchema = z.object({
     hobbies: z.string().optional(),
     summary: z.string().optional(),
     profileImage: z.string().optional(),
+    resumeUrl: z.string().optional(),
   }).optional(),
 });
 
@@ -139,7 +140,7 @@ export async function POST(req: NextRequest) {
 
     const themeStyles = buildThemePrompt(theme);
 
-    const sysPrompt = `
+     const sysPrompt = `
       You are an elite full-stack web designer specializing in high-performance career portfolios.
       TASK: Generate a COMPLETE, SINGLE-FILE HTML portfolio based on the user's career data and the specified theme.
       
@@ -151,6 +152,8 @@ export async function POST(req: NextRequest) {
       5. Include smooth AOS animations.
       6. Ensure the design is MOBILE-RESPONSIVE and PREMIUM.
       7. ${themeStyles}
+      8. RESUME/CV: If a 'resumeUrl' is provided in the user data, you MUST include a prominent, beautifully styled 'Download CV' or 'View Resume' button/link in the Hero section and optionally in the Header. Design it to perfectly match the theme.
+      9. PROJECT IMAGES: For each project in the list: if an 'Image' link is present, render a styled <img> element to display the project screenshot/gif. If no image link is present, display a matching theme-based icon or abstract SVG mockup card.
     `;
 
     const userPrompt = `
@@ -162,6 +165,7 @@ export async function POST(req: NextRequest) {
       - List their skills: ${data?.skills || 'Expertise'}.
       - Present their experience and projects in a professional timeline/grid.
       - Ensure contact links (LinkedIn: ${data?.linkedin || '#'}, GitHub: ${data?.github || '#'}) are active.
+      - If 'resumeUrl' is present: ${data?.resumeUrl ? `Include a button linking to ${data.resumeUrl} to download/view the CV.` : 'Do not add a resume button.'}
     `;
 
     // 5. Call AI with multi-provider fallback

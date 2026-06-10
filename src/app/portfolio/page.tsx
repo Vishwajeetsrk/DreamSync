@@ -11,7 +11,7 @@ import {
 import { validateCareerInput } from '@/lib/aiGuard';
 
 // ---------- TYPES ----------
-interface Project { topic: string; points: string; website: string; }
+interface Project { topic: string; points: string; website: string; imageUrl?: string; }
 interface Course { topic: string; points: string; link: string; }
 interface WorkExp { title: string; company: string; points: string; startDate: string; endDate: string; isInternship: boolean; }
 
@@ -213,18 +213,19 @@ export default function PortfolioGenerator() {
   const [languages, setLanguages] = useState('');
   const [linkedin, setLinkedin] = useState('');
   const [github, setGithub] = useState('');
+  const [resumeUrl, setResumeUrl] = useState('');
   const [summary, setSummary] = useState('');
   const [achievements, setAchievements] = useState('');
   const [hobbies, setHobbies] = useState('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
   // Dynamic arrays
-  const [projects, setProjects] = useState<Project[]>([{ topic: '', points: '', website: '' }]);
+  const [projects, setProjects] = useState<Project[]>([{ topic: '', points: '', website: '', imageUrl: '' }]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [workExp, setWorkExp] = useState<WorkExp[]>([]);
 
   // Helpers
-  const addProject = () => setProjects(p => [...p, { topic: 'New Project', points: '', website: '' }]);
+  const addProject = () => setProjects(p => [...p, { topic: 'New Project', points: '', website: '', imageUrl: '' }]);
   const removeProject = (i: number) => setProjects(p => p.filter((_, idx) => idx !== i));
   const updateProject = (i: number, f: keyof Project, v: string) => setProjects(p => p.map((x, idx) => idx === i ? { ...x, [f]: v } : x));
 
@@ -257,7 +258,7 @@ export default function PortfolioGenerator() {
     setGenError('');
     try {
       const projectsStr = projects.filter(p => p.topic).map(p =>
-        `${p.topic}: ${p.points}${p.website ? ` | Link: ${p.website}` : ''}`).join('\n');
+        `${p.topic}: ${p.points}${p.website ? ` | Link: ${p.website}` : ''}${p.imageUrl ? ` | Image: ${p.imageUrl}` : ''}`).join('\n');
       const coursesStr = courses.filter(c => c.topic).map(c =>
         `${c.topic}: ${c.points}${c.link ? ` | Certificate: ${c.link}` : ''}`).join('\n');
       const expStr = workExp.filter(w => w.title).map(w =>
@@ -274,7 +275,7 @@ export default function PortfolioGenerator() {
           theme: selectedTheme,
           data: {
             fullName, email, phone, targetRole, skills, education,
-            languages, linkedin, github, summary, achievements, hobbies,
+            languages, linkedin, github, resumeUrl, summary, achievements, hobbies,
             projects: projectsStr,
             courses: coursesStr,
             experience: expStr,
@@ -513,6 +514,10 @@ export default function PortfolioGenerator() {
                            <input value={phone} onChange={e => setPhone(e.target.value)} className="input-field" placeholder="+91 90000 00000" />
                          </div>
                          <div className="col-span-2 space-y-2">
+                           <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">Resume / CV PDF Link (Google Drive / Dropbox)</label>
+                           <input value={resumeUrl} onChange={e => setResumeUrl(e.target.value)} className="input-field" placeholder="https://drive.google.com/file/d/your-resume-id/view" />
+                         </div>
+                         <div className="col-span-2 space-y-2">
                            <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">Key Skills</label>
                            <input value={skills} onChange={e => setSkills(e.target.value)} className="input-field" placeholder="e.g. Communication, MS Excel, Tally..." />
                          </div>
@@ -612,7 +617,9 @@ export default function PortfolioGenerator() {
                           <div key={i} className="p-6 rounded-[2rem] border border-stone-100 bg-stone-50/50 space-y-4">
                             <div className="flex justify-end"><button onClick={() => removeProject(i)} className="text-rose-500"><Trash2 className="w-4 h-4" /></button></div>
                             <input value={p.topic} onChange={e => updateProject(i, 'topic', e.target.value)} className="input-field bg-white" placeholder="Project Name" />
-                            <textarea value={p.points} onChange={e => updateProject(i, 'points', e.target.value)} className="input-field bg-white" placeholder="Description" />
+                            <input value={p.website} onChange={e => updateProject(i, 'website', e.target.value)} className="input-field bg-white" placeholder="Project Link (optional)" />
+                            <input value={p.imageUrl || ''} onChange={e => updateProject(i, 'imageUrl', e.target.value)} className="input-field bg-white" placeholder="Project Image/GIF URL (optional)" />
+                            <textarea value={p.points} onChange={e => updateProject(i, 'points', e.target.value)} className="input-field bg-white min-h-[60px]" placeholder="Description" />
                           </div>
                         ))}
                       </div>
@@ -730,6 +737,12 @@ export default function PortfolioGenerator() {
                                <Github className={`w-4 h-4 ${style.brutalism ? 'text-black' : 'text-stone-400'}`} />
                                <span className="opacity-70 truncate max-w-[180px]">{github || 'github.com/username'}</span>
                             </div>
+                            {resumeUrl && (
+                                <div className={`pt-2 flex items-center gap-2 text-[10px] font-bold ${style.titleColor}`}>
+                                   <Download className={`w-4 h-4 ${style.brutalism ? 'text-black' : 'text-emerald-500'}`} />
+                                   <span className="opacity-90 underline truncate max-w-[180px]">CV/Resume Linked</span>
+                                </div>
+                             )}
                          </div>
                       </div>
                    </div>
