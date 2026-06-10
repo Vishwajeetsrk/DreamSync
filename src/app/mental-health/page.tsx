@@ -310,7 +310,11 @@ export default function MentalHealthAgent() {
       const res = await fetch('/api/mental-health', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history, mood: mood || 'not specified' }),
+        body: JSON.stringify({ 
+          messages: history, 
+          mood: mood || 'not specified',
+          language: selectedLang.name
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed');
@@ -436,13 +440,31 @@ export default function MentalHealthAgent() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowLangMenu(!showLangMenu)}
-              className="flex items-center gap-2 px-4 py-2 bg-stone-50 rounded-2xl border border-stone-100 text-stone-500 font-bold text-xs hover:bg-white hover:text-blue-600 transition-all"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              {selectedLang.native}
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowLangMenu(!showLangMenu)}
+                className="flex items-center gap-2 px-4 py-2 bg-stone-50 rounded-2xl border border-stone-100 text-stone-500 font-bold text-xs hover:bg-white hover:text-rose-500 transition-all animate-none"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                {selectedLang.native}
+              </button>
+              {showLangMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-stone-200 rounded-2xl shadow-xl z-50 max-h-60 overflow-y-auto p-2">
+                  {languages.map(lang => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setSelectedLang(lang);
+                        setShowLangMenu(false);
+                      }}
+                      className={`w-full text-left px-4 py-2 rounded-xl text-xs font-bold transition-all ${selectedLang.code === lang.code ? 'bg-rose-50 text-rose-600' : 'text-stone-500 hover:bg-stone-50'}`}
+                    >
+                      {lang.native} ({lang.name})
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <button
               onClick={handleVoiceModeToggle}
               className={`flex items-center gap-2 px-4 py-2 rounded-2xl border font-bold text-xs transition-all ${voiceMode ? 'bg-rose-500 text-white border-rose-500 shadow-md' : 'bg-stone-50 border-stone-100 text-stone-500 hover:bg-white'}`}

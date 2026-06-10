@@ -19,6 +19,7 @@ const MessageSchema = z.object({
 const BodySchema = z.object({
   messages: z.array(MessageSchema).min(1).max(30),
   mood: z.string().max(50).optional(),
+  language: z.string().max(50).optional(),
 });
 
 // ── System Prompt ─────────────────────────────────────────────────
@@ -87,10 +88,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  const { messages, mood = 'not specified' } = body;
+  const { messages, mood = 'not specified', language = 'English (India)' } = body;
 
   // 4. Build AI messages
-  const systemWithMood = `${SYSTEM_PROMPT}\n\nCurrent user mood: ${mood}`;
+  const systemWithMood = `${SYSTEM_PROMPT}\n\nCurrent user mood: ${mood}\n\n🚨 SELECTED LANGUAGE FOR RESPONSE: ${language}. You MUST speak and respond ONLY in this language! If English, respond strictly in English. If Hindi, respond strictly in Hindi. If Telugu, respond strictly in Telugu. Ensure the response flows naturally and is native to the selected language.`;
 
   const aiMessages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
     { role: 'system', content: systemWithMood },
