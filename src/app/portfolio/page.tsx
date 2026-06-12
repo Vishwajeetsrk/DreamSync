@@ -258,11 +258,11 @@ export default function PortfolioGenerator() {
     setGenError('');
     try {
       const projectsStr = projects.filter(p => p.topic).map(p =>
-        `${p.topic}: ${p.points}${p.website ? ` | Link: ${p.website}` : ''}${p.imageUrl ? ` | Image: ${p.imageUrl}` : ''}`).join('\n');
+        `${p.topic}: ${p.points}${p.website ? ` | Link: ${p.website}` : ''}${p.imageUrl ? ` | Image: ${p.imageUrl}` : ''}`).join('|§|');
       const coursesStr = courses.filter(c => c.topic).map(c =>
-        `${c.topic}: ${c.points}${c.link ? ` | Certificate: ${c.link}` : ''}`).join('\n');
+        `${c.topic}: ${c.points}${c.link ? ` | Certificate: ${c.link}` : ''}`).join('|§|');
       const expStr = workExp.filter(w => w.title).map(w =>
-        `${w.isInternship ? '[Internship]' : '[Work]'} ${w.title} @ ${w.company} (${w.startDate}–${w.endDate || 'Present'}): ${w.points}`).join('\n');
+        `${w.isInternship ? '[Internship]' : '[Work]'} ${w.title} @ ${w.company} (${w.startDate}–${w.endDate || 'Present'}): ${w.points}`).join('|§|');
 
       const progressInterval = setInterval(() => {
         setGenProgress(p => p < 90 ? p + 2 : p);

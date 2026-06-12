@@ -272,17 +272,36 @@ export async function POST(req: NextRequest) {
       
       let expHtml = '<div class="content-block opacity-90">Detailed experience not provided.</div>';
       if (userData?.experience) {
-        expHtml = userData.experience.split('\n').filter(Boolean).map((exp: string) => {
-           // Basic formatting for experience block
-           return `<div style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: 0.5rem; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">
-             <p class="content-block opacity-90">${exp.replace(/:/g, ':<br><strong>').replace(/\] /g, '] </strong>')}</p>
+        expHtml = userData.experience.split('|§|').filter(Boolean).map((exp: string) => {
+           const colonIdx = exp.indexOf(':');
+           let header = exp;
+           let pointsStr = '';
+           if (colonIdx > -1) {
+             header = exp.substring(0, colonIdx);
+             pointsStr = exp.substring(colonIdx + 1).trim();
+           }
+           
+           let formattedHeader = header;
+           const companyMatch = header.match(/@\s*(.*?)\s*\(/);
+           if (companyMatch) {
+             const companyName = companyMatch[1];
+             formattedHeader = header.replace(`@ ${companyName}`, `@ <strong style="color: #2563eb;">${companyName}</strong>`);
+           }
+           formattedHeader = formattedHeader.replace(/\[Internship\]/g, '<span style="color: #059669; font-weight: bold;">[Internship]</span>')
+                                            .replace(/\[Work\]/g, '<span style="color: #ca8a04; font-weight: bold;">[Work]</span>');
+           
+           const bullets = pointsStr.split('\n').filter(p => p.trim()).map(p => `<li style="margin-bottom: 0.5rem; list-style-type: disc; margin-left: 1.5rem;">${p.trim()}</li>`).join('');
+
+           return `<div style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: 0.5rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+             <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem;">${formattedHeader}</h4>
+             <ul class="content-block opacity-90">${bullets}</ul>
            </div>`;
         }).join('');
       }
 
       let projHtml = '<div class="content-block opacity-90">Detailed projects not provided.</div>';
       if (userData?.projects) {
-        projHtml = userData.projects.split('\n').filter(Boolean).map((proj: string) => {
+        projHtml = userData.projects.split('|§|').filter(Boolean).map((proj: string) => {
            const linkMatch = proj.match(/\|\s*Link:\s*(.*?)(?=\s*\||$)/);
            const imgMatch = proj.match(/\|\s*Image:\s*(.*?)(?=\s*\||$)/);
            let link = linkMatch ? linkMatch[1].trim() : '';
@@ -295,17 +314,19 @@ export async function POST(req: NextRequest) {
            
            const colonIndex = titleAndDesc.indexOf(':');
            let title = titleAndDesc;
-           let desc = '';
+           let descStr = '';
            if (colonIndex > -1) {
              title = titleAndDesc.substring(0, colonIndex).trim();
-             desc = titleAndDesc.substring(colonIndex + 1).trim();
+             descStr = titleAndDesc.substring(colonIndex + 1).trim();
            }
 
+           const descBullets = descStr.split('\n').filter(p => p.trim()).map(p => `<p style="margin-bottom: 0.5rem;">${p.trim()}</p>`).join('');
+
            return `
-            <div style="margin-bottom: 2rem; padding: 1.5rem; border-radius: 0.75rem; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); overflow: hidden;">
+            <div style="margin-bottom: 2rem; padding: 1.5rem; border-radius: 0.75rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
               ${image && image !== '#' ? `<img src="${image}" alt="${title}" style="width: 100%; height: auto; max-height: 250px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">` : ''}
               <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">${title}</h4>
-              <p class="content-block opacity-90" style="margin-bottom: 1rem;">${desc}</p>
+              <div class="content-block opacity-90" style="margin-bottom: 1.25rem;">${descBullets}</div>
               ${link && link !== '#' ? `<a href="${link}" target="_blank" style="display: inline-block; padding: 0.5rem 1rem; background: #000; color: #fff; text-decoration: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;"><i class="fa-brands fa-github"></i> View Project</a>` : ''}
             </div>
            `;
