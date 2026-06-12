@@ -272,26 +272,26 @@ export async function POST(req: NextRequest) {
       
       let expHtml = '<div class="content-block opacity-90">Detailed experience not provided.</div>';
       if (userData?.experience) {
-        expHtml = userData.experience.split('\\n').filter(Boolean).map((exp: string) => {
+        expHtml = userData.experience.split('\n').filter(Boolean).map((exp: string) => {
            // Basic formatting for experience block
-           return \`<div style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: 0.5rem; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">
-             <p class="content-block opacity-90">\${exp.replace(/:/g, ':<br><strong>').replace(/\\] /g, '] </strong>')}</p>
-           </div>\`;
+           return `<div style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: 0.5rem; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);">
+             <p class="content-block opacity-90">${exp.replace(/:/g, ':<br><strong>').replace(/\] /g, '] </strong>')}</p>
+           </div>`;
         }).join('');
       }
 
       let projHtml = '<div class="content-block opacity-90">Detailed projects not provided.</div>';
       if (userData?.projects) {
-        projHtml = userData.projects.split('\\n').filter(Boolean).map((proj: string) => {
-           const linkMatch = proj.match(/\\|\\s*Link:\\s*(.*?)(?=\\s*\\||$)/);
-           const imgMatch = proj.match(/\\|\\s*Image:\\s*(.*?)(?=\\s*\\||$)/);
+        projHtml = userData.projects.split('\n').filter(Boolean).map((proj: string) => {
+           const linkMatch = proj.match(/\|\s*Link:\s*(.*?)(?=\s*\||$)/);
+           const imgMatch = proj.match(/\|\s*Image:\s*(.*?)(?=\s*\||$)/);
            let link = linkMatch ? linkMatch[1].trim() : '';
            let image = imgMatch ? imgMatch[1].trim() : '';
            
            let titleAndDesc = proj;
            if (linkMatch) titleAndDesc = titleAndDesc.replace(linkMatch[0], '');
            if (imgMatch) titleAndDesc = titleAndDesc.replace(imgMatch[0], '');
-           titleAndDesc = titleAndDesc.replace(/\\|\\s*$/, '').trim();
+           titleAndDesc = titleAndDesc.replace(/\|\s*$/, '').trim();
            
            const colonIndex = titleAndDesc.indexOf(':');
            let title = titleAndDesc;
@@ -301,30 +301,30 @@ export async function POST(req: NextRequest) {
              desc = titleAndDesc.substring(colonIndex + 1).trim();
            }
 
-           return \`
+           return `
             <div style="margin-bottom: 2rem; padding: 1.5rem; border-radius: 0.75rem; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); overflow: hidden;">
-              \${image && image !== '#' ? \`<img src="\${image}" alt="\${title}" style="width: 100%; height: auto; max-height: 250px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">\` : ''}
-              <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">\${title}</h4>
-              <p class="content-block opacity-90" style="margin-bottom: 1rem;">\${desc}</p>
-              \${link && link !== '#' ? \`<a href="\${link}" target="_blank" style="display: inline-block; padding: 0.5rem 1rem; background: #000; color: #fff; text-decoration: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;"><i class="fa-brands fa-github"></i> View Project</a>\` : ''}
+              ${image && image !== '#' ? `<img src="${image}" alt="${title}" style="width: 100%; height: auto; max-height: 250px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">` : ''}
+              <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">${title}</h4>
+              <p class="content-block opacity-90" style="margin-bottom: 1rem;">${desc}</p>
+              ${link && link !== '#' ? `<a href="${link}" target="_blank" style="display: inline-block; padding: 0.5rem 1rem; background: #000; color: #fff; text-decoration: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;"><i class="fa-brands fa-github"></i> View Project</a>` : ''}
             </div>
-           \`;
+           `;
         }).join('');
       }
 
-      return \`
+      return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>\${name} - Portfolio</title>
+  <title>${name} - Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@400;600&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    \${themeStyles}
+    ${themeStyles}
     .social-links { display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem; }
     .skills { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
     .content-block { line-height: 1.7; color: inherit; }
@@ -332,26 +332,26 @@ export async function POST(req: NextRequest) {
 </head>
 <body>
   <div class="hero">
-    \${profileImage ? \`<img src="\${profileImage}" alt="\${name}" class="profile-img">\` : ''}
-    <h1>\${name}</h1>
-    <p>\${role}</p>
-    \${resumeUrl && resumeUrl !== '#' ? \`<a href="\${resumeUrl}" class="btn" target="_blank"><i class="fa-solid fa-download"></i> Download Resume</a>\` : ''}
+    ${profileImage ? `<img src="${profileImage}" alt="${name}" class="profile-img">` : ''}
+    <h1>${name}</h1>
+    <p>${role}</p>
+    ${resumeUrl && resumeUrl !== '#' ? `<a href="${resumeUrl}" class="btn" target="_blank"><i class="fa-solid fa-download"></i> Download Resume</a>` : ''}
     <div class="social-links">
-      \${linkedin && linkedin !== '#' ? \`<a href="\${linkedin}" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>\` : ''}
-      \${github && github !== '#' ? \`<a href="\${github}" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>\` : ''}
+      ${linkedin && linkedin !== '#' ? `<a href="${linkedin}" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>` : ''}
+      ${github && github !== '#' ? `<a href="${github}" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>` : ''}
     </div>
   </div>
   
   <div class="container">
     <div class="card">
       <h2 class="text-2xl font-bold mb-4">About Me</h2>
-      <div class="content-block opacity-90">\${userData?.summary?.replace(/\\n/g, '<br>') || 'I am a passionate professional looking to make an impact in my field.'}</div>
+      <div class="content-block opacity-90">${userData?.summary?.replace(/\n/g, '<br>') || 'I am a passionate professional looking to make an impact in my field.'}</div>
     </div>
     
     <div class="card">
       <h2 class="text-2xl font-bold mb-4">Skills & Expertise</h2>
       <div class="skills">
-        \${skills.split(',').filter((s: string) => s.trim()).map((s: string) => \`<span class="skill-chip">\${s.trim()}</span>\`).join('')}
+        ${skills.split(',').filter((s: string) => s.trim()).map((s: string) => `<span class="skill-chip">${s.trim()}</span>`).join('')}
       </div>
     </div>
     
@@ -359,16 +359,16 @@ export async function POST(req: NextRequest) {
       <h2 class="text-2xl font-bold mb-6">Experience & Projects</h2>
       <div class="mb-8">
         <h3 class="text-xl font-bold mb-4 border-b pb-2 opacity-80">Experience</h3>
-        \${expHtml}
+        ${expHtml}
       </div>
       <div>
         <h3 class="text-xl font-bold mb-4 border-b pb-2 opacity-80">Projects</h3>
-        \${projHtml}
+        ${projHtml}
       </div>
     </div>
   </div>
 </body>
-</html>\`;
+</html>`;
     };
 
     // 4. Safety Guard
