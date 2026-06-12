@@ -18,7 +18,7 @@
 
 ---
 
-## 🏗️ Human-Centric Design System
+##  Human-Centric Design System
 
 DreamSync features an **NGO-Inspired, Supportive, and Highly Accessible** design architecture:
 
