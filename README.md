@@ -103,6 +103,7 @@ Empathetic voice & text buddy for burnout and stress:
 - **Added**: Smart Project Rendering — The engine now detects base64 images and URLs inside project descriptions to automatically render rich project cards with image previews and "View Project" buttons.
 - **Improved**: Robust Parsing Engine — Replaced standard newline joining with a highly secure custom delimiter (`|§|`) to ensure multi-line project descriptions and massive base64 image strings parse flawlessly without truncating or merging.
 - **Added**: Advanced Experience Presentation — Upgraded Experience cards to automatically format task lists into bullet points (`<ul><li>`), dynamically highlight company names in blue, and color-code `[Internship]` (green) and `[Work]` (yellow) tags.
+- **Added**: Comprehensive Profile Sections — The fallback generator now fully parses and renders standalone UI cards for Education, Certifications & Courses (with dynamic link buttons), Awards & Achievements, and Languages (as custom skills chips).
 - **Improved**: Dynamic Fallback Themes — the static HTML fallback generator now fully supports and dynamically injects CSS for all 7 themes (Neo-Brutalism, Emerald Pro, Glass Dark, etc.), ensuring beautiful results even when AI providers hit rate limits.
 - **Fixed**: 400 "Invalid Input" error when generating portfolios without a profile photo (Zod v4 schema nullable fix).
 - **Fixed**: Right-column live preview panel was incorrectly nested inside the form column, breaking the 8+4 grid layout on desktop.
