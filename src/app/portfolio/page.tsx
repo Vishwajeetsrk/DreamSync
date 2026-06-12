@@ -274,19 +274,37 @@ export default function PortfolioGenerator() {
         body: JSON.stringify({
           theme: selectedTheme,
           data: {
-            fullName, email, phone, targetRole, skills, education,
-            languages, linkedin, github, resumeUrl, summary, achievements, hobbies,
-            projects: projectsStr,
-            courses: coursesStr,
-            experience: expStr,
-            profileImage,
+            fullName: fullName || undefined,
+            email: email || undefined,
+            phone: phone || undefined,
+            targetRole: targetRole || undefined,
+            skills: skills || undefined,
+            education: education || undefined,
+            languages: languages || undefined,
+            linkedin: linkedin || undefined,
+            github: github || undefined,
+            resumeUrl: resumeUrl || undefined,
+            summary: summary || undefined,
+            achievements: achievements || undefined,
+            hobbies: hobbies || undefined,
+            projects: projectsStr || undefined,
+            courses: coursesStr || undefined,
+            experience: expStr || undefined,
+            profileImage: profileImage || undefined,
           },
         }),
       });
       clearInterval(progressInterval);
       setGenProgress(100);
       const resData = await res.json();
-      if (!res.ok) throw new Error(resData.error || 'Generation failed');
+      if (!res.ok) {
+        const detail = resData.details
+          ? (Array.isArray(resData.details)
+            ? resData.details.map((d: any) => `${d.path?.join('.')}: ${d.message}`).join('; ')
+            : String(resData.details))
+          : '';
+        throw new Error(resData.error + (detail ? ` — ${detail}` : '') || 'Generation failed');
+      }
       setGeneratedHtml(resData.html);
       setStep(4);
     } catch (err: any) {
@@ -673,7 +691,9 @@ export default function PortfolioGenerator() {
                 </button>
               </div>
             )}
-                   {/* Right Column: Dynamic Real-time Preview */}
+          </div>
+
+          {/* Right Column: Dynamic Real-time Preview */}
           {(() => {
             const style = previewStyles[selectedTheme] || previewStyles['minimal-dev'];
             return (
@@ -753,7 +773,7 @@ export default function PortfolioGenerator() {
                 </div>
               </div>
             );
-          })()}     </div>
+          })()}
         </div>
       </div>
     </div>

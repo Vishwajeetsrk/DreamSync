@@ -9,26 +9,29 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
 });
 
+// Helper: accept string, null, or undefined for optional text fields
+const optionalStr = z.string().optional().nullable();
+
 const portfolioSchema = z.object({
   theme: z.enum(['minimal-dev', 'neo-brutalism', 'glass-dark', 'data-pro', 'soft-warm', 'glass-light', 'emerald-pro']).default('minimal-dev'),
   data: z.object({
-    fullName: z.string().optional(),
-    email: z.string().optional(),
-    phone: z.string().optional(),
-    linkedin: z.string().optional(),
-    github: z.string().optional(),
-    targetRole: z.string().optional(),
-    skills: z.string().optional(),
-    education: z.string().optional(),
-    languages: z.string().optional(),
-    experience: z.string().optional(),
-    projects: z.string().optional(),
-    courses: z.string().optional(),
-    achievements: z.string().optional(),
-    hobbies: z.string().optional(),
-    summary: z.string().optional(),
-    profileImage: z.string().optional(),
-    resumeUrl: z.string().optional(),
+    fullName: optionalStr,
+    email: optionalStr,
+    phone: optionalStr,
+    linkedin: optionalStr,
+    github: optionalStr,
+    targetRole: optionalStr,
+    skills: optionalStr,
+    education: optionalStr,
+    languages: optionalStr,
+    experience: optionalStr,
+    projects: optionalStr,
+    courses: optionalStr,
+    achievements: optionalStr,
+    hobbies: optionalStr,
+    summary: optionalStr,
+    profileImage: optionalStr,
+    resumeUrl: optionalStr,
   }).optional(),
 });
 
@@ -126,6 +129,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parsed = portfolioSchema.safeParse(body);
     if (!parsed.success) {
+      console.error('[Portfolio API] Validation failed:', JSON.stringify(parsed.error.issues, null, 2));
       return NextResponse.json({ error: 'Invalid input', details: parsed.error.issues }, { status: 400 });
     }
 

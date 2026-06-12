@@ -1,144 +1,368 @@
-# 🌙 DreamSync — Warm Career Intelligence & Empathetic Support Platform
+# 🌙 DreamSync — AI-Powered Career Intelligence & Empathetic Support Platform
 
-> **Empowering career journeys for students and care-experienced youth. Find your path, build your professional identity, and grow with empathetic AI guidance.**
+<div align="center">
 
-### 🌐 [Live Deployment Portal](https://dreamssync.vercel.app/) | 🏠 [Production Home Portal](https://dreamssync.vercel.app/)
+![Next.js](https://img.shields.io/badge/Next.js-16.2.2-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=for-the-badge&logo=react)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)
+![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=for-the-badge&logo=vercel)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+**Empowering career journeys for students and care-experienced youth.**
+**Find your path, build your professional identity, and grow with empathetic AI guidance.**
+
+### 🌐 [Live Platform →](https://dreamssync.vercel.app/) &nbsp;&nbsp;|&nbsp;&nbsp; 📂 [Source Code →](https://github.com/Vishwajeetsrk/DreamSync)
+
+</div>
 
 ---
 
 ## 🏗️ Human-Centric Design System
-DreamSync features an **NGO-Inspired, Supportive, and Highly Accessible** architecture. This design prioritizes:
-- **Trust & Clarity**: Calming `Stone-50` and `Emerald` color palettes, mixed with soft organic shapes (`rounded-[3rem]`) to reduce digital anxiety.
-- **High Readability**: High-legibility modern typography (`Inter`, `Outfit`) and highly contrastive buttons suitable for users of all digital literacy levels.
-- **Empathetic UX**: Interactive micro-animations (via `Framer Motion`) providing premium visual feedback that feels organic and supportive.
+
+DreamSync features an **NGO-Inspired, Supportive, and Highly Accessible** design architecture:
+
+| Principle | Implementation |
+| :--- | :--- |
+| **Trust & Clarity** | Calming `Stone-50` and `Emerald` palettes with soft organic shapes (`rounded-[3rem]`) to reduce digital anxiety |
+| **High Readability** | Modern typography (`Inter`, `Outfit`) with high-contrast buttons suitable for all digital literacy levels |
+| **Empathetic UX** | Interactive micro-animations via `Framer Motion` with premium, organic visual feedback |
+| **Mobile-First** | Fully responsive layouts across all 9 modules with optimized touch targets and mobile navigation |
 
 ---
 
 ## ✨ 9 Core Support Modules
 
-1. **🧠 Ikigai Architect**: Discover your professional alignment at the intersection of Passion, Skills, Market, and Income with automated Venn diagram rendering.
-2. **📄 AI Resume Forge & Builder**: A tabbed sidebar resume editor. Features **`✨ Optimize Summary with AI`** to generate tailored professional bios, and **`✨ AI Enhance Bullets`** to rewrite experience bullets using the STAR method. Includes a live **ATS Insights** tab calculating real-time compatibility scores, target company checklists (Google, Microsoft), lists of missing keywords, and recommended courses. Supports direct printer-ready PDF & Word exports.
-3. **🛡️ ATS Resume Score Checker**: Drag-and-drop resume scanner that checks keywords and structural alignment against target job descriptions, providing instant rewrite indicators.
-4. **🤖 AI Career Guide & Coach**: Empathetic AI coach delivering real-time salary insights, localized Indian job postings, and structured 90-day progress roadmaps.
-5. **💼 LinkedIn Pro Profile Optimizer**: Instantly tune profile headlines, "About" bios, and personalized outreach networking templates.
-6. **🗺️ Skills & Document Roadmap**: Milestone progress timelines paired with a dedicated guide on obtaining essential Indian documents (Aadhaar, PAN, E-Shram, etc.).
-7. **🌱 Peer Community Hub**: A safe ecosystem for connecting with peer circles, digital mentors, and local NGO career events.
-8. **🖼️ Dynamic Stand-alone Portfolio Engine**: Instantly generate responsive web portfolios in 4 distinct themes: *Minimal Dev*, *Neo-Brutalism*, *Glass Dark*, and *Data Pro*. Features a fully styled **Interactive Real-Time Preview Container** that maps theme colors, glassmorphism, fonts, and user updates instantly.
-9. **🌸 Serenity AI Mental Health Companion**: Empathetic voice & text buddy for burnout and stress, with local Indian helplines. Now features a **Language Selection Dropdown** for 11+ Indian languages (Hindi, Telugu, Tamil, Bengali, etc.), a **Dynamic Prompt Language Lock** that restricts AI replies to the chosen language (e.g. pure English in English mode), and optimized TTS settings (pitch `1.0`, rate `0.90`) prioritizing high-quality natural/neural browser voices.
+### 1. 🧠 Ikigai Architect
+Discover your professional alignment at the intersection of **Passion, Skills, Market, and Income** with automated Venn diagram rendering. Features interactive exploration with personalized career path suggestions.
+
+### 2. 📄 AI Resume Forge & Builder
+A tabbed sidebar resume editor with powerful AI enhancements:
+- **✨ Optimize Summary with AI** — Generates tailored professional bios
+- **✨ AI Enhance Bullets** — Rewrites experience bullets using the STAR method
+- **ATS Insights Tab** — Real-time compatibility scores, target company checklists (Google, Microsoft), missing keyword analysis, and recommended courses
+- **Export Options** — Printer-ready PDF & Word document exports
+
+### 3. 🛡️ ATS Resume Score Checker
+Drag-and-drop resume scanner that checks keyword density and structural alignment against target job descriptions with instant rewrite indicators and actionable improvement suggestions.
+
+### 4. 🤖 AI Career Guide & Coach
+Empathetic AI coach delivering:
+- Real-time salary insights for Indian markets
+- Localized job postings and opportunities
+- Structured 90-day progress roadmaps
+- Personalized career path recommendations
+
+### 5. 💼 LinkedIn Pro Profile Optimizer
+Instantly optimize LinkedIn profiles with AI-powered headline tuning, "About" bio generation, and personalized outreach networking templates.
+
+### 6. 🗺️ Skills & Document Roadmap
+Milestone progress timelines paired with a dedicated guide on obtaining essential Indian documents (Aadhaar, PAN, E-Shram, Bank Account, etc.).
+
+### 7. 🌱 Peer Community Hub
+A safe ecosystem for connecting with peer circles, digital mentors, and local NGO career events. Features community cards and social proof indicators.
+
+### 8. 🖼️ Dynamic Stand-alone Portfolio Engine
+Instantly generate responsive web portfolios with **7 distinct themes**:
+
+| Theme | Style |
+| :--- | :--- |
+| **Minimal Dev** | Clean white, editorial typography, professional |
+| **Soft Warm** | Rose/cream gradients, empathetic, friendly |
+| **Glass Light** | Violet glassmorphism, modern, futuristic |
+| **Emerald Pro** | Green success theme, professional growth |
+| **Neo-Brutalism** | Bold borders, yellow/pink accents, high contrast |
+| **Glass Dark** | Apple-level dark mode, violet/cyan glows |
+| **Vishwa Pro (Data)** | Particle backgrounds, data-driven, tech-forward |
+
+Features:
+- **Interactive Real-Time Preview** — Maps theme colors, glassmorphism, fonts, and user updates instantly
+- **Resume Import** — Upload PDF resume to auto-populate all fields
+- **Profile Photo Upload** — Base64-encoded image embedding
+- **Resume/CV Link** — Prominent download button in hero section
+- **Project Image Support** — Display screenshots/GIFs for each project
+- **One-Click Download** — Export complete HTML portfolio file
+- **Deployment Guide** — Built-in instructions for Vercel, GitHub Pages, and Netlify
+
+### 9. 🌸 Serenity AI Mental Health Companion
+Empathetic voice & text buddy for burnout and stress:
+- **Language Selection** — 11+ Indian languages (Hindi, Telugu, Tamil, Bengali, Marathi, Gujarati, Kannada, Malayalam, Odia, Punjabi, Urdu)
+- **Dynamic Prompt Lock** — AI replies restricted to the chosen language
+- **Optimized TTS** — Pitch `1.0`, rate `0.90` with high-quality natural/neural browser voices
+- **Local Helplines** — Indian mental health crisis helplines integrated
+
+---
+
+## 🔄 Latest Updates & Bug Fixes (June 2026)
+
+### 🐛 Portfolio Engine — Critical Fix
+- **Fixed**: 400 "Invalid Input" error when generating portfolios without a profile photo
+  - **Root Cause**: Client sent `profileImage: null` but Zod v4 schema only accepted `string | undefined`
+  - **Fix**: Updated schema to use `.nullable()` and client to sanitize null/empty values before sending
+- **Fixed**: Right-column live preview panel was incorrectly nested inside the form column, breaking the 8+4 grid layout on desktop
+- **Improved**: Error messages now display detailed validation context (field path + reason) instead of generic "Invalid input"
+- **Added**: Server-side error logging for faster debugging
+
+### 🏗️ Architecture Updates
+- **Supabase Integration** — New primary database alongside Firebase for enhanced data management
+- **Multi-Provider AI Pipeline** — Groq → OpenRouter → Gemini fallback chain with per-provider timeout controls
+- **Edge Caching** — AI responses cached in Upstash Redis (24h TTL) for faster repeat queries
+- **Zod v4 Migration** — Updated all API validation schemas to Zod v4 with nullable field support
 
 ---
 
 ## 🛡️ Robustness & Fault Tolerance
 
-- **API Rate Limit Resilience**: Integrates a dynamic model fallback chain (automatically rotating between Groq's `llama-3.3-70b-versatile` and `llama-3.1-8b-instant`, and falling back to OpenRouter's free tier if rate-limited). Portfolio generation is optimized to `4000` tokens to prevent TPM rate limits (503 errors).
-- **Client-Side Auth Fallback**: Automatically intercepts client-side Firestore/Storage write errors (for users logged in via NextAuth without Firebase permissions) and reroutes profile updates and base64-encoded PDF resume uploads securely to a server-side `/api/profile` Redis database using **Upstash**.
+### Multi-Provider AI Fallback Chain
+```
+Groq (llama-3.3-70b → llama-3.1-8b)
+  ↓ on failure
+OpenRouter (7 models: Llama-3.3-70b, Qwen-2.5-72b, GPT-4o-mini, Claude-3-Haiku, Gemini Flash)
+  ↓ on failure
+Google Gemini (1.5-flash direct API)
+```
+
+### Safety & Security
+- **AI Safety Guard** — Blocks harmful/illegal career inputs with whole-word keyword matching and safe exemptions (ethical hacker, cybersecurity analyst, etc.)
+- **Rate Limiting** — Upstash Redis-powered per-user rate limiting across all API endpoints
+- **Auth Protection** — Protected routes with `ProtectedRoute` wrapper enforcing authentication
+- **Input Sanitization** — All API inputs validated through Zod schemas with max-length guards
+
+### Client-Side Resilience
+- **Auth Fallback** — Automatically intercepts Firestore write errors and reroutes profile updates to server-side Redis storage
+- **Token Optimization** — Portfolio generation capped at 4000 tokens to prevent TPM rate limits (503 errors)
+- **Timeout Control** — 45-second per-provider AbortController timeouts prevent hanging requests
 
 ---
 
-## 🛠️ Modern Technical Stack
+## 🛠️ Technical Stack
 
-- **Frontend Framework**: [Next.js 16.2.2 (Turbopack Enabled)](https://nextjs.org/)
-- **Core Library**: [React 19.2.4](https://react.dev/)
-- **Styling Core**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Motion & Transition**: [Framer Motion 12+](https://www.framer.com/motion/)
-- **Database Engine**: [Firebase Cloud Firestore](https://firebase.google.com/)
-- **Authentication**: **Firebase Secure Auth** (Google, GitHub, and Custom Credentials)
-- **High Availability Cache**: [Upstash Redis & Ratelimit](https://upstash.com/)
-- **AI Inference Pipeline**: [OpenRouter API (Llama-3-70B)](https://openrouter.ai/) & [Google Gemini]
-- **API Form Handler**: [Web3Forms API](https://web3forms.com/)
+### Core Framework
+| Technology | Version | Purpose |
+| :--- | :--- | :--- |
+| [Next.js](https://nextjs.org/) | 16.2.2 (Turbopack) | Full-stack React framework with App Router |
+| [React](https://react.dev/) | 19.2.4 | UI component library |
+| [TypeScript](https://www.typescriptlang.org/) | 5.x | Type-safe development |
+| [Tailwind CSS](https://tailwindcss.com/) | v4 | Utility-first CSS styling |
+| [Framer Motion](https://www.framer.com/motion/) | 12+ | Animations & transitions |
+
+### Backend & Data
+| Technology | Purpose |
+| :--- | :--- |
+| [Supabase](https://supabase.com/) | Primary database & auth (OAuth 2.1) |
+| [Firebase](https://firebase.google.com/) | Cloud Firestore, Auth (Google/GitHub/Credentials), Storage |
+| [Upstash Redis](https://upstash.com/) | Rate limiting, AI response caching, profile fallback storage |
+| [NextAuth.js](https://next-auth.js.org/) | Session management & multi-provider OAuth |
+
+### AI & Intelligence
+| Provider | Models | Role |
+| :--- | :--- | :--- |
+| [Groq](https://groq.com/) | Llama-3.3-70B, Llama-3.1-8B | Primary inference (fastest) |
+| [OpenRouter](https://openrouter.ai/) | 7-model rotation | Secondary fallback |
+| [Google Gemini](https://ai.google.dev/) | Gemini 1.5 Flash | Tertiary fallback |
+
+### Utilities
+| Package | Purpose |
+| :--- | :--- |
+| [Zod v4](https://zod.dev/) | Runtime schema validation |
+| [Lucide React](https://lucide.dev/) | Icon system |
+| [pdf-parse](https://www.npmjs.com/package/pdf-parse) | Resume PDF text extraction |
+| [docx](https://www.npmjs.com/package/docx) | Word document generation |
+| [Resend](https://resend.com/) | Transactional email delivery |
+
+---
+
+## 📁 Project Structure
+
+```
+DreamSync/
+├── src/
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── api/                # 13 API route handlers
+│   │   │   ├── portfolio/      # AI portfolio generation
+│   │   │   ├── resume/         # Resume optimization
+│   │   │   ├── resume-parse/   # PDF resume parsing
+│   │   │   ├── career-agent/   # AI career coaching
+│   │   │   ├── ats-advanced/   # ATS scoring engine
+│   │   │   ├── ikigai/         # Ikigai analysis
+│   │   │   ├── linkedin/       # LinkedIn optimizer
+│   │   │   ├── mental-health/  # Mental health AI
+│   │   │   ├── roadmap/        # Career roadmap
+│   │   │   ├── profile/        # User profile management
+│   │   │   ├── stats/          # Platform analytics
+│   │   │   ├── usage/          # Usage tracking
+│   │   │   └── auth/           # NextAuth handlers
+│   │   ├── portfolio/          # Portfolio generator page
+│   │   ├── resume-builder/     # Resume editor page
+│   │   ├── career-agent/       # Career coach page
+│   │   ├── mental-health/      # Mental health page
+│   │   └── ...                 # 20+ route pages
+│   ├── components/             # Reusable UI components
+│   │   ├── Navbar.tsx          # Navigation bar
+│   │   ├── Footer.tsx          # Site footer
+│   │   ├── AIAssistant.tsx     # Floating AI assistant
+│   │   ├── ResumePreview.tsx   # Live resume preview
+│   │   ├── IkigaiDiagram.tsx   # Venn diagram renderer
+│   │   └── ProtectedRoute.tsx  # Auth guard wrapper
+│   ├── context/                # React context providers
+│   │   ├── AuthContext.tsx     # Authentication state
+│   │   └── LanguageContext.tsx # i18n language state
+│   ├── lib/                    # Shared utilities
+│   │   ├── ai.ts              # Multi-provider AI caller
+│   │   ├── aiGuard.ts         # Safety input filter
+│   │   ├── ratelimit.ts       # Redis rate limiter
+│   │   ├── firebase.ts        # Firebase client SDK
+│   │   ├── firebase-admin.ts  # Firebase Admin SDK
+│   │   └── supabase.ts        # Supabase client
+│   └── data/                   # Static data files
+├── public/                     # Static assets
+├── portfolio/                  # Standalone portfolio templates
+│   ├── script.js              # Portfolio interactivity
+│   └── style.css              # Portfolio styles
+└── package.json               # Dependencies & scripts
+```
 
 ---
 
 ## 🔑 Infrastructure & API Requirements
 
-To operate this platform locally or in production, acquire API credentials for the following services:
+To operate this platform locally or in production, acquire API credentials for:
 
-| Service Provider | Config Details | Purpose | Link |
-| :--- | :--- | :--- | :--- |
-| **Firebase Console** | Web App API Keys, Project IDs, Auth Domain | Authentication & User Firestore DB | [Firebase](https://console.firebase.google.com/) |
-| **Upstash Redis** | Rest URL & Rest Token | Rate limiting & feature usage caching | [Upstash Console](https://console.upstash.com/) |
-| **OpenRouter** | `OPENROUTER_API_KEY` | Model endpoints for resume advice & coaching | [OpenRouter](https://openrouter.ai/) |
-| **Web3Forms** | Contact Form Token Key | Delivers contact/support messages | [Web3Forms](https://web3forms.com/) |
-| **Serper API** | `SERPER_API_KEY` (Optional) | Powers live Indian job search indexing | [Serper.dev](https://serper.dev/) |
+| Service | Config Key(s) | Purpose |
+| :--- | :--- | :--- |
+| **Firebase** | `NEXT_PUBLIC_FIREBASE_*` | Authentication & Firestore DB |
+| **Supabase** | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Primary database & OAuth |
+| **Upstash Redis** | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Rate limiting & caching |
+| **Groq** | `GROQ_API_KEY` | Primary AI inference |
+| **OpenRouter** | `OPENROUTER_API_KEY` | Secondary AI fallback |
+| **Google Gemini** | `GOOGLE_API_KEY` | Tertiary AI fallback |
+| **Google OAuth** | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google sign-in |
+| **GitHub OAuth** | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | GitHub sign-in |
+| **Serper** | `SERPER_API_KEY` (Optional) | Live job search indexing |
 
 ---
 
-## 🏁 Local Development & Setup Guide
+## 🏁 Local Development & Setup
 
-### 1. Software Prerequisites
-- **Node.js**: Install version `20.x` or `22.x` (Recommended) from [Node.js Official Website](https://nodejs.org/).
-- **Git**: Command line tool for version control.
-- **VS Code**: Recommended Editor.
+### Prerequisites
+- **Node.js** `20.x` or `22.x` — [Download](https://nodejs.org/)
+- **Git** — Version control CLI
+- **VS Code** — Recommended editor
 
-### 2. Synchronization & Dependency Installation
-Clone the repository and install all required modules using clean legacy peer dependencies:
+### Quick Start
+
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/Vishwajeetsrk/DreamSync.git
 cd DreamSync
 
-# Install dependency modules securely
+# 2. Install dependencies
 npm install --legacy-peer-deps
+
+# 3. Create environment file
+cp .env.example .env.local
+# Edit .env.local with your API keys
+
+# 4. Start development server (Turbopack)
+npm run dev
 ```
 
-### 3. Environment Variables Setup
-Create a `.env.local` file in the project root directory and insert your secure API keys:
+Open [http://localhost:3000](http://localhost:3000) to access the platform.
+
+### Environment Variables Template
+Create a `.env.local` file in the project root:
 ```env
-# Firebase Configuration
+# Authentication
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Firebase
 NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 
-# Upstash Cache & Rate Limit Configurations
-UPSTASH_REDIS_REST_URL=https://your-database-id.upstash.io
+# Redis Cache
+UPSTASH_REDIS_REST_URL=https://your-database.upstash.io
 UPSTASH_REDIS_REST_TOKEN=your_upstash_token
 
-# AI, Search & Forms Integrations
+# AI Providers (at least one required)
+GROQ_API_KEY=your_groq_api_key
 OPENROUTER_API_KEY=your_openrouter_api_key
-NEXT_PUBLIC_WEB3FORMS_KEY=your_web3forms_token
+GOOGLE_API_KEY=your_google_api_key
+
+# OAuth Providers
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+
+# Optional
 SERPER_API_KEY=your_serper_api_key
 ```
 
-### 4. Run the Dev Protocol
-Launch the blazing-fast local developer server powered by Next.js Turbopack:
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your web browser to access the portal.
-
 ---
 
-## 🚀 Live Deployment Protocol (Vercel)
+## 🚀 Deployment (Vercel)
 
-1. **GitHub Push**: Commit and push your verified code changes to your GitHub branch.
-2. **Deploy to Vercel**:
-   - Sign in to the [Vercel Dashboard](https://vercel.com/).
-   - Click **"Add New"** > **"Project"** and import the `DreamSync` repository.
-3. **Configure Settings**:
-   - Framework preset: **Next.js**.
-   - Build command: `next build`.
-   - Node version: `20.x` or `22.x`.
-4. **Setup Environment Variables**:
-   - Copy all variables from your local `.env.local` file and add them directly in the Vercel project environment settings.
-5. **Launch**: Click **"Deploy"**. Vercel will build and host your platform on global edge networks.
-6. **Whitelist Domains**:
-   - Navigate to **Firebase Console** > **Authentication** > **Settings** > **Authorized Domains**.
-   - Add your newly deployed Vercel URL (e.g., `dreamssync.vercel.app`) to authorize users to sign in.
+1. **Push to GitHub** — Commit and push your code to the repository
+2. **Import on Vercel** — [vercel.com](https://vercel.com) → Add New → Project → Import `DreamSync`
+3. **Configure**:
+   - Framework: **Next.js**
+   - Build Command: `next build`
+   - Node.js: `20.x` or `22.x`
+4. **Environment Variables** — Copy all `.env.local` variables to Vercel Project Settings
+5. **Deploy** — Click Deploy. Vercel builds and hosts on global edge networks
+6. **Authorize Domain** — Add your Vercel URL to Firebase Console → Authentication → Authorized Domains
 
 ---
 
 ## 🧩 Recommended VS Code Extensions
 
-Install the following extensions in Visual Studio Code for an optimized developer workflow:
-- **Tailwind CSS IntelliSense**: For real-time utility autocomplete.
-- **ESLint**: Real-time code quality and typescript constraint validation.
-- **Prettier - Code Formatter**: Auto-formats code on save.
-- **GitLens**: Supercharges Git tracking right inside your files.
-- **Lucide Icon Searcher**: Easily discover supportive icons to match custom modules.
+| Extension | Purpose |
+| :--- | :--- |
+| Tailwind CSS IntelliSense | Real-time utility autocomplete |
+| ESLint | Code quality & TypeScript validation |
+| Prettier | Auto-format on save |
+| GitLens | Enhanced Git tracking |
+| Lucide Icon Searcher | Icon discovery for custom modules |
 
 ---
 
-© 2026 DREAMSYNC. EMPOWERING FUTURES. HUMAN_CENTRIC. IDENTITY_SECURED.
+## 📊 Platform Stats
+
+- **9** Core AI-powered modules
+- **13** API route handlers
+- **20+** Application pages
+- **7** Portfolio themes
+- **11+** Indian language support
+- **3** AI provider fallback chain
+- **3** OAuth providers (Google, GitHub, LinkedIn)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+<div align="center">
+
+**© 2026 DreamSync. Empowering Futures. Human-Centric. Identity-Secured.**
+
+Built with ❤️ by [Vishwajeet](https://github.com/Vishwajeetsrk)
+
+</div>
