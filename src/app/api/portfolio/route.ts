@@ -34,6 +34,113 @@ const portfolioSchema = z.object({
     resumeUrl: optionalStr,
   }).optional(),
 });
+function parseProjects(projectsStr: string | null | undefined) {
+  if (!projectsStr) return [];
+  return projectsStr.split('|§|').filter(Boolean).map((proj: string) => {
+     const tagLinkMatch = proj.match(/\[LINK\]([\s\S]*?)\[\/LINK\]/);
+     const tagImgMatch = proj.match(/\[IMAGE\]([\s\S]*?)\[\/IMAGE\]/);
+     
+     let link = tagLinkMatch ? tagLinkMatch[1].trim() : '';
+     let image = tagImgMatch ? tagImgMatch[1].trim() : '';
+     
+     let titleAndDesc = proj;
+     if (tagLinkMatch) titleAndDesc = titleAndDesc.replace(tagLinkMatch[0], '');
+     if (tagImgMatch) titleAndDesc = titleAndDesc.replace(tagImgMatch[0], '');
+     
+     if (!link) {
+       const pipeLinkMatch = titleAndDesc.match(/\|\s*Link:\s*(.*?)(?=\s*\||$)/);
+       if (pipeLinkMatch) {
+         link = pipeLinkMatch[1].trim();
+         titleAndDesc = titleAndDesc.replace(pipeLinkMatch[0], '');
+       }
+     }
+     if (!image) {
+       const pipeImgMatch = titleAndDesc.match(/\|\s*Image:\s*(.*?)(?=\s*\||$)/);
+       if (pipeImgMatch) {
+         image = pipeImgMatch[1].trim();
+         titleAndDesc = titleAndDesc.replace(pipeImgMatch[0], '');
+       }
+     }
+     
+     titleAndDesc = titleAndDesc.replace(/\|\s*$/, '').trim();
+     
+     const colonIndex = titleAndDesc.indexOf(':');
+     let title = titleAndDesc;
+     let description = '';
+     if (colonIndex > -1) {
+       title = titleAndDesc.substring(0, colonIndex).trim();
+       description = titleAndDesc.substring(colonIndex + 1).trim();
+     }
+     return { title, description, link, image };
+  });
+}
+
+function parseExperience(expStr: string | null | undefined) {
+  if (!expStr) return [];
+  return expStr.split('|§|').filter(Boolean).map((exp: string) => {
+     const colonIdx = exp.indexOf(':');
+     let header = exp;
+     let pointsStr = '';
+     if (colonIdx > -1) {
+       header = exp.substring(0, colonIdx);
+       pointsStr = exp.substring(colonIdx + 1).trim();
+     }
+     
+     let cleanHeader = header;
+     let type = 'Work';
+     if (header.includes('[Internship]')) {
+       type = 'Internship';
+       cleanHeader = header.replace('[Internship]', '').trim();
+     } else if (header.includes('[Work]')) {
+       type = 'Work';
+       cleanHeader = header.replace('[Work]', '').trim();
+     }
+
+     const companyMatch = cleanHeader.match(/^(.*?)\s*@\s*(.*?)\s*\((.*?)\)$/);
+     let role = cleanHeader;
+     let company = '';
+     let dates = '';
+     if (companyMatch) {
+       role = companyMatch[1].trim();
+       company = companyMatch[2].trim();
+       dates = companyMatch[3].trim();
+     }
+     
+     const points = pointsStr.split('\n').map(p => p.trim()).filter(Boolean);
+     return { role, company, dates, type, points };
+  });
+}
+
+function parseCourses(coursesStr: string | null | undefined) {
+  if (!coursesStr) return [];
+  return coursesStr.split('|§|').filter(Boolean).map((course: string) => {
+     const tagLinkMatch = course.match(/\[CERTIFICATE\]([\s\S]*?)\[\/CERTIFICATE\]/);
+     let link = tagLinkMatch ? tagLinkMatch[1].trim() : '';
+     
+     let titleAndDesc = course;
+     if (tagLinkMatch) titleAndDesc = titleAndDesc.replace(tagLinkMatch[0], '');
+     
+     if (!link) {
+       const pipeLinkMatch = titleAndDesc.match(/\|\s*Certificate:\s*(.*?)(?=\s*\||$)/);
+       if (pipeLinkMatch) {
+         link = pipeLinkMatch[1].trim();
+         titleAndDesc = titleAndDesc.replace(pipeLinkMatch[0], '');
+       }
+     }
+     
+     titleAndDesc = titleAndDesc.replace(/\|\s*$/, '').trim();
+     
+     const colonIndex = titleAndDesc.indexOf(':');
+     let title = titleAndDesc;
+     let description = '';
+     if (colonIndex > -1) {
+       title = titleAndDesc.substring(0, colonIndex).trim();
+       description = titleAndDesc.substring(colonIndex + 1).trim();
+     }
+     return { title, description, certificateUrl: link };
+  });
+}
+
 
 function buildThemePrompt(theme: string): string {
   if (theme === 'soft-warm') return `
@@ -270,27 +377,19 @@ export async function POST(req: NextRequest) {
           break;
       }
       
+      const parsedExperience = parseExperience(userData?.experience);
       let expHtml = '<div class="content-block opacity-90">Detailed experience not provided.</div>';
-      if (userData?.experience) {
-        expHtml = userData.experience.split('|§|').filter(Boolean).map((exp: string) => {
-           const colonIdx = exp.indexOf(':');
-           let header = exp;
-           let pointsStr = '';
-           if (colonIdx > -1) {
-             header = exp.substring(0, colonIdx);
-             pointsStr = exp.substring(colonIdx + 1).trim();
+      if (parsedExperience.length > 0) {
+        expHtml = parsedExperience.map((exp) => {
+           let formattedHeader = `${exp.type === 'Internship' ? '<span style="color: #059669; font-weight: bold;">[Internship]</span>' : (exp.type === 'Work' ? '<span style="color: #ca8a04; font-weight: bold;">[Work]</span>' : '')} ${exp.role}`;
+           if (exp.company) {
+             formattedHeader += ` @ <strong style="color: #2563eb;">${exp.company}</strong>`;
+           }
+           if (exp.dates) {
+             formattedHeader += ` (${exp.dates})`;
            }
            
-           let formattedHeader = header;
-           const companyMatch = header.match(/@\s*(.*?)\s*\(/);
-           if (companyMatch) {
-             const companyName = companyMatch[1];
-             formattedHeader = header.replace(`@ ${companyName}`, `@ <strong style="color: #2563eb;">${companyName}</strong>`);
-           }
-           formattedHeader = formattedHeader.replace(/\[Internship\]/g, '<span style="color: #059669; font-weight: bold;">[Internship]</span>')
-                                            .replace(/\[Work\]/g, '<span style="color: #ca8a04; font-weight: bold;">[Work]</span>');
-           
-           const bullets = pointsStr.split('\n').filter(p => p.trim()).map(p => `<li style="margin-bottom: 0.5rem; list-style-type: disc; margin-left: 1.5rem;">${p.trim()}</li>`).join('');
+           const bullets = exp.points.map(p => `<li style="margin-bottom: 0.5rem; list-style-type: disc; margin-left: 1.5rem;">${p}</li>`).join('');
 
            return `<div style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: 0.5rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
              <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem;">${formattedHeader}</h4>
@@ -299,64 +398,33 @@ export async function POST(req: NextRequest) {
         }).join('');
       }
 
+      const parsedProjects = parseProjects(userData?.projects);
       let projHtml = '<div class="content-block opacity-90">Detailed projects not provided.</div>';
-      if (userData?.projects) {
-        projHtml = userData.projects.split('|§|').filter(Boolean).map((proj: string) => {
-           const linkMatch = proj.match(/\|\s*Link:\s*(.*?)(?=\s*\||$)/);
-           const imgMatch = proj.match(/\|\s*Image:\s*(.*?)(?=\s*\||$)/);
-           let link = linkMatch ? linkMatch[1].trim() : '';
-           let image = imgMatch ? imgMatch[1].trim() : '';
-           
-           let titleAndDesc = proj;
-           if (linkMatch) titleAndDesc = titleAndDesc.replace(linkMatch[0], '');
-           if (imgMatch) titleAndDesc = titleAndDesc.replace(imgMatch[0], '');
-           titleAndDesc = titleAndDesc.replace(/\|\s*$/, '').trim();
-           
-           const colonIndex = titleAndDesc.indexOf(':');
-           let title = titleAndDesc;
-           let descStr = '';
-           if (colonIndex > -1) {
-             title = titleAndDesc.substring(0, colonIndex).trim();
-             descStr = titleAndDesc.substring(colonIndex + 1).trim();
-           }
-
-           const descBullets = descStr.split('\n').filter(p => p.trim()).map(p => `<p style="margin-bottom: 0.5rem;">${p.trim()}</p>`).join('');
-
+      if (parsedProjects.length > 0) {
+        projHtml = parsedProjects.map((p) => {
+           const descBullets = p.description.split('\n').filter(bullet => bullet.trim()).map(bullet => `<p style="margin-bottom: 0.5rem;">${bullet.trim()}</p>`).join('');
            return `
-            <div style="margin-bottom: 2rem; padding: 1.5rem; border-radius: 0.75rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-              ${image && image !== '#' ? `<img src="${image}" alt="${title}" style="width: 100%; height: auto; max-height: 250px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">` : ''}
-              <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">${title}</h4>
-              <div class="content-block opacity-90" style="margin-bottom: 1.25rem;">${descBullets}</div>
-              ${link && link !== '#' ? `<a href="${link}" target="_blank" style="display: inline-block; padding: 0.5rem 1rem; background: #000; color: #fff; text-decoration: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;"><i class="fa-brands fa-github"></i> View Project</a>` : ''}
-            </div>
+             <div style="margin-bottom: 2rem; padding: 1.5rem; border-radius: 0.75rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+               ${p.image && p.image !== '#' ? `<img src="${p.image}" alt="${p.title}" style="width: 100%; height: auto; max-height: 250px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">` : ''}
+               <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">${p.title}</h4>
+               <div class="content-block opacity-90" style="margin-bottom: 1.25rem;">${descBullets}</div>
+               ${p.link && p.link !== '#' ? `<a href="${p.link}" target="_blank" style="display: inline-block; padding: 0.5rem 1rem; background: #000; color: #fff; text-decoration: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;"><i class="fa-brands fa-github"></i> View Project</a>` : ''}
+             </div>
            `;
         }).join('');
       }
 
+      const parsedCourses = parseCourses(userData?.courses);
       let coursesHtml = '';
-      if (userData?.courses) {
-        coursesHtml = userData.courses.split('|§|').filter(Boolean).map((course: string) => {
-           const linkMatch = course.match(/\|\s*Certificate:\s*(.*?)(?=\s*\||$)/);
-           let link = linkMatch ? linkMatch[1].trim() : '';
-           let titleAndDesc = course;
-           if (linkMatch) titleAndDesc = titleAndDesc.replace(linkMatch[0], '');
-           titleAndDesc = titleAndDesc.replace(/\|\s*$/, '').trim();
-           
-           const colonIndex = titleAndDesc.indexOf(':');
-           let title = titleAndDesc;
-           let descStr = '';
-           if (colonIndex > -1) {
-             title = titleAndDesc.substring(0, colonIndex).trim();
-             descStr = titleAndDesc.substring(colonIndex + 1).trim();
-           }
-           const descBullets = descStr.split('\n').filter(p => p.trim()).map(p => `<p style="margin-bottom: 0.5rem;">${p.trim()}</p>`).join('');
-
+      if (parsedCourses.length > 0) {
+        coursesHtml = parsedCourses.map((c) => {
+           const descBullets = c.description.split('\n').filter(bullet => bullet.trim()).map(bullet => `<p style="margin-bottom: 0.5rem;">${bullet.trim()}</p>`).join('');
            return `
-            <div style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: 0.5rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-              <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">${title}</h4>
-              <div class="content-block opacity-90" style="margin-bottom: 1rem;">${descBullets}</div>
-              ${link && link !== '#' ? `<a href="${link}" target="_blank" style="display: inline-block; padding: 0.375rem 0.75rem; background: #2563eb; color: #fff; text-decoration: none; border-radius: 0.375rem; font-weight: 600; font-size: 0.875rem;"><i class="fa-solid fa-certificate"></i> View Certificate</a>` : ''}
-            </div>
+             <div style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: 0.5rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+               <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">${c.title}</h4>
+               <div class="content-block opacity-90" style="margin-bottom: 1rem;">${descBullets}</div>
+               ${c.certificateUrl && c.certificateUrl !== '#' ? `<a href="${c.certificateUrl}" target="_blank" style="display: inline-block; padding: 0.375rem 0.75rem; background: #2563eb; color: #fff; text-decoration: none; border-radius: 0.375rem; font-weight: 600; font-size: 0.875rem;"><i class="fa-solid fa-certificate"></i> View Certificate</a>` : ''}
+             </div>
            `;
         }).join('');
       }
@@ -464,6 +532,17 @@ export async function POST(req: NextRequest) {
 
     const themeStyles = buildThemePrompt(theme);
 
+    const parsedProjects = parseProjects(data?.projects);
+    const parsedExperience = parseExperience(data?.experience);
+    const parsedCourses = parseCourses(data?.courses);
+
+    const structuredData = {
+      ...data,
+      projects: parsedProjects,
+      experience: parsedExperience,
+      courses: parsedCourses,
+    };
+
      const sysPrompt = `
       You are an elite full-stack web designer specializing in high-performance career portfolios.
       TASK: Generate a COMPLETE, SINGLE-FILE HTML portfolio based on the user's career data and the specified theme.
@@ -477,19 +556,20 @@ export async function POST(req: NextRequest) {
       6. Ensure the design is MOBILE-RESPONSIVE and PREMIUM.
       7. ${themeStyles}
       8. RESUME/CV: If a 'resumeUrl' is provided in the user data, you MUST include a prominent, beautifully styled 'Download CV' or 'View Resume' button/link in the Hero section and optionally in the Header. Design it to perfectly match the theme.
-      9. PROJECT IMAGES: For each project in the list: if an 'Image' link is present, render a styled <img> element to display the project screenshot/gif. If no image link is present, display a matching theme-based icon or abstract SVG mockup card.
+      9. PROJECT IMAGES: For each project in the projects array: if an 'image' URL is present and not empty, you MUST render a beautifully styled, mobile-responsive <img> element to display the project screenshot/gif. Design it premiumly with shadow and border-radius. If no image URL is present, display a matching theme-based icon or abstract SVG mockup card.
     `;
 
     const userPrompt = `
-      User Data: ${JSON.stringify(data)}
+      User Data: ${JSON.stringify(structuredData, null, 2)}
       Theme requested: ${theme}
       
       Instructions:
-      - Create a stunning hero section with their name: ${data?.fullName || 'Professional'}.
-      - List their skills: ${data?.skills || 'Expertise'}.
+      - Create a stunning hero section with their name: ${structuredData?.fullName || 'Professional'}.
+      - List their skills: ${structuredData?.skills || 'Expertise'}.
       - Present their experience and projects in a professional timeline/grid.
-      - Ensure contact links (LinkedIn: ${data?.linkedin || '#'}, GitHub: ${data?.github || '#'}) are active.
-      - If 'resumeUrl' is present: ${data?.resumeUrl ? `Include a button linking to ${data.resumeUrl} to download/view the CV.` : 'Do not add a resume button.'}
+      - Ensure contact links (LinkedIn: ${structuredData?.linkedin || '#'}, GitHub: ${structuredData?.github || '#'}) are active.
+      - If 'resumeUrl' is present: ${structuredData?.resumeUrl ? `Include a button linking to ${structuredData.resumeUrl} to download/view the CV.` : 'Do not add a resume button.'}
+      - For each project: if the 'image' field is present and not empty, you MUST render a beautiful, responsive <img> tag with src matching the 'image' field and alt matching the project title. Do NOT hide or omit this image.
     `;
 
     // 5. Call AI with multi-provider fallback

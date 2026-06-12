@@ -258,9 +258,9 @@ export default function PortfolioGenerator() {
     setGenError('');
     try {
       const projectsStr = projects.filter(p => p.topic).map(p =>
-        `${p.topic}: ${p.points}${p.website ? ` | Link: ${p.website}` : ''}${p.imageUrl ? ` | Image: ${p.imageUrl}` : ''}`).join('|§|');
+        `${p.topic}: ${p.points}${p.website ? ` [LINK]${p.website}[/LINK]` : ''}${p.imageUrl ? ` [IMAGE]${p.imageUrl}[/IMAGE]` : ''}`).join('|§|');
       const coursesStr = courses.filter(c => c.topic).map(c =>
-        `${c.topic}: ${c.points}${c.link ? ` | Certificate: ${c.link}` : ''}`).join('|§|');
+        `${c.topic}: ${c.points}${c.link ? ` [CERTIFICATE]${c.link}[/CERTIFICATE]` : ''}`).join('|§|');
       const expStr = workExp.filter(w => w.title).map(w =>
         `${w.isInternship ? '[Internship]' : '[Work]'} ${w.title} @ ${w.company} (${w.startDate}–${w.endDate || 'Present'}): ${w.points}`).join('|§|');
 
