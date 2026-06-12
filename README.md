@@ -369,7 +369,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 <div align="center">
 
-**© 2026 DreamSync. Empowering Futures. Human-Centric. Identity-Secured.**
+**© 2026 DreamSync. Empowering Futures.**
 
 Built with ❤️ by [Vishwajeet](https://github.com/Vishwajeetsrk)
 
