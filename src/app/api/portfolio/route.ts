@@ -333,6 +333,64 @@ export async function POST(req: NextRequest) {
         }).join('');
       }
 
+      let coursesHtml = '';
+      if (userData?.courses) {
+        coursesHtml = userData.courses.split('|§|').filter(Boolean).map((course: string) => {
+           const linkMatch = course.match(/\|\s*Certificate:\s*(.*?)(?=\s*\||$)/);
+           let link = linkMatch ? linkMatch[1].trim() : '';
+           let titleAndDesc = course;
+           if (linkMatch) titleAndDesc = titleAndDesc.replace(linkMatch[0], '');
+           titleAndDesc = titleAndDesc.replace(/\|\s*$/, '').trim();
+           
+           const colonIndex = titleAndDesc.indexOf(':');
+           let title = titleAndDesc;
+           let descStr = '';
+           if (colonIndex > -1) {
+             title = titleAndDesc.substring(0, colonIndex).trim();
+             descStr = titleAndDesc.substring(colonIndex + 1).trim();
+           }
+           const descBullets = descStr.split('\n').filter(p => p.trim()).map(p => `<p style="margin-bottom: 0.5rem;">${p.trim()}</p>`).join('');
+
+           return `
+            <div style="margin-bottom: 1.5rem; padding: 1.25rem; border-radius: 0.5rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+              <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">${title}</h4>
+              <div class="content-block opacity-90" style="margin-bottom: 1rem;">${descBullets}</div>
+              ${link && link !== '#' ? `<a href="${link}" target="_blank" style="display: inline-block; padding: 0.375rem 0.75rem; background: #2563eb; color: #fff; text-decoration: none; border-radius: 0.375rem; font-weight: 600; font-size: 0.875rem;"><i class="fa-solid fa-certificate"></i> View Certificate</a>` : ''}
+            </div>
+           `;
+        }).join('');
+      }
+
+      const languagesHtml = userData?.languages ? `
+        <div class="card" style="margin-top: 2rem;">
+          <h2 class="text-2xl font-bold mb-4">Languages</h2>
+          <div class="skills">
+            ${userData.languages.split(',').filter((s: string) => s.trim()).map((s: string) => `<span class="skill-chip" style="background: rgba(0,0,0,0.8); color: white; border: none;">${s.trim()}</span>`).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      const educationHtml = userData?.education ? `
+        <div class="card" style="margin-top: 2rem;">
+          <h2 class="text-2xl font-bold mb-4">Education</h2>
+          <div class="content-block opacity-90" style="line-height: 2;">${userData.education.replace(/\n/g, '<br><br>')}</div>
+        </div>
+      ` : '';
+
+      const achievementsHtml = userData?.achievements ? `
+        <div class="card" style="margin-top: 2rem;">
+          <h2 class="text-2xl font-bold mb-4">Awards & Achievements</h2>
+          <div class="content-block opacity-90" style="line-height: 2;">${userData.achievements.replace(/\n/g, '<br><br>')}</div>
+        </div>
+      ` : '';
+
+      const certsHtml = coursesHtml ? `
+        <div class="card" style="margin-top: 2rem;">
+          <h2 class="text-2xl font-bold mb-4">Certifications & Courses</h2>
+          ${coursesHtml}
+        </div>
+      ` : '';
+
       return `
 <!DOCTYPE html>
 <html lang="en">
@@ -369,14 +427,16 @@ export async function POST(req: NextRequest) {
       <div class="content-block opacity-90">${userData?.summary?.replace(/\n/g, '<br>') || 'I am a passionate professional looking to make an impact in my field.'}</div>
     </div>
     
-    <div class="card">
+    <div class="card" style="margin-top: 2rem;">
       <h2 class="text-2xl font-bold mb-4">Skills & Expertise</h2>
       <div class="skills">
         ${skills.split(',').filter((s: string) => s.trim()).map((s: string) => `<span class="skill-chip">${s.trim()}</span>`).join('')}
       </div>
     </div>
+    ${languagesHtml}
+    ${educationHtml}
     
-    <div class="card">
+    <div class="card" style="margin-top: 2rem;">
       <h2 class="text-2xl font-bold mb-6">Experience & Projects</h2>
       <div class="mb-8">
         <h3 class="text-xl font-bold mb-4 border-b pb-2 opacity-80">Experience</h3>
@@ -387,6 +447,9 @@ export async function POST(req: NextRequest) {
         ${projHtml}
       </div>
     </div>
+    
+    ${certsHtml}
+    ${achievementsHtml}
   </div>
 </body>
 </html>`;
