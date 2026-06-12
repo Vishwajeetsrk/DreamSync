@@ -12,7 +12,7 @@
 **Empowering career journeys for students and care-experienced youth.**
 **Find your path, build your professional identity, and grow with empathetic AI guidance.**
 
-### 🌐 [Live Platform →](https://dreamssync.vercel.app/) &nbsp;&nbsp;|&nbsp;&nbsp; 📂 [Source Code →](https://github.com/Vishwajeetsrk/DreamSync)
+### 🌐 [Live Platform →](https://dream-sync-nine.vercel.app/) &nbsp;&nbsp;|&nbsp;&nbsp; 📂 [Source Code →](https://github.com/Vishwajeetsrk/DreamSync)
 
 </div>
 
