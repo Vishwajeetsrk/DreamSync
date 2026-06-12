@@ -34,6 +34,24 @@ const portfolioSchema = z.object({
     resumeUrl: optionalStr,
   }).optional(),
 });
+function formatGoogleDriveLink(url: string): string {
+  if (!url) return '';
+  let fileId = '';
+  const fileDMatch = url.match(/(?:drive|docs)\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (fileDMatch) {
+    fileId = fileDMatch[1];
+  } else {
+    const idParamMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (idParamMatch && url.includes('drive.google.com')) {
+      fileId = idParamMatch[1];
+    }
+  }
+  if (fileId) {
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
+  }
+  return url;
+}
+
 function parseProjects(projectsStr: string | null | undefined) {
   if (!projectsStr) return [];
   return projectsStr.split('|§|').filter(Boolean).map((proj: string) => {
@@ -71,7 +89,7 @@ function parseProjects(projectsStr: string | null | undefined) {
        title = titleAndDesc.substring(0, colonIndex).trim();
        description = titleAndDesc.substring(colonIndex + 1).trim();
      }
-     return { title, description, link, image };
+     return { title, description, link, image: formatGoogleDriveLink(image) };
   });
 }
 
