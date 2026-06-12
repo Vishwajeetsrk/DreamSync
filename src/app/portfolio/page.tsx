@@ -552,6 +552,14 @@ export default function PortfolioGenerator() {
                            <input value={education} onChange={e => setEducation(e.target.value)} className="input-field" placeholder="e.g. B.Com - Delhi University (2024)" />
                          </div>
                          <div className="col-span-2 space-y-2">
+                           <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">Languages</label>
+                           <input value={languages} onChange={e => setLanguages(e.target.value)} className="input-field" placeholder="e.g. English, Hindi, Spanish" />
+                         </div>
+                         <div className="col-span-2 space-y-2">
+                           <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">Awards & Achievements</label>
+                           <textarea value={achievements} onChange={e => setAchievements(e.target.value)} className="input-field min-h-[80px]" placeholder="e.g. Employee of the Month (2023)..." />
+                         </div>
+                         <div className="col-span-2 space-y-2">
                            <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">Bio / Small Summary</label>
                            <textarea value={summary} onChange={e => setSummary(e.target.value)} className="input-field min-h-[100px]" placeholder="Tell companies what motivates you..." />
                          </div>
@@ -646,6 +654,30 @@ export default function PortfolioGenerator() {
                             <input value={p.website} onChange={e => updateProject(i, 'website', e.target.value)} className="input-field bg-white" placeholder="Project Link (optional)" />
                             <input value={p.imageUrl || ''} onChange={e => updateProject(i, 'imageUrl', e.target.value)} className="input-field bg-white" placeholder="Project Image/GIF URL (optional)" />
                             <textarea value={p.points} onChange={e => updateProject(i, 'points', e.target.value)} className="input-field bg-white min-h-[60px]" placeholder="Description" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Certifications & Courses */}
+                    <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-stone-100 space-y-8">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Award className="w-6 h-6 text-indigo-500" />
+                          <h3 className="text-2xl font-bold text-stone-900">Certifications & Courses</h3>
+                        </div>
+                        <button onClick={addCourse} className="p-3 bg-stone-50 rounded-2xl text-indigo-600 hover:bg-stone-100 transition-all">
+                          <Plus className="w-6 h-6" />
+                        </button>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {courses.map((c, i) => (
+                          <div key={i} className="p-6 rounded-[2rem] border border-stone-100 bg-stone-50/50 space-y-4">
+                            <div className="flex justify-end"><button onClick={() => removeCourse(i)} className="text-rose-500 hover:text-rose-600"><Trash2 className="w-4 h-4" /></button></div>
+                            <input value={c.topic} onChange={e => updateCourse(i, 'topic', e.target.value)} className="input-field bg-white" placeholder="Course/Certification Name" />
+                            <input value={c.link} onChange={e => updateCourse(i, 'link', e.target.value)} className="input-field bg-white" placeholder="Certificate Link URL" />
+                            <textarea value={c.points} onChange={e => updateCourse(i, 'points', e.target.value)} className="input-field bg-white min-h-[60px]" placeholder="What did you learn?" />
                           </div>
                         ))}
                       </div>
