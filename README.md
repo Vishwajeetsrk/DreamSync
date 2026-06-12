@@ -1,4 +1,4 @@
-# 🌙 DreamSync — AI-Powered Career Intelligence & Empathetic Support Platform
+# DreamSync — AI-Powered Career Intelligence & Empathetic Support Platform
 
 <div align="center">
 
