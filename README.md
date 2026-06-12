@@ -95,13 +95,15 @@ Empathetic voice & text buddy for burnout and stress:
 
 ## 🔄 Latest Updates & Bug Fixes (June 2026)
 
-### 🐛 Portfolio Engine — Critical Fix
-- **Fixed**: 400 "Invalid Input" error when generating portfolios without a profile photo
-  - **Root Cause**: Client sent `profileImage: null` but Zod v4 schema only accepted `string | undefined`
-  - **Fix**: Updated schema to use `.nullable()` and client to sanitize null/empty values before sending
-- **Fixed**: Right-column live preview panel was incorrectly nested inside the form column, breaking the 8+4 grid layout on desktop
-- **Improved**: Error messages now display detailed validation context (field path + reason) instead of generic "Invalid input"
-- **Added**: Server-side error logging for faster debugging
+### 🐛 Portfolio Engine — Critical Fixes & Features
+- **Added**: Smart Social Link Formatter — automatically formats raw usernames into valid LinkedIn/GitHub URLs.
+- **Added**: Profile Photo Rendering — integrated base64 profile image rendering directly into the hero section of generated portfolios with theme-specific styling.
+- **Fixed**: Missing UI Fields — restored LinkedIn and GitHub input fields in the Portfolio UI (Step 1) so users can easily append their social links.
+- **Improved**: Dynamic Fallback Themes — the static HTML fallback generator now fully supports and dynamically injects CSS for all 7 themes (Neo-Brutalism, Emerald Pro, Glass Dark, etc.), ensuring beautiful results even when AI providers hit rate limits.
+- **Fixed**: 400 "Invalid Input" error when generating portfolios without a profile photo (Zod v4 schema nullable fix).
+- **Fixed**: Right-column live preview panel was incorrectly nested inside the form column, breaking the 8+4 grid layout on desktop.
+- **Improved**: Error messages now display detailed validation context (field path + reason) instead of generic "Invalid input".
+- **Added**: Server-side error logging for faster debugging.
 
 ### 🏗️ Architecture Updates
 - **Supabase Integration** — New primary database alongside Firebase for enhanced data management

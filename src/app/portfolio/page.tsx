@@ -531,6 +531,14 @@ export default function PortfolioGenerator() {
                            <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">Phone Number</label>
                            <input value={phone} onChange={e => setPhone(e.target.value)} className="input-field" placeholder="+91 90000 00000" />
                          </div>
+                         <div className="space-y-2">
+                           <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">LinkedIn Profile</label>
+                           <input value={linkedin} onChange={e => setLinkedin(e.target.value)} className="input-field" placeholder="linkedin.com/in/username" />
+                         </div>
+                         <div className="space-y-2">
+                           <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">GitHub Profile</label>
+                           <input value={github} onChange={e => setGithub(e.target.value)} className="input-field" placeholder="github.com/username" />
+                         </div>
                          <div className="col-span-2 space-y-2">
                            <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">Resume / CV PDF Link (Google Drive / Dropbox)</label>
                            <input value={resumeUrl} onChange={e => setResumeUrl(e.target.value)} className="input-field" placeholder="https://drive.google.com/file/d/your-resume-id/view" />

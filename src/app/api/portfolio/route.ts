@@ -135,6 +135,200 @@ export async function POST(req: NextRequest) {
 
     const { theme, data } = parsed.data;
 
+    // Fallback template generator in case AI fails
+    const generateFallbackHTML = (userData: any, reqTheme: string) => {
+      const name = userData?.fullName || 'Professional';
+      const role = userData?.targetRole || 'Developer';
+      const skills = userData?.skills || 'HTML, CSS, JavaScript';
+      
+      const formatUrl = (url: string, domain: string) => {
+        if (!url || url === '#') return '#';
+        if (url.startsWith('http')) return url;
+        if (url.includes(domain)) return `https://${url}`;
+        return `https://${domain}${url}`;
+      };
+      
+      const linkedin = formatUrl(userData?.linkedin, 'linkedin.com/in/');
+      const github = formatUrl(userData?.github, 'github.com/');
+      const resumeUrl = userData?.resumeUrl || '';
+      const profileImage = userData?.profileImage || '';
+      
+      let themeStyles = '';
+      switch (reqTheme) {
+        case 'neo-brutalism':
+          themeStyles = `
+            body { background-color: #FFFBF5; color: #000; font-family: 'Space Grotesk', sans-serif; }
+            .hero { background: #FFE500; border-bottom: 4px solid black; padding: 5rem 2rem; text-align: center; color: black; box-shadow: 0 8px 0px black; margin-bottom: 3rem; }
+            .hero h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: -1px; }
+            .hero p { font-size: 1.5rem; font-weight: bold; }
+            .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+            .card { background: white; border: 4px solid black; padding: 2.5rem; box-shadow: 6px 6px 0px black; margin-bottom: 3rem; }
+            .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: #FF4081; color: white; border: 4px solid black; box-shadow: 4px 4px 0px black; font-weight: bold; text-decoration: none; margin-top: 2rem; transition: transform 0.2s; text-transform: uppercase; }
+            .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px black; }
+            .skill-chip { background: #FFE500; border: 2px solid black; padding: 0.5rem 1rem; font-weight: bold; font-size: 1rem; box-shadow: 2px 2px 0px black; display: inline-block; }
+            .social-links a { color: black; font-size: 2.5rem; transition: transform 0.2s; }
+            .social-links a:hover { transform: scale(1.1) rotate(5deg); }
+            .profile-img { width: 180px; height: 180px; border-radius: 0; object-fit: cover; margin: 0 auto 2rem auto; border: 4px solid black; box-shadow: 6px 6px 0px black; background: white; }
+          `;
+          break;
+        case 'glass-dark':
+          themeStyles = `
+            body { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 100%); color: #e2e8f0; font-family: 'Inter', sans-serif; min-height: 100vh; }
+            .hero { padding: 6rem 2rem; text-align: center; }
+            .hero h1 { font-size: 3.5rem; font-weight: 800; background: linear-gradient(to right, #8B5CF6, #06B6D4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+            .hero p { font-size: 1.25rem; opacity: 0.9; }
+            .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+            .card { backdrop-filter: blur(20px); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 2.5rem; margin-bottom: 2.5rem; color: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+            .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: linear-gradient(to right, #8B5CF6, #06B6D4); color: white; border-radius: 9999px; font-weight: 600; text-decoration: none; margin-top: 2rem; transition: opacity 0.2s, transform 0.2s; }
+            .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+            .skill-chip { background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3); color: #c4b5fd; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.9rem; display: inline-block; }
+            .social-links a { color: #06B6D4; font-size: 1.75rem; transition: color 0.2s; }
+            .social-links a:hover { color: #8B5CF6; }
+            .profile-img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; margin: 0 auto 2rem auto; border: 2px solid rgba(6, 182, 212, 0.5); padding: 4px; box-shadow: 0 0 30px rgba(139, 92, 246, 0.3); }
+          `;
+          break;
+        case 'glass-light':
+          themeStyles = `
+            body { background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%); color: #1e293b; font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; }
+            .hero { padding: 6rem 2rem; text-align: center; }
+            .hero h1 { font-size: 3.5rem; font-weight: 800; color: #8B5CF6; margin-bottom: 1rem; }
+            .hero p { font-size: 1.25rem; color: #64748b; }
+            .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+            .card { backdrop-filter: blur(20px); background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 1.5rem; padding: 2.5rem; margin-bottom: 2.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+            .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: linear-gradient(to right, #8B5CF6, #EC4899); color: white; border-radius: 9999px; font-weight: 600; text-decoration: none; margin-top: 2rem; transition: transform 0.2s, box-shadow 0.2s; }
+            .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2); }
+            .skill-chip { background: rgba(236, 72, 153, 0.1); color: #db2777; padding: 0.5rem 1rem; border-radius: 9999px; font-weight: 600; font-size: 0.9rem; display: inline-block; }
+            .social-links a { color: #8B5CF6; font-size: 1.75rem; transition: color 0.2s; }
+            .social-links a:hover { color: #EC4899; }
+            .profile-img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; margin: 0 auto 2rem auto; border: 4px solid white; box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2); }
+          `;
+          break;
+        case 'emerald-pro':
+          themeStyles = `
+            body { background: linear-gradient(135deg, #F0FDF4 0%, #F9FBF9 100%); color: #064e3b; font-family: 'Inter', sans-serif; }
+            .hero { padding: 5rem 2rem; text-align: center; background: #10B981; color: white; border-radius: 0 0 3rem 3rem; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1); }
+            .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; }
+            .hero p { font-size: 1.25rem; opacity: 0.9; }
+            .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+            .card { background: white; border-left: 6px solid #10B981; border-radius: 0.75rem; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 2.5rem; }
+            .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: white; color: #10B981; border-radius: 0.5rem; font-weight: 600; text-decoration: none; margin-top: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s; }
+            .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+            .skill-chip { background: #d1fae5; color: #047857; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.9rem; display: inline-block; }
+            .social-links a { color: white; font-size: 1.75rem; transition: opacity 0.2s; }
+            .social-links a:hover { opacity: 0.8; }
+            .profile-img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; margin: 0 auto 2rem auto; border: 4px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+          `;
+          break;
+        case 'soft-warm':
+          themeStyles = `
+            body { background: linear-gradient(135deg, #FFFBF5 0%, #FFF1F2 100%); color: #4c0519; font-family: 'Outfit', sans-serif; }
+            .hero { padding: 6rem 2rem; text-align: center; }
+            .hero h1 { font-size: 3.5rem; font-weight: 700; color: #e11d48; margin-bottom: 1rem; }
+            .hero p { font-size: 1.25rem; color: #881337; opacity: 0.8; }
+            .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+            .card { background: white; border: 1px solid #ffe4e6; border-radius: 2rem; padding: 2.5rem; box-shadow: 0 10px 40px rgba(225, 29, 72, 0.05); margin-bottom: 2.5rem; }
+            .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: #f43f5e; color: white; border-radius: 9999px; font-weight: 600; text-decoration: none; margin-top: 2rem; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3); transition: transform 0.2s; }
+            .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(244, 63, 94, 0.4); }
+            .skill-chip { background: #ffe4e6; color: #e11d48; padding: 0.5rem 1rem; border-radius: 9999px; font-weight: 500; font-size: 0.9rem; display: inline-block; }
+            .social-links a { color: #f43f5e; font-size: 1.75rem; transition: transform 0.2s; }
+            .social-links a:hover { transform: scale(1.1); }
+            .profile-img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; margin: 0 auto 2rem auto; border: 6px solid white; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.15); }
+          `;
+          break;
+        case 'data-pro':
+          themeStyles = `
+            body { background-color: #f8fafc; color: #0f172a; font-family: 'Poppins', sans-serif; }
+            .hero { background: linear-gradient(135deg, #1e40af 0%, #4338ca 100%); color: white; padding: 6rem 2rem; text-align: center; position: relative; }
+            .hero h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem; }
+            .hero p { font-size: 1.25rem; opacity: 0.9; }
+            .container { max-width: 900px; margin: -4rem auto 0; padding: 2rem; position: relative; z-index: 10; }
+            .card { background: white; border-radius: 0.75rem; padding: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); margin-bottom: 2.5rem; border-top: 5px solid #1e40af; }
+            .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: #f59e0b; color: white; border-radius: 0.5rem; font-weight: 600; text-decoration: none; margin-top: 2rem; transition: background 0.2s; }
+            .btn:hover { background: #d97706; }
+            .skill-chip { background: #f1f5f9; color: #334155; padding: 0.5rem 1rem; border-radius: 0.25rem; font-weight: 500; font-size: 0.9rem; border-left: 3px solid #10b981; display: inline-block; }
+            .social-links a { color: white; font-size: 1.75rem; transition: color 0.2s; }
+            .social-links a:hover { color: #f59e0b; }
+            .profile-img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; margin: 0 auto 2rem auto; border: 4px solid #f59e0b; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+          `;
+          break;
+        case 'minimal-dev':
+        default:
+          themeStyles = `
+            body { background-color: #F9FAFB; color: #111827; font-family: 'Inter', sans-serif; }
+            .hero { background: white; color: black; padding: 6rem 2rem; text-align: center; border-bottom: 1px solid #e5e7eb; }
+            .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px; }
+            .hero p { font-size: 1.25rem; color: #4b5563; }
+            .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+            .card { background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 2.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 2.5rem; }
+            .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: black; color: white; border-radius: 9999px; font-weight: 600; text-decoration: none; margin-top: 2rem; transition: opacity 0.2s; }
+            .btn:hover { opacity: 0.8; }
+            .skill-chip { background: #f3f4f6; color: #374151; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 500; display: inline-block; }
+            .social-links a { color: black; font-size: 1.75rem; transition: opacity 0.2s; }
+            .social-links a:hover { opacity: 0.6; }
+            .profile-img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; margin: 0 auto 2rem auto; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+          `;
+          break;
+      }
+      
+      return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${name} - Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@400;600&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    ${themeStyles}
+    .social-links { display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem; }
+    .skills { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+    .content-block { line-height: 1.7; color: inherit; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    ${profileImage ? `<img src="${profileImage}" alt="${name}" class="profile-img">` : ''}
+    <h1>${name}</h1>
+    <p>${role}</p>
+    ${resumeUrl && resumeUrl !== '#' ? `<a href="${resumeUrl}" class="btn" target="_blank"><i class="fa-solid fa-download"></i> Download Resume</a>` : ''}
+    <div class="social-links">
+      ${linkedin && linkedin !== '#' ? `<a href="${linkedin}" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>` : ''}
+      ${github && github !== '#' ? `<a href="${github}" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>` : ''}
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="card">
+      <h2 class="text-2xl font-bold mb-4">About Me</h2>
+      <div class="content-block opacity-90">${userData?.summary?.replace(/\\n/g, '<br>') || 'I am a passionate professional looking to make an impact in my field.'}</div>
+    </div>
+    
+    <div class="card">
+      <h2 class="text-2xl font-bold mb-4">Skills & Expertise</h2>
+      <div class="skills">
+        ${skills.split(',').filter((s: string) => s.trim()).map((s: string) => `<span class="skill-chip">${s.trim()}</span>`).join('')}
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2 class="text-2xl font-bold mb-6">Experience & Projects</h2>
+      <div class="mb-8">
+        <h3 class="text-xl font-bold mb-3 border-b pb-2 opacity-80">Experience</h3>
+        <div class="content-block opacity-90">${userData?.experience?.replace(/\\n/g, '<br>') || 'Detailed experience not provided.'}</div>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold mb-3 border-b pb-2 opacity-80">Projects</h3>
+        <div class="content-block opacity-90">${userData?.projects?.replace(/\\n/g, '<br>') || 'Detailed projects not provided.'}</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+    };
+
     // 4. Safety Guard
     const combinedInput = `${data?.targetRole || ''} ${data?.summary || ''}`;
     const safety = validateCareerInput(combinedInput);
@@ -223,14 +417,17 @@ export async function POST(req: NextRequest) {
       const errMsg = error.message || String(error);
       const isMissingKeys = errMsg.includes('not configured') || errMsg.includes('API key');
       
-      const userFriendlyError = isMissingKeys
-        ? 'Configuration Error: AI API Keys are missing. Please add GROQ_API_KEY, OPENROUTER_API_KEY, or GOOGLE_API_KEY in your Vercel Project Settings > Environment Variables.'
-        : 'AI is currently overloaded with requests in your region. Please try again in 30 seconds.';
-
+      // If AI fails (missing keys or rate limited), return a fallback template
+      console.warn('[Portfolio API] Returning fallback template due to AI failure.');
+      const fallbackHtml = generateFallbackHTML(data, theme);
+      
       return NextResponse.json({ 
-        error: userFriendlyError,
-        debug: errMsg
-      }, { status: 503 });
+        html: fallbackHtml,
+        _provider: 'fallback',
+        warning: isMissingKeys 
+          ? 'API Keys are missing. Used fallback template.' 
+          : 'AI is overloaded. Used fallback template.'
+      });
     }
 
   } catch (error: any) {

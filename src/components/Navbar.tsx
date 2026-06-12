@@ -70,7 +70,7 @@ export default function Navbar() {
              alt="DreamSync Logo" 
              width={160} 
              height={40} 
-             className="object-contain w-[130px] md:w-[160px]" 
+             className="object-contain w-[130px] md:w-[160px] h-auto"
              priority 
            />
         </Link>

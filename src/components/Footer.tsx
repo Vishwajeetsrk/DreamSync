@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Coffee, Globe, Shield, Zap, Sparkles, Linkedin, Mail, Instagram, Twitter } from 'lucide-react';
+import { Coffee, Globe, Shield, Zap, Sparkles, Linkedin, Mail, Instagram, Twitter, Github } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Footer() {
@@ -55,6 +55,15 @@ export default function Footer() {
         <div className="space-y-6">
           <h4 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Follow Us</h4>
           <div className="flex flex-wrap gap-3">
+            <a 
+              href="https://github.com/Vishwajeetsrk/DreamSync" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 hover:bg-stone-900 hover:text-white transition-all shadow-sm"
+            >
+              <Github className="w-5 h-5" />
+            </a>
+
             <a 
               href="https://www.instagram.com/dream_sync_hub?igsh=MW50dHk3Znh5eTczcg==" 
               target="_blank" 
