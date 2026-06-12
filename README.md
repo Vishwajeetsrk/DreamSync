@@ -99,6 +99,8 @@ Empathetic voice & text buddy for burnout and stress:
 - **Added**: Smart Social Link Formatter — automatically formats raw usernames into valid LinkedIn/GitHub URLs.
 - **Added**: Profile Photo Rendering — integrated base64 profile image rendering directly into the hero section of generated portfolios with theme-specific styling.
 - **Fixed**: Missing UI Fields — restored LinkedIn and GitHub input fields in the Portfolio UI (Step 1) so users can easily append their social links.
+- **Improved**: Enhanced Presentation — Experience and Projects in the fallback generator are now parsed into beautiful standalone UI cards instead of continuous text.
+- **Added**: Smart Project Rendering — The engine now detects base64 images and URLs inside project descriptions to automatically render rich project cards with image previews and "View Project" buttons.
 - **Improved**: Dynamic Fallback Themes — the static HTML fallback generator now fully supports and dynamically injects CSS for all 7 themes (Neo-Brutalism, Emerald Pro, Glass Dark, etc.), ensuring beautiful results even when AI providers hit rate limits.
 - **Fixed**: 400 "Invalid Input" error when generating portfolios without a profile photo (Zod v4 schema nullable fix).
 - **Fixed**: Right-column live preview panel was incorrectly nested inside the form column, breaking the 8+4 grid layout on desktop.
